@@ -1,4 +1,4 @@
-package zed;
+package zed.service.jsoncrud.api;
 
 public interface JsonCrudService {
 
