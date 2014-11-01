@@ -13,12 +13,16 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
+        <camel.version>2.14.0</camel.version>
         <spring.boot.version>1.1.8.RELEASE</spring.boot.version>
         <zed.version>${project.version}</zed.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- BOMs -->
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -27,10 +31,19 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Zed's dependencies -->
+
             <dependency>
                 <groupId>com.github.zed</groupId>
                 <artifactId>zed-service-jsoncrud-api</artifactId>
                 <version>${zed.version}</version>
+            </dependency>
+
+            <!-- 3rd parties dependencies -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-mongodb</artifactId>
+                <version>${camel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
