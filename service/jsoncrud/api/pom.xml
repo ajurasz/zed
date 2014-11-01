@@ -6,16 +6,10 @@
 
     <parent>
         <groupId>com.github.zed</groupId>
-        <artifactId>zed-bom</artifactId>
+        <artifactId>zed-service-jsoncrud</artifactId>
         <version>0.0.0-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
     </parent>
 
-    <artifactId>zed-service</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>jsoncrud</module>
-    </modules>
+    <artifactId>zed-service-jsoncrud-api</artifactId>
 
 </project>
