@@ -24,4 +24,9 @@ public class MongoJsonCrudServiceTest extends Assert {
         assertEquals(Started, camelContext.getStatus());
     }
 
+    @Test
+    public void shouldLoadRoutes() {
+        assertFalse(camelContext.getRoutes().isEmpty());
+    }
+
 }
