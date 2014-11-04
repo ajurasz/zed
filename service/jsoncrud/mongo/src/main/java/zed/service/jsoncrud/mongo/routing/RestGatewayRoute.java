@@ -8,7 +8,10 @@ public class RestGatewayRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        from("direct:test").to("direct:test");
+        // TODO:CAMEL
+        // Collection should not be required for dynamic endpoints
+        from("direct:savePojo").
+                to("mongodb:mongoClient?database=zed_json_crud&collection=flights&operation=insert&dynamicity=true");
     }
 
 }

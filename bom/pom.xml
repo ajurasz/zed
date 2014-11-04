@@ -42,7 +42,12 @@
             <!-- 3rd parties dependencies -->
 
             <dependency>
-                <groupId>org.apache.camel</groupId>
+                <groupId>de.flapdoodle.embed</groupId>
+                <artifactId>de.flapdoodle.embed.mongo</artifactId>
+                <version>1.46.1</version>
+            </dependency>
+            <dependency>
+            <groupId>org.apache.camel</groupId>
                 <artifactId>camel-mongodb</artifactId>
                 <version>${camel.version}</version>
             </dependency>
