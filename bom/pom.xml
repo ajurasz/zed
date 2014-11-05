@@ -14,6 +14,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <camel.version>2.14.0</camel.version>
+        <guava.version>18.0</guava.version>
         <spring.boot.version>1.1.8.RELEASE</spring.boot.version>
         <zed.version>${project.version}</zed.version>
     </properties>
@@ -42,7 +43,12 @@
             <!-- 3rd parties dependencies -->
 
             <dependency>
-                <groupId>de.flapdoodle.embed</groupId>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
                 <version>1.46.1</version>
             </dependency>
