@@ -55,7 +55,7 @@ public class DynamicSchemaExpander {
         }
 
         if (!tableExists) {
-            String createSql = String.format("CREATE TABLE %s (id SERIAL", pojoTableName);
+            String createSql = String.format("CREATE TABLE %s (id VARCHAR(128)", pojoTableName);
             if (parent != null) {
                 createSql += ", " + parent + "_id LONG";
             }

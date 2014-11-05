@@ -53,7 +53,7 @@ public class SqlMirrorTest extends Assert {
         jdbcTemplate.execute("DROP TABLE Invoice IF EXISTS");
 
         // When
-        crossStoreStatementsGenerator.insert(new Invoice("id", new InvoiceCorrection(BigDecimal.TEN)));
+        crossStoreStatementsGenerator.insert("id", new Invoice("invoiceId", new InvoiceCorrection(BigDecimal.TEN)));
 
         // Then
         long invoices = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Invoice", Long.class);
