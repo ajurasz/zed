@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.sqlmirror;
+package zed.service.jsoncrud.mongo.crossstore.sql;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -48,14 +48,16 @@ public class SqlMirrorTest extends Assert {
     }
 
     @Test
-    public void should() {
+    public void shouldExpandSchemaAndInsertPojo() {
+        // Given
         jdbcTemplate.execute("DROP TABLE Invoice IF EXISTS");
 
+        // When
         crossStoreStatementsGenerator.insert(new Invoice("id", new InvoiceCorrection(BigDecimal.TEN)));
 
+        // Then
         long invoices = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Invoice", Long.class);
         assertEquals(1, invoices);
-
     }
 
 }

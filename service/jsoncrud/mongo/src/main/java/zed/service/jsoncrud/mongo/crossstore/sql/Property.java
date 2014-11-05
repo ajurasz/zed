@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.sqlmirror;
+package zed.service.jsoncrud.mongo.crossstore.sql;
 
 public class Property {
 

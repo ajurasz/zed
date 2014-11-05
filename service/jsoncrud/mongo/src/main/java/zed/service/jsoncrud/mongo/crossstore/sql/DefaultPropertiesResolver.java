@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.sqlmirror;
+package zed.service.jsoncrud.mongo.crossstore.sql;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
