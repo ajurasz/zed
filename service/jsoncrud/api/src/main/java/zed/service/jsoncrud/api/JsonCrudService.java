@@ -2,8 +2,8 @@ package zed.service.jsoncrud.api;
 
 public interface JsonCrudService {
 
-    void save(Object pojo);
+    String save(Object pojo);
 
-    void save(String collection, String json);
+    String save(String collection, String json);
 
 }

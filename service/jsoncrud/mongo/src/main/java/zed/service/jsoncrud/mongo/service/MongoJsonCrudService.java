@@ -14,13 +14,13 @@ public class MongoJsonCrudService implements JsonCrudService {
     private ProducerTemplate producerTemplate;
 
     @Override
-    public void save(Object pojo) {
-        producerTemplate.sendBodyAndHeader("direct:savePojo", pojo, COLLECTION, pojo.getClass().getSimpleName());
+    public String save(Object pojo) {
+        return producerTemplate.requestBodyAndHeader("direct:savePojo", pojo, COLLECTION, pojo.getClass().getSimpleName(), String.class);
     }
 
     @Override
-    public void save(String collection, String json) {
-
+    public String save(String collection, String json) {
+        return producerTemplate.requestBodyAndHeader("direct:saveJson", json, COLLECTION, collection, String.class);
     }
 
 }

@@ -55,6 +55,26 @@ public class MongoJsonCrudServiceTest extends Assert {
         assertEquals(1, mongoClient.getDB("zed_json_crud").getCollection("Invoice").count());
     }
 
+    @Test
+    public void shouldGenerateOid_fromPojo() throws UnknownHostException, InterruptedException {
+        // When
+        String oid = jsonCrudService.save(new Invoice("invoice001"));
+
+        // Then
+        String recordOid = mongoClient.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
+        assertEquals(oid, recordOid);
+    }
+
+    @Test
+    public void shouldGenerateOid_fromJson() throws UnknownHostException, InterruptedException {
+        // When
+        String oid = jsonCrudService.save("Invoice", "{invoiceId: 'id'}");
+
+        // Then
+        String recordOid = mongoClient.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
+        assertEquals(oid, recordOid);
+    }
+
 }
 
 class Invoice {
