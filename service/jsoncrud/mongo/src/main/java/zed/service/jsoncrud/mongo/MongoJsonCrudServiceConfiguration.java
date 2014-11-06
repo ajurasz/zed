@@ -6,6 +6,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.RoutesBuilder;
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,10 @@ import java.net.UnknownHostException;
 @EnableAutoConfiguration
 @ComponentScan
 public class MongoJsonCrudServiceConfiguration {
+
+    public static void main(String[] args) {
+        new SpringApplication(MongoJsonCrudServiceConfiguration.class).run(args);
+    }
 
     @Autowired
     RoutesBuilder[] routes;
