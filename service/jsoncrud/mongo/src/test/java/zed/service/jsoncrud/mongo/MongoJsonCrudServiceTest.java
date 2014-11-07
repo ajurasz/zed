@@ -2,6 +2,7 @@ package zed.service.jsoncrud.mongo;
 
 import com.mongodb.MongoClient;
 import org.apache.camel.CamelContext;
+import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,9 +76,77 @@ public class MongoJsonCrudServiceTest extends Assert {
         assertEquals(oid, recordOid);
     }
 
+    @Test
+    public void shouldFindOne() {
+        // Given
+        String savedOid = jsonCrudService.save(new Invoice("invoice001"));
+
+        // When
+        Invoice invoice = jsonCrudService.findOne(Invoice.class, savedOid);
+
+        // Then
+        assertEquals(savedOid, invoice.get_id());
+    }
+
+    @Test
+    public void shouldNotFindOne() {
+        // When
+        Invoice invoice = jsonCrudService.findOne(Invoice.class, ObjectId.get().toString());
+
+        // Then
+        assertNull(invoice);
+    }
+
+    @Test
+    public void shouldFindOneJson() {
+        // Given
+        String savedOid = jsonCrudService.save(new Invoice("invoice001"));
+
+        // When
+        String json = jsonCrudService.findOneJson("Invoice", savedOid);
+
+        // Then
+        assertTrue(json.contains(savedOid));
+    }
+
+    @Test
+    public void shouldNotFindOneJson() {
+        // When
+        String json = jsonCrudService.findOneJson("Invoice", ObjectId.get().toString());
+
+        // Then
+        assertNull(json);
+    }
+
+    @Test
+    public void shouldCountByClass() throws UnknownHostException, InterruptedException {
+        // Given
+        jsonCrudService.save(new Invoice("invoice001"));
+
+        // When
+        long invoices = jsonCrudService.count(Invoice.class);
+
+        // Then
+        assertEquals(1, invoices);
+    }
+
+    @Test
+    public void shouldCountByCollectionName() throws UnknownHostException, InterruptedException {
+        // Given
+        jsonCrudService.save(new Invoice("invoice001"));
+
+        // When
+        long invoices = jsonCrudService.count("Invoice");
+
+        // Then
+        assertEquals(1, invoices);
+    }
+
 }
 
 class Invoice {
+
+    private String _id;
 
     private String invoiceId;
 
@@ -86,6 +155,14 @@ class Invoice {
 
     Invoice(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getInvoiceId() {
