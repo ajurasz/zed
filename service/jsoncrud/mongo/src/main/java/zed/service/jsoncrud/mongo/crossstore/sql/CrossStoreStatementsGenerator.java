@@ -39,16 +39,16 @@ public class CrossStoreStatementsGenerator {
         for (Property property : propertiesResolver.resolveBasicProperties(pojo.getClass())) {
             insertStatement += ", ";
             if (property.type() == String.class) {
-                insertStatement += "'" + property.readFrom(pojo) + "'";
+                insertStatement += "'" + propertiesResolver.readFrom(pojo, property) + "'";
                 } else {
-                insertStatement += property.readFrom(pojo);
+                insertStatement += propertiesResolver.readFrom(pojo, property);
                 }
         }
         insertStatement += ")";
         jdbcTemplate.execute(insertStatement);
 
         for (Property<?> property : propertiesResolver.resolvePojoProperties(pojo.getClass())) {
-            Object nestedPojo = property.readFrom(pojo);
+            Object nestedPojo = propertiesResolver.readFrom(pojo, property);
             if (parentId == null) {
                 doInsert(null, oid, null, table, nestedPojo);
             } else {

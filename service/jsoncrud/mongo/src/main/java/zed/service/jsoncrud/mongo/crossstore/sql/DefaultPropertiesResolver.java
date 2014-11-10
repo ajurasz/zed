@@ -12,10 +12,21 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
 
+import static org.apache.commons.lang3.reflect.FieldUtils.readField;
+
 @Component
 public class DefaultPropertiesResolver implements PropertiesResolver {
 
     private final Set<?> basicTypes = Sets.newHashSet(String.class, Long.class, Integer.class, BigDecimal.class, BigInteger.class);
+
+    @Override
+    public <T> T readFrom(Object from, Property<T> property) {
+        try {
+            return (T) readField(from, property.name(), true);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public List<Property> resolveProperties(Class<?> pojoClass) {
