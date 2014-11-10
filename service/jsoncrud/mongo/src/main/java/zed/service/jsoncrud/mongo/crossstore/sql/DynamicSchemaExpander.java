@@ -40,7 +40,7 @@ public class DynamicSchemaExpander {
         }
 
         Map<String, Class<?>> pojoTableSchema = new HashMap<>();
-        for (Property property : propertiesResolver.resolveProperties(pojoClass)) {
+        for (Property property : propertiesResolver.resolveBasicProperties(pojoClass)) {
             if (property.type() == String.class) {
                 pojoTableSchema.put(", " + property.name() + " VARCHAR(1024)", property.type());
             } else if (property.type() == Integer.class) {
@@ -50,8 +50,12 @@ public class DynamicSchemaExpander {
             } else if (property.type() == BigDecimal.class) {
                 pojoTableSchema.put(", " + property.name() + " DECIMAL", property.type());
             } else {
-                expandPojoSchema(pojoTableName, property.type());
+                throw new IllegalStateException("Unknown basic type: " + property.type());
             }
+        }
+
+        for (Property property : propertiesResolver.resolvePojoProperties(pojoClass)) {
+            expandPojoSchema(pojoTableName, property.type());
         }
 
         if (!tableExists) {
