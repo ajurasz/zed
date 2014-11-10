@@ -1,5 +1,6 @@
 package zed.service.jsoncrud.mongo.crossstore.sql;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.stereotype.Component;
@@ -18,14 +19,9 @@ public class DefaultPropertiesResolver implements PropertiesResolver {
 
     @Override
     public List<Property> resolveProperties(Class<?> pojoClass) {
-        final List<Property> properties = Lists.newLinkedList();
-        ReflectionUtils.doWithFields(pojoClass, new ReflectionUtils.FieldCallback() {
-            @Override
-            public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
-                properties.add(new Property(field.getName(), field.getType()));
-            }
-        });
-        return properties;
+        List<Property> basicProperties = resolveBasicProperties(pojoClass);
+        List<Property> pojoProperties = resolvePojoProperties(pojoClass);
+        return ImmutableList.<Property>builder().addAll(basicProperties).addAll(pojoProperties).build();
     }
 
     @Override
