@@ -15,12 +15,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {SqlMirrorTest.class})
+@SpringApplicationConfiguration(classes = {SqlCrossStoreTest.class})
 @ActiveProfiles("test")
 @EnableAutoConfiguration
 @IntegrationTest
 @ComponentScan
-public class SqlMirrorTest extends Assert {
+public class SqlCrossStoreTest extends Assert {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -48,7 +48,7 @@ public class SqlMirrorTest extends Assert {
     }
 
     @Test
-    public void shouldExpandSchemaAndInsertPojo() {
+    public void shouldInsertPojo() {
         // Given
         jdbcTemplate.execute("DROP TABLE Invoice IF EXISTS");
 
@@ -57,6 +57,20 @@ public class SqlMirrorTest extends Assert {
 
         // Then
         long invoices = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Invoice", Long.class);
+        assertEquals(1, invoices);
+    }
+
+    @Test
+    public void shouldInsertNestedPojo() {
+        // Given
+        jdbcTemplate.execute("DROP TABLE Invoice IF EXISTS");
+        jdbcTemplate.execute("DROP TABLE Invoice_InvoiceCorrection IF EXISTS");
+
+        // When
+        crossStoreStatementsGenerator.insert("id", new Invoice("invoiceId", new InvoiceCorrection(BigDecimal.TEN)));
+
+        // Then
+        long invoices = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Invoice_InvoiceCorrection", Long.class);
         assertEquals(1, invoices);
     }
 
