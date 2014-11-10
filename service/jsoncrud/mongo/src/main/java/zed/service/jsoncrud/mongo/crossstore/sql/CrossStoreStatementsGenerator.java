@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-
 @Component
 public class CrossStoreStatementsGenerator {
 
@@ -40,34 +38,22 @@ public class CrossStoreStatementsGenerator {
         insertStatement += ") VALUES ('" + oid + "'";
         for (Property property : propertiesResolver.resolveBasicProperties(pojo.getClass())) {
             insertStatement += ", ";
-            try {
-                Field f = pojo.getClass().getDeclaredField(property.name());
-                f.setAccessible(true);
-                if (f.getType() == String.class) {
-                    insertStatement += "'" + f.get(pojo) + "'";
+            if (property.type() == String.class) {
+                insertStatement += "'" + property.readFrom(pojo) + "'";
                 } else {
-                    insertStatement += f.get(pojo);
+                insertStatement += property.readFrom(pojo);
                 }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
         }
         insertStatement += ")";
         jdbcTemplate.execute(insertStatement);
 
-        for (Property property : propertiesResolver.resolvePojoProperties(pojo.getClass())) {
-            try {
-                Field f = pojo.getClass().getDeclaredField(property.name());
-                f.setAccessible(true);
-                Object nestedPojo = f.get(pojo);
-                if (parentId == null) {
-                    doInsert(null, oid, null, table, nestedPojo);
-                } else {
-                    long insertedId = 1;
-                    doInsert(null, null, insertedId, table, nestedPojo);
-                }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException(e);
+        for (Property<?> property : propertiesResolver.resolvePojoProperties(pojo.getClass())) {
+            Object nestedPojo = property.readFrom(pojo);
+            if (parentId == null) {
+                doInsert(null, oid, null, table, nestedPojo);
+            } else {
+                long insertedId = 1;
+                doInsert(null, null, insertedId, table, nestedPojo);
             }
         }
     }
