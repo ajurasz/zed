@@ -22,8 +22,12 @@ public class RestGatewayRoute extends RouteBuilder {
         from("direct:findOne").
                 to(BASE_MONGO_ENDPOINT + "findById");
 
+        from("direct:findByQuery").
+                to(BASE_MONGO_ENDPOINT + "findAll");
+
         from("direct:count").
                 to(BASE_MONGO_ENDPOINT + "count");
+
     }
 
 }

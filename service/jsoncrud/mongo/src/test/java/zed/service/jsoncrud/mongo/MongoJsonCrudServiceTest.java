@@ -14,8 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
 import zed.service.jsoncrud.api.JsonCrudService;
+import zed.service.jsoncrud.api.QueryBuilder;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 import static org.apache.camel.ServiceStatus.Started;
 
@@ -67,16 +69,6 @@ public class MongoJsonCrudServiceTest extends Assert {
     }
 
     @Test
-    public void shouldGenerateOid_fromJson() throws UnknownHostException, InterruptedException {
-        // When
-        String oid = jsonCrudService.save("Invoice", "{invoiceId: 'id'}");
-
-        // Then
-        String recordOid = mongoClient.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
-        assertEquals(oid, recordOid);
-    }
-
-    @Test
     public void shouldFindOne() {
         // Given
         String savedOid = jsonCrudService.save(new Invoice("invoice001"));
@@ -98,27 +90,6 @@ public class MongoJsonCrudServiceTest extends Assert {
     }
 
     @Test
-    public void shouldFindOneJson() {
-        // Given
-        String savedOid = jsonCrudService.save(new Invoice("invoice001"));
-
-        // When
-        String json = jsonCrudService.findOneJson("Invoice", savedOid);
-
-        // Then
-        assertTrue(json.contains(savedOid));
-    }
-
-    @Test
-    public void shouldNotFindOneJson() {
-        // When
-        String json = jsonCrudService.findOneJson("Invoice", ObjectId.get().toString());
-
-        // Then
-        assertNull(json);
-    }
-
-    @Test
     public void shouldCountByClass() throws UnknownHostException, InterruptedException {
         // Given
         jsonCrudService.save(new Invoice("invoice001"));
@@ -131,15 +102,58 @@ public class MongoJsonCrudServiceTest extends Assert {
     }
 
     @Test
-    public void shouldCountByCollectionName() throws UnknownHostException, InterruptedException {
+    public void shouldFindByQuery() {
         // Given
-        jsonCrudService.save(new Invoice("invoice001"));
+        Invoice invoice = new Invoice("invoice001");
+        jsonCrudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
-        long invoices = jsonCrudService.count("Invoice");
+        List<Invoice> invoices = jsonCrudService.findByQuery(new QueryBuilder(Invoice.class, query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+    }
+
+    @Test
+    public void shouldNotFindByQuery() {
+        // Given
+        jsonCrudService.save(new Invoice("invoice001"));
+        InvoiceQuery query = new InvoiceQuery("randomValue");
+
+        // When
+        List<Invoice> invoices = jsonCrudService.findByQuery(new QueryBuilder(Invoice.class, query));
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
+    public void shouldCountPositiveByQuery() {
+        // Given
+        Invoice invoice = new Invoice("invoice001");
+        jsonCrudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
+
+        // When
+        long invoices = jsonCrudService.countByQuery(new QueryBuilder(Invoice.class, query));
 
         // Then
         assertEquals(1, invoices);
+    }
+
+    @Test
+    public void shouldCountNegativeByQuery() {
+        // Given
+        jsonCrudService.save(new Invoice("invoice001"));
+        InvoiceQuery query = new InvoiceQuery("randomValue");
+
+        // When
+        long invoices = jsonCrudService.countByQuery(new QueryBuilder(Invoice.class, query));
+
+        // Then
+        assertEquals(0, invoices);
     }
 
 }
@@ -163,6 +177,27 @@ class Invoice {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+}
+
+class InvoiceQuery {
+
+    private String invoiceId;
+
+    InvoiceQuery() {
+    }
+
+    InvoiceQuery(String invoiceId) {
+        this.invoiceId = invoiceId;
     }
 
     public String getInvoiceId() {

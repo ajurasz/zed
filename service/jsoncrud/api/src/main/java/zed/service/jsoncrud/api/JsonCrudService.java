@@ -1,17 +1,17 @@
 package zed.service.jsoncrud.api;
 
+import java.util.List;
+
 public interface JsonCrudService {
 
     String save(Object pojo);
 
-    String save(String collection, String json);
-
     <T> T findOne(Class<T> pojoClass, String oid);
-
-    String findOneJson(String collection, String oid);
 
     long count(Class<?> pojoClass);
 
-    long count(String collection);
+    <C, Q> List<C> findByQuery(QueryBuilder<C, Q> query);
+
+    <C, Q> long countByQuery(QueryBuilder<C, Q> query);
 
 }
