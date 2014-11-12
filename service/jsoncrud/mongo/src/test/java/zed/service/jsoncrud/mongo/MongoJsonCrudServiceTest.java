@@ -75,7 +75,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         String savedOid = jsonCrudService.save(new Invoice("invoice001"));
 
         // When
-        Invoice invoice = jsonCrudService.findOne(Invoice.class, savedOid);
+        Invoice invoice = new RestJsonCrudServiceClient("http://0.0.0.0:18080").findOne(Invoice.class, savedOid);
 
         // Then
         assertEquals(savedOid, invoice.get_id());
@@ -84,14 +84,14 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldNotFindOne() {
         // When
-        Invoice invoice = jsonCrudService.findOne(Invoice.class, ObjectId.get().toString());
+        Invoice invoice = new RestJsonCrudServiceClient("http://0.0.0.0:18080").findOne(Invoice.class, ObjectId.get().toString());
 
         // Then
         assertNull(invoice);
     }
 
     @Test
-    public void shouldCountByClass() throws UnknownHostException, InterruptedException {
+    public void shouldCount() throws UnknownHostException, InterruptedException {
         // Given
         jsonCrudService.save(new Invoice("invoice001"));
 

@@ -3,7 +3,6 @@ package zed.service.jsoncrud.mongo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
 import org.apache.camel.ProducerTemplate;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import zed.service.jsoncrud.api.JsonCrudService;
@@ -29,11 +28,7 @@ public class MongoJsonCrudService implements JsonCrudService {
 
     @Override
     public <T> T findOne(Class<T> pojoClass, String oid) {
-        DBObject document = producerTemplate.requestBodyAndHeader("direct:findOne", new ObjectId(oid), COLLECTION, pojoClassToCollection(pojoClass), DBObject.class);
-        if (document == null) {
-            return null;
-        }
-        return documentToPojo(document, pojoClass);
+        throw new UnsupportedOperationException();
     }
 
     @Override
