@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
 import zed.service.jsoncrud.api.JsonCrudService;
 import zed.service.jsoncrud.api.QueryBuilder;
+import zed.service.jsoncrud.api.client.RestJsonCrudServiceClient;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -95,7 +96,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         jsonCrudService.save(new Invoice("invoice001"));
 
         // When
-        long invoices = jsonCrudService.count(Invoice.class);
+        long invoices = new RestJsonCrudServiceClient("http://0.0.0.0:18080").count(Invoice.class);
 
         // Then
         assertEquals(1, invoices);

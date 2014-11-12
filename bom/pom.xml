@@ -32,6 +32,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <!-- Zed's dependencies -->
 
@@ -57,21 +64,6 @@
             <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
                 <version>1.46.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-groovy</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-mongodb</artifactId>
-                <version>${camel.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-spring</artifactId>
-                <version>${camel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import static zed.service.jsoncrud.api.client.Pojos.pojoClassToCollection;
+
 @Component
 public class CrossStoreStatementsGenerator {
 
@@ -26,7 +28,7 @@ public class CrossStoreStatementsGenerator {
     }
 
     public void doInsert(String oid, String parentOid, Long parentId, String parentTable, Object pojo) {
-        String table = pojo.getClass().getSimpleName();
+        String table = pojoClassToCollection(pojo.getClass());
         if (parentTable != null) {
             table = parentTable + "_" + table;
         }

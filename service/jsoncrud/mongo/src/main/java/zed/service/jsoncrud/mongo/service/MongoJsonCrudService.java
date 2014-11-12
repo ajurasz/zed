@@ -1,7 +1,6 @@
 package zed.service.jsoncrud.mongo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.ProducerTemplate;
 import org.bson.types.ObjectId;
@@ -15,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
+import static zed.service.jsoncrud.api.client.Pojos.pojoClassToCollection;
 
 @Component
 public class MongoJsonCrudService implements JsonCrudService {
@@ -24,12 +24,12 @@ public class MongoJsonCrudService implements JsonCrudService {
 
     @Override
     public String save(Object pojo) {
-        return producerTemplate.requestBodyAndHeader("direct:save", pojo, COLLECTION, pojo.getClass().getSimpleName(), String.class);
+        return producerTemplate.requestBodyAndHeader("direct:save", pojo, COLLECTION, pojoClassToCollection(pojo.getClass()), String.class);
     }
 
     @Override
     public <T> T findOne(Class<T> pojoClass, String oid) {
-        DBObject document = producerTemplate.requestBodyAndHeader("direct:findOne", new ObjectId(oid), COLLECTION, pojoClass.getSimpleName(), DBObject.class);
+        DBObject document = producerTemplate.requestBodyAndHeader("direct:findOne", new ObjectId(oid), COLLECTION, pojoClassToCollection(pojoClass), DBObject.class);
         if (document == null) {
             return null;
         }
@@ -38,19 +38,19 @@ public class MongoJsonCrudService implements JsonCrudService {
 
     @Override
     public long count(Class<?> pojoClass) {
-        // Fix : you can pass "irrelevantBody" anymore
-        return producerTemplate.requestBodyAndHeader("direct:count", new BasicDBObject(), COLLECTION, pojoClass.getSimpleName(), Long.class);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public <C, Q> List<C> findByQuery(final QueryBuilder<C, Q> query) {
-        List<DBObject> dbObjects = producerTemplate.requestBodyAndHeader("direct:findByQuery", query.query(), COLLECTION, query.classifier().getSimpleName(), List.class);
+        List<DBObject> dbObjects = producerTemplate.requestBodyAndHeader("direct:findByQuery", query.query(), COLLECTION, pojoClassToCollection(query.classifier()), List.class);
         return dbObjects.parallelStream().map(document -> documentToPojo(document, query.classifier())).collect(Collectors.toList());
     }
 
     @Override
     public <C, Q> long countByQuery(QueryBuilder<C, Q> query) {
-        return producerTemplate.requestBodyAndHeader("direct:count", query.query(), COLLECTION, query.classifier().getSimpleName(), Long.class);
+        // Fix : you can pass "irrelevantBody" anymore
+        return producerTemplate.requestBodyAndHeader("direct:countByQuery", query.query(), COLLECTION, pojoClassToCollection(query.classifier()), Long.class);
     }
 
     // private
