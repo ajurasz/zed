@@ -11,6 +11,8 @@
 
     <modules>
         <module>bom</module>
+        <module>deployer</module>
+        <module>shell</module>
         <module>service</module>
     </modules>
 

@@ -1,0 +1,6 @@
+shell:
+  auth:
+    simple:
+      user:
+        name: zed
+        password: zed
