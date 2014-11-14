@@ -15,6 +15,7 @@
 
         <camel.version>2.14.0</camel.version>
         <commons.lang.version>3.3.2</commons.lang.version>
+        <embedmongo.version>1.46.1</embedmongo.version>
         <guava.version>18.0</guava.version>
         <spring.boot.version>1.1.9.RELEASE</spring.boot.version>
         <zed.version>${project.version}</zed.version>
@@ -63,7 +64,7 @@
             <dependency>
             <groupId>de.flapdoodle.embed</groupId>
                 <artifactId>de.flapdoodle.embed.mongo</artifactId>
-                <version>1.46.1</version>
+                <version>${embedmongo.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
