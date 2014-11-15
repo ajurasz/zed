@@ -1,3 +1,6 @@
 # IntelliJ Idea
 .idea/
 *.iml
+
+# Ekstazi
+.ekstazi
