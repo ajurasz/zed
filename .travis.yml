@@ -1,3 +1,6 @@
+install:
+  - sudo apt-get install docker
+
 language: java
 
 jdk:
