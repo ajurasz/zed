@@ -11,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>dozer</artifactId>
+    <artifactId>zed-quickstarts-fuse-61-blueprint-camel-dozer</artifactId>
     <packaging>bundle</packaging>
 
     <dependencies>
@@ -30,14 +30,24 @@
             <artifactId>camel-netty-http</artifactId>
             <version>2.12.0.redhat-610379</version>
         </dependency>
+
+        <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -91,10 +101,6 @@
                                         <ports>
                                             <port>18081:18081</port>
                                         </ports>
-                                        <wait>
-                                            <time>45000</time>
-                                            <!--<url>http://localhost:18080</url>-->
-                                        </wait>
                                     </run>
                                 </image>
                             </images>
