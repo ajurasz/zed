@@ -8,10 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.List;
 
-public class DefaultDeployerTest extends Assert {
+public class DefaultDeploymentManagerTest extends Assert {
 
-    DefaultDeployer deployer = new DefaultDeployer();
+    DefaultDeploymentManager deployer = new DefaultDeploymentManager();
 
     @Test
     public void shouldDeployFatGuavaJar() {
@@ -36,6 +37,21 @@ public class DefaultDeployerTest extends Assert {
         // Then
         String savedDescriptor = Files.toString(new File(deployer.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy"), Charset.defaultCharset());
         assertEquals(deploymentDescriptor.uri(), savedDescriptor);
+    }
+
+    @Test
+    public void shouldListDeploymentDescriptors() {
+        // Given
+        deployer.clear();
+        DeploymentDescriptor descriptor = deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+
+        // When
+        List<DeploymentDescriptor> descriptors = deployer.list();
+
+        // Then
+        assertEquals(1, descriptors.size());
+        assertEquals(descriptor.id(), descriptors.get(0).id());
+        assertEquals("fatjar:mvn:com.google.guava/guava/18.0", descriptors.get(0).uri());
     }
 
 }

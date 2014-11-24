@@ -3,8 +3,8 @@ package zed.shell;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import zed.deployer.DefaultDeployer;
-import zed.deployer.Deployer;
+import zed.deployer.DefaultDeploymentManager;
+import zed.deployer.DeploymentManager;
 
 @EnableAutoConfiguration
 public class ShellConfiguration {
@@ -14,8 +14,8 @@ public class ShellConfiguration {
     }
 
     @Bean
-    Deployer deployer() {
-        return new DefaultDeployer();
+    DeploymentManager deployer() {
+        return new DefaultDeploymentManager();
     }
 
 }
