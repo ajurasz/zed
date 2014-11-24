@@ -1,0 +1,13 @@
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net  http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping>
+        <class-a>zed.quickstarts.fuse61.blueprint.camel.dozer.Foo</class-a>
+        <class-b>zed.quickstarts.fuse61.blueprint.camel.dozer.Bar</class-b>
+        <field>
+            <a>value</a>
+            <b>value</b>
+        </field>
+    </mapping>
+
+</mappings>

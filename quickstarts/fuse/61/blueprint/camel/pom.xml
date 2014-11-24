@@ -4,17 +4,18 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.zed</groupId>
-    <artifactId>zed</artifactId>
+    <parent>
+        <groupId>com.github.zed</groupId>
+        <artifactId>zed-quickstarts-fuse-61-blueprint</artifactId>
+        <version>0.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>zed-quickstarts-fuse-61-blueprint-camel</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.0-SNAPSHOT</version>
 
     <modules>
-        <module>bom</module>
-        <module>deployer</module>
-        <module>shell</module>
-        <module>service</module>
-        <module>quickstarts</module>
+        <module>dozer</module>
     </modules>
 
 </project>
