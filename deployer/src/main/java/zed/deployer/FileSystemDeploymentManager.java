@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class DefaultDeploymentManager implements DeploymentManager {
+public class FileSystemDeploymentManager implements DeploymentManager {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 

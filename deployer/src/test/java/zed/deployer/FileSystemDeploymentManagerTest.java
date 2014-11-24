@@ -2,6 +2,7 @@ package zed.deployer;
 
 import com.google.common.io.Files;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -10,15 +11,19 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultDeploymentManagerTest extends Assert {
+public class FileSystemDeploymentManagerTest extends Assert {
 
-    DefaultDeploymentManager deployer = new DefaultDeploymentManager();
+    FileSystemDeploymentManager deployer = new FileSystemDeploymentManager();
+
+    @Before
+    public void before() {
+        deployer.clear();
+    }
+
+    // Tests
 
     @Test
     public void shouldDeployFatGuavaJar() {
-        // Given
-        deployer.clear();
-
         // When
         deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
@@ -28,9 +33,6 @@ public class DefaultDeploymentManagerTest extends Assert {
 
     @Test
     public void shouldDeployFatGuavaJarDescriptor() throws IOException {
-        // Given
-        deployer.clear();
-
         // When
         DeploymentDescriptor deploymentDescriptor = deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
@@ -42,7 +44,6 @@ public class DefaultDeploymentManagerTest extends Assert {
     @Test
     public void shouldListDeploymentDescriptors() {
         // Given
-        deployer.clear();
         DeploymentDescriptor descriptor = deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // When
