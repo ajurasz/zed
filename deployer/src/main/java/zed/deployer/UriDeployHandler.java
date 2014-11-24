@@ -4,6 +4,6 @@ public interface UriDeployHandler {
 
     boolean supports(String uri);
 
-    void deploy(String uri);
+    void deploy(DeploymentDescriptor deploymentDescriptor);
 
 }

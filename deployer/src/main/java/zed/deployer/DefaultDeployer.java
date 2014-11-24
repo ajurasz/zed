@@ -4,14 +4,18 @@ package zed.deployer;
 import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class DefaultDeployer implements Deployer {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 
     @Override
-    public void deploy(String uri) {
-        new MavenUriDeployHandler(zedHome).deploy(uri);
+    public DeploymentDescriptor deploy(String uri) {
+        String id = UUID.randomUUID().toString();
+        BasicDeploymentDescriptor deploymentDescriptor = new BasicDeploymentDescriptor(id, uri);
+        new FatJarUriDeployHandler(zedHome).deploy(deploymentDescriptor);
+        return deploymentDescriptor;
     }
 
     @Override
