@@ -21,4 +21,9 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
         return uri;
     }
 
+    @Override
+    public String toString() {
+        return id + " " + uri;
+    }
+
 }
