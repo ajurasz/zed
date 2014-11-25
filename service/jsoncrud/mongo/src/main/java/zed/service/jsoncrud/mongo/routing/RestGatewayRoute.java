@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class RestGatewayRoute extends RouteBuilder {
 
     // TODO:CAMEL Collection should not be required for dynamic endpoints
-    private static final String BASE_MONGO_ENDPOINT = "mongodb:mongoClient?database=zed_json_crud&collection=default&dynamicity=true&operation=";
+    private static final String BASE_MONGO_ENDPOINT = "mongodb:mongo?database=zed_json_crud&collection=default&dynamicity=true&operation=";
 
     @Override
     public void configure() throws Exception {

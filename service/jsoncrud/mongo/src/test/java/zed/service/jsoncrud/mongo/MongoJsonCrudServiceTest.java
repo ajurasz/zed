@@ -1,10 +1,11 @@
 package zed.service.jsoncrud.mongo;
 
-import com.mongodb.MongoClient;
+import com.mongodb.Mongo;
 import org.apache.camel.CamelContext;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,16 @@ public class MongoJsonCrudServiceTest extends Assert {
     JsonCrudService jsonCrudService;
 
     @Autowired
-    MongoClient mongoClient;
+    Mongo mongo;
+
+    @BeforeClass
+    public static void beforeClass() {
+        System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
+    }
 
     @Before
     public void before() throws UnknownHostException {
-        mongoClient.getDB("zed_json_crud").dropDatabase();
+        mongo.getDB("zed_json_crud").dropDatabase();
     }
 
     @Test
@@ -56,7 +62,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     public void shouldSavePojo() throws UnknownHostException, InterruptedException {
         jsonCrudService.save(new Invoice("invoice001"));
 
-        assertEquals(1, mongoClient.getDB("zed_json_crud").getCollection("Invoice").count());
+        assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
     }
 
     @Test
@@ -65,7 +71,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         String oid = jsonCrudService.save(new Invoice("invoice001"));
 
         // Then
-        String recordOid = mongoClient.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
+        String recordOid = mongo.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
         assertEquals(oid, recordOid);
     }
 

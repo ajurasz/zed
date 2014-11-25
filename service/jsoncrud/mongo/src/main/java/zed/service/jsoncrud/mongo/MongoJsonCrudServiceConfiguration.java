@@ -1,6 +1,5 @@
 package zed.service.jsoncrud.mongo;
 
-import com.mongodb.MongoClient;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.RoutesBuilder;
@@ -8,12 +7,9 @@ import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
-import java.net.UnknownHostException;
 
 @Configuration
 @EnableAutoConfiguration
@@ -41,12 +37,6 @@ public class MongoJsonCrudServiceConfiguration {
     @Bean
     ProducerTemplate producerTemplate() throws Exception {
         return camelContext().createProducerTemplate();
-    }
-
-    @Bean
-    @ConditionalOnMissingClass(name = "org.junit.runner.Runner")
-    MongoClient mongoClient() throws UnknownHostException {
-        return new MongoClient();
     }
 
 }
