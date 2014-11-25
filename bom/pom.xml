@@ -18,7 +18,7 @@
         <embedmongo.version>1.46.1</embedmongo.version>
         <extazi.version>4.3.0</extazi.version>
         <guava.version>18.0</guava.version>
-        <spring.boot.version>1.1.9.RELEASE</spring.boot.version>
+        <spring.boot.version>1.2.0.RC2</spring.boot.version>
         <zed.version>${project.version}</zed.version>
     </properties>
 
@@ -116,5 +116,26 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>
