@@ -35,6 +35,8 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Autowired
     JsonCrudService jsonCrudService;
 
+    JsonCrudService crudService = new RestJsonCrudServiceClient("http://0.0.0.0:18080");
+
     @Autowired
     Mongo mongo;
 
@@ -60,15 +62,17 @@ public class MongoJsonCrudServiceTest extends Assert {
 
     @Test
     public void shouldSavePojo() throws UnknownHostException, InterruptedException {
-        jsonCrudService.save(new Invoice("invoice001"));
+        // When
+        crudService.save(new Invoice("invoice001"));
 
+        // Then
         assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
     }
 
     @Test
     public void shouldGenerateOid_fromPojo() throws UnknownHostException, InterruptedException {
         // When
-        String oid = jsonCrudService.save(new Invoice("invoice001"));
+        String oid = crudService.save(new Invoice("invoice001"));
 
         // Then
         String recordOid = mongo.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
@@ -78,10 +82,10 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldFindOne() {
         // Given
-        String savedOid = jsonCrudService.save(new Invoice("invoice001"));
+        String savedOid = crudService.save(new Invoice("invoice001"));
 
         // When
-        Invoice invoice = new RestJsonCrudServiceClient("http://0.0.0.0:18080").findOne(Invoice.class, savedOid);
+        Invoice invoice = crudService.findOne(Invoice.class, savedOid);
 
         // Then
         assertEquals(savedOid, invoice.get_id());
@@ -90,7 +94,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldNotFindOne() {
         // When
-        Invoice invoice = new RestJsonCrudServiceClient("http://0.0.0.0:18080").findOne(Invoice.class, ObjectId.get().toString());
+        Invoice invoice = crudService.findOne(Invoice.class, ObjectId.get().toString());
 
         // Then
         assertNull(invoice);
@@ -99,10 +103,10 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldCount() throws UnknownHostException, InterruptedException {
         // Given
-        jsonCrudService.save(new Invoice("invoice001"));
+        crudService.save(new Invoice("invoice001"));
 
         // When
-        long invoices = new RestJsonCrudServiceClient("http://0.0.0.0:18080").count(Invoice.class);
+        long invoices = crudService.count(Invoice.class);
 
         // Then
         assertEquals(1, invoices);
@@ -112,7 +116,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     public void shouldFindByQuery() {
         // Given
         Invoice invoice = new Invoice("invoice001");
-        jsonCrudService.save(invoice);
+        crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
@@ -126,7 +130,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldNotFindByQuery() {
         // Given
-        jsonCrudService.save(new Invoice("invoice001"));
+        crudService.save(new Invoice("invoice001"));
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When
@@ -140,7 +144,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     public void shouldCountPositiveByQuery() {
         // Given
         Invoice invoice = new Invoice("invoice001");
-        jsonCrudService.save(invoice);
+        crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
@@ -153,7 +157,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldCountNegativeByQuery() {
         // Given
-        jsonCrudService.save(new Invoice("invoice001"));
+        crudService.save(new Invoice("invoice001"));
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When

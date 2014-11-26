@@ -3,9 +3,10 @@ package zed.service.jsoncrud.mongo.routing;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mongodb.MongoDbConstants;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
+
+import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {
@@ -19,6 +20,11 @@ public class RestGatewayRoute extends RouteBuilder {
         // REST API facade
 
         restConfiguration().component("netty-http").host("0.0.0.0").port(18080).bindingMode(RestBindingMode.auto);
+
+        rest("/api/jsonCrud").
+                post("/save/{collection}").route().
+                setBody().groovy("new zed.service.jsoncrud.mongo.routing.SaveOperation(request.headers['collection'], request.body)").
+                to("direct:save").setBody().groovy("request.body.toString()");
 
         rest("/api/jsonCrud").
                 get("/count/{collection}").route().
@@ -35,6 +41,8 @@ public class RestGatewayRoute extends RouteBuilder {
         // Operations handlers
 
         from("direct:save").
+                setHeader(COLLECTION).groovy("request.body.collection").
+                setBody().groovy("request.body.pojo").
                 convertBodyTo(DBObject.class). // FIXED:CAMEL-7996
                 setProperty("original", body()).
                 // TODO:CAMEL
@@ -42,7 +50,7 @@ public class RestGatewayRoute extends RouteBuilder {
                 setBody().groovy("exchange.properties['original'].get('_id')");
 
         from("direct:findOne").
-                setHeader(MongoDbConstants.COLLECTION).groovy("request.body.collection").
+                setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("new org.bson.types.ObjectId(request.body.oid)").
                 to(BASE_MONGO_ENDPOINT + "findById").
                 choice().
@@ -55,7 +63,7 @@ public class RestGatewayRoute extends RouteBuilder {
                 to(BASE_MONGO_ENDPOINT + "findAll");
 
         from("direct:count").
-                setHeader(MongoDbConstants.COLLECTION).groovy("request.body.collection").
+                setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().constant(new BasicDBObject()).
                 to(BASE_MONGO_ENDPOINT + "count");
 

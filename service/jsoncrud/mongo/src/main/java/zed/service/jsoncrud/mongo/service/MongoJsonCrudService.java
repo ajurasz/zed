@@ -23,7 +23,7 @@ public class MongoJsonCrudService implements JsonCrudService {
 
     @Override
     public String save(Object pojo) {
-        return producerTemplate.requestBodyAndHeader("direct:save", pojo, COLLECTION, pojoClassToCollection(pojo.getClass()), String.class);
+        throw new UnsupportedOperationException();
     }
 
     @Override

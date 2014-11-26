@@ -31,7 +31,7 @@ public class RestJsonCrudServiceClient implements JsonCrudService {
 
     @Override
     public String save(Object pojo) {
-        throw new UnsupportedOperationException("Not *yet* implemented.");
+        return restTemplate.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(pojo.getClass())), pojo, String.class);
     }
 
     @Override
