@@ -65,6 +65,12 @@
             <artifactId>h2</artifactId>
         </dependency>
 
+        <!-- Operations -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+
         <!-- Testing -->
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
