@@ -10,7 +10,6 @@ import zed.service.jsoncrud.api.QueryBuilder;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static zed.service.jsoncrud.api.client.Pojos.pojoClassToCollection;
@@ -37,15 +36,14 @@ public class MongoJsonCrudService implements JsonCrudService {
     }
 
     @Override
-    public <C, Q> List<C> findByQuery(final QueryBuilder<C, Q> query) {
-        List<DBObject> dbObjects = producerTemplate.requestBodyAndHeader("direct:findByQuery", query.query(), COLLECTION, pojoClassToCollection(query.classifier()), List.class);
-        return dbObjects.parallelStream().map(document -> documentToPojo(document, query.classifier())).collect(Collectors.toList());
+    public <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public <C, Q> long countByQuery(QueryBuilder<C, Q> query) {
+    public <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
         // Fix : you can pass "irrelevantBody" anymore
-        return producerTemplate.requestBodyAndHeader("direct:countByQuery", query.query(), COLLECTION, pojoClassToCollection(query.classifier()), Long.class);
+        return producerTemplate.requestBodyAndHeader("direct:countByQuery", query.query(), COLLECTION, pojoClassToCollection(documentClass), Long.class);
     }
 
     // private

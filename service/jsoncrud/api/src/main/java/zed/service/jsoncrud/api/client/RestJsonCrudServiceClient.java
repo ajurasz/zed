@@ -1,12 +1,14 @@
 package zed.service.jsoncrud.api.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import zed.service.jsoncrud.api.JsonCrudService;
 import zed.service.jsoncrud.api.QueryBuilder;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,12 +47,15 @@ public class RestJsonCrudServiceClient implements JsonCrudService {
     }
 
     @Override
-    public <C, Q> List<C> findByQuery(QueryBuilder<C, Q> query) {
-        throw new UnsupportedOperationException("Not *yet* implemented.");
+    public <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
+        Class<C[]> returnType = (Class<C[]>) Array.newInstance(documentClass, 1).getClass();
+        String collection = pojoClassToCollection(documentClass);
+        C[] documents = restTemplate.postForObject(format("%s/findByQuery/%s", baseUrl, collection), query, returnType);
+        return ImmutableList.copyOf(documents);
     }
 
     @Override
-    public <C, Q> long countByQuery(QueryBuilder<C, Q> query) {
+    public <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
         throw new UnsupportedOperationException("Not *yet* implemented.");
     }
 

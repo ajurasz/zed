@@ -38,6 +38,11 @@ public class RestGatewayRoute extends RouteBuilder {
                 setBody().groovy("new zed.service.jsoncrud.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['oid'])").
                 to("direct:findOne");
 
+        rest("/api/jsonCrud").
+                post("/findByQuery/{collection}").route().
+                setBody().groovy("new zed.service.jsoncrud.mongo.routing.FindByQueryOperation(request.headers['collection'], request.body)").
+                to("direct:findByQuery");
+
         // Operations handlers
 
         from("direct:save").
@@ -60,7 +65,10 @@ public class RestGatewayRoute extends RouteBuilder {
 
 
         from("direct:findByQuery").
-                to(BASE_MONGO_ENDPOINT + "findAll");
+                setHeader(COLLECTION).groovy("request.body.collection").
+                setBody().groovy("request.body.queryBuilder.query").
+                to(BASE_MONGO_ENDPOINT + "findAll").
+                setBody().groovy("request.body.collect {it.put('_id', it.get('_id').toString()); it}");
 
         from("direct:count").
                 setHeader(COLLECTION).groovy("request.body.collection").

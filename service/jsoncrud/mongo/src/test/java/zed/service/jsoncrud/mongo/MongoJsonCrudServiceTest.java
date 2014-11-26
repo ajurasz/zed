@@ -120,7 +120,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
-        List<Invoice> invoices = jsonCrudService.findByQuery(new QueryBuilder(Invoice.class, query));
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices.size());
@@ -134,7 +134,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When
-        List<Invoice> invoices = jsonCrudService.findByQuery(new QueryBuilder(Invoice.class, query));
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(0, invoices.size());
@@ -148,7 +148,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
-        long invoices = jsonCrudService.countByQuery(new QueryBuilder(Invoice.class, query));
+        long invoices = jsonCrudService.countByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices);
@@ -161,7 +161,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When
-        long invoices = jsonCrudService.countByQuery(new QueryBuilder(Invoice.class, query));
+        long invoices = jsonCrudService.countByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(0, invoices);

@@ -10,8 +10,8 @@ public interface JsonCrudService {
 
     long count(Class<?> pojoClass);
 
-    <C, Q> List<C> findByQuery(QueryBuilder<C, Q> query);
+    <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query);
 
-    <C, Q> long countByQuery(QueryBuilder<C, Q> query);
+    <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query);
 
 }

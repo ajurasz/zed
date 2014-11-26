@@ -1,8 +1,6 @@
 package zed.service.jsoncrud.api;
 
-public class QueryBuilder<CLASS, QUERY> {
-
-    private final Class<CLASS> classifier;
+public class QueryBuilder<QUERY> {
 
     private final QUERY query;
 
@@ -14,16 +12,15 @@ public class QueryBuilder<CLASS, QUERY> {
 
     private String[] orderBy = new String[0];
 
-    public QueryBuilder(Class<CLASS> classifier, QUERY query) {
-        this.classifier = classifier;
+    public QueryBuilder(QUERY query) {
         this.query = query;
     }
 
-    public Class<CLASS> classifier() {
-        return classifier;
+    public QUERY query() {
+        return query;
     }
 
-    public QUERY query() {
+    public QUERY getQuery() {
         return query;
     }
 
