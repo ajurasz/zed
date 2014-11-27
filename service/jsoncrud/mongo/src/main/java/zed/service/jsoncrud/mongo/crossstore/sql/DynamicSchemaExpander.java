@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static zed.service.jsoncrud.api.client.Pojos.pojoClassToCollection;
 
 @Component
 public class DynamicSchemaExpander {
@@ -29,7 +28,7 @@ public class DynamicSchemaExpander {
     }
 
     private void expandPojoSchema(String parent, Class<?> pojoClass) {
-        String pojoTableName = pojoClassToCollection(pojoClass);
+        String pojoTableName = Pojos.pojoClassToCollection(pojoClass);
         if (parent != null) {
             pojoTableName = parent + "_" + pojoTableName;
         }

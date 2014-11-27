@@ -56,7 +56,7 @@ public class RestJsonCrudServiceClient implements JsonCrudService {
 
     @Override
     public <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
-        throw new UnsupportedOperationException("Not *yet* implemented.");
+        return restTemplate.postForObject(format("%s/countByQuery/%s", baseUrl, pojoClassToCollection(documentClass)), query, Long.class);
     }
 
     // Helpers

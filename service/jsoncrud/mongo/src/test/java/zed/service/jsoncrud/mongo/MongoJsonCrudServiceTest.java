@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
@@ -33,12 +34,15 @@ public class MongoJsonCrudServiceTest extends Assert {
     CamelContext camelContext;
 
     @Autowired
-    JsonCrudService jsonCrudService;
-
-    JsonCrudService crudService = new RestJsonCrudServiceClient("http://0.0.0.0:18080");
+    JsonCrudService crudService;
 
     @Autowired
     Mongo mongo;
+
+    @Bean
+    JsonCrudService jsonCrudService() {
+        return new RestJsonCrudServiceClient("http://0.0.0.0:18080");
+    }
 
     @BeforeClass
     public static void beforeClass() {
@@ -148,7 +152,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
         // When
-        long invoices = jsonCrudService.countByQuery(Invoice.class, new QueryBuilder(query));
+        long invoices = crudService.countByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices);
@@ -161,7 +165,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When
-        long invoices = jsonCrudService.countByQuery(Invoice.class, new QueryBuilder(query));
+        long invoices = crudService.countByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(0, invoices);

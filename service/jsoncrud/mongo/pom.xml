@@ -14,11 +14,6 @@
     <packaging>war</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.zed</groupId>
-            <artifactId>zed-service-jsoncrud-api</artifactId>
-        </dependency>
-
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -76,6 +71,11 @@
         </dependency>
 
         <!-- Testing -->
+        <dependency>
+            <groupId>com.github.zed</groupId>
+            <artifactId>zed-service-jsoncrud-api</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
