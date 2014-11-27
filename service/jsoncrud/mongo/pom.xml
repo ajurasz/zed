@@ -67,7 +67,11 @@
 
         <!-- Operations -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
 
