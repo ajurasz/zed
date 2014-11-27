@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.api;
+package zed.service.jsoncrud.sdk;
 
 import java.util.List;
 

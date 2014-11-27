@@ -1,12 +1,10 @@
-package zed.service.jsoncrud.api.client;
+package zed.service.jsoncrud.sdk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import zed.service.jsoncrud.api.JsonCrudService;
-import zed.service.jsoncrud.api.QueryBuilder;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -14,7 +12,7 @@ import java.util.List;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
-import static zed.service.jsoncrud.api.client.Pojos.pojoClassToCollection;
+import static zed.service.jsoncrud.sdk.Pojos.pojoClassToCollection;
 
 public class RestJsonCrudServiceClient implements JsonCrudService {
 

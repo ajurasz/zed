@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>api</module>
+        <module>sdk</module>
         <module>mongo</module>
     </modules>
 

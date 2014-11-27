@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.api.client;
+package zed.service.jsoncrud.sdk;
 
 public final class Pojos {
 

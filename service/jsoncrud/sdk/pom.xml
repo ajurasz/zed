@@ -15,7 +15,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
-    <artifactId>zed-service-jsoncrud-api</artifactId>
+    <artifactId>zed-service-jsoncrud-sdk</artifactId>
 
     <dependencies>
         <dependency>

@@ -73,7 +73,7 @@
         <!-- Testing -->
         <dependency>
             <groupId>com.github.zed</groupId>
-            <artifactId>zed-service-jsoncrud-api</artifactId>
+            <artifactId>zed-service-jsoncrud-sdk</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

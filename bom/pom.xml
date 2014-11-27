@@ -47,7 +47,7 @@
 
             <dependency>
                 <groupId>com.github.zed</groupId>
-                <artifactId>zed-service-jsoncrud-api</artifactId>
+                <artifactId>zed-service-jsoncrud-sdk</artifactId>
                 <version>${zed.version}</version>
             </dependency>
 

@@ -15,9 +15,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
-import zed.service.jsoncrud.api.JsonCrudService;
-import zed.service.jsoncrud.api.QueryBuilder;
-import zed.service.jsoncrud.api.client.RestJsonCrudServiceClient;
+import zed.service.jsoncrud.sdk.JsonCrudService;
+import zed.service.jsoncrud.sdk.QueryBuilder;
+import zed.service.jsoncrud.sdk.RestJsonCrudServiceClient;
 
 import java.net.UnknownHostException;
 import java.util.List;
