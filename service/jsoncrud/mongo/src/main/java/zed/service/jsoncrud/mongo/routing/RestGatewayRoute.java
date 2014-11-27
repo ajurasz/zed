@@ -7,6 +7,7 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
+import static zed.service.jsoncrud.mongo.routing.BsonToJsonMapperProcessor.mapBsonToJson;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {
@@ -67,17 +68,13 @@ public class RestGatewayRoute extends RouteBuilder {
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("new org.bson.types.ObjectId(request.body.oid)").
                 to(BASE_MONGO_ENDPOINT + "findById").
-                choice().
-                when(body().isNotNull()).
-                setBody().groovy("request.body.put('_id', request.body.get('_id').toString()); request.body").endChoice().
-                otherwise().endChoice();
-
+                process(mapBsonToJson());
 
         from("direct:findByQuery").
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("request.body.queryBuilder.query").
                 to(BASE_MONGO_ENDPOINT + "findAll").
-                setBody().groovy("request.body.collect {it.put('_id', it.get('_id').toString()); it}");
+                process(mapBsonToJson());
 
         from("direct:count").
                 setHeader(COLLECTION).groovy("request.body.collection").
