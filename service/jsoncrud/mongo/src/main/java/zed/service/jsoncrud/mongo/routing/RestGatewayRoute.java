@@ -54,9 +54,13 @@ public class RestGatewayRoute extends RouteBuilder {
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("request.body.pojo").
                 convertBodyTo(DBObject.class). // FIXED:CAMEL-7996
+                choice().
+                when().groovy("request.body.get('_id') != null").
+                setBody().groovy("request.body.put('_id', new org.bson.types.ObjectId(request.body.get('_id'))); request.body").endChoice().
+                otherwise().endChoice().
                 setProperty("original", body()).
                 // TODO:CAMEL
-                        to(BASE_MONGO_ENDPOINT + "insert").
+                        to(BASE_MONGO_ENDPOINT + "save").
                 setBody().groovy("exchange.properties['original'].get('_id')");
 
         from("direct:findOne").

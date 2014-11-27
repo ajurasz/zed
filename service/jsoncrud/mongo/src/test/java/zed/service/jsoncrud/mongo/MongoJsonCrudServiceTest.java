@@ -1,7 +1,6 @@
 package zed.service.jsoncrud.mongo;
 
 import com.mongodb.Mongo;
-import org.apache.camel.CamelContext;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,16 +21,11 @@ import zed.service.jsoncrud.sdk.RestJsonCrudServiceClient;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import static org.apache.camel.ServiceStatus.Started;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoJsonCrudServiceConfiguration.class, MongoJsonCrudServiceTest.class})
 @IntegrationTest
 @ActiveProfiles("test")
 public class MongoJsonCrudServiceTest extends Assert {
-
-    @Autowired
-    CamelContext camelContext;
 
     @Autowired
     JsonCrudService crudService;
@@ -54,20 +48,41 @@ public class MongoJsonCrudServiceTest extends Assert {
         mongo.getDB("zed_json_crud").dropDatabase();
     }
 
-    @Test
-    public void shouldStartCamelContext() {
-        assertEquals(Started, camelContext.getStatus());
-    }
+    // Tests
 
     @Test
-    public void shouldLoadRoutes() {
-        assertFalse(camelContext.getRoutes().isEmpty());
-    }
-
-    @Test
-    public void shouldSavePojo() throws UnknownHostException, InterruptedException {
+    public void shouldCreatePojo() throws UnknownHostException, InterruptedException {
         // When
         crudService.save(new Invoice("invoice001"));
+
+        // Then
+        assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
+    }
+
+    @Test
+    public void shouldUpdatePojoWithAssignedId() {
+        // Given
+        Invoice invoice = new Invoice();
+        String oid = crudService.save(invoice);
+        invoice.set_id(oid);
+
+        // When
+        crudService.save(invoice);
+
+        // Then
+        List<Invoice> invs = crudService.findByQuery(Invoice.class, new QueryBuilder<>(new InvoiceQuery()));
+        System.out.println();
+        assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
+    }
+
+    @Test
+    public void shouldUpdateLoadedPojo() {
+        // Given
+        String oid = crudService.save(new Invoice());
+        Invoice invoice = crudService.findOne(Invoice.class, oid);
+
+        // When
+        crudService.save(invoice);
 
         // Then
         assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
