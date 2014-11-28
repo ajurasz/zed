@@ -28,7 +28,7 @@ public class DeployCommandTest {
 
     @Test
     public void xxx() throws JSchException, IOException {
-        executeCommand("clearDeployed");
+        executeCommand("deploy_clean");
 
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
         executeCommand(command);
@@ -37,12 +37,12 @@ public class DeployCommandTest {
     }
 
     @Test
-    public void shouldClearDeployed() throws JSchException, IOException {
-        executeCommand("clearDeployed");
+    public void shouldCleanDeployed() throws JSchException, IOException {
+        executeCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
         executeCommand(command);
 
-        executeCommand("clearDeployed");
+        executeCommand("deploy_clean");
 
         Assert.assertEquals(0, zedHome.deployDirectory().list().length);
     }

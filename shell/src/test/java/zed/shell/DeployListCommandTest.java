@@ -11,8 +11,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import zed.deployer.LocalFileSystemZedHome;
-import zed.deployer.ZedHome;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,12 +23,10 @@ import java.util.List;
 @IntegrationTest
 public class DeployListCommandTest extends Assert {
 
-    ZedHome zedHome = new LocalFileSystemZedHome();
-
     @Test
     public void shouldPrintHeader() throws JSchException, IOException {
         // Given
-        executeCommand("clearDeployed");
+        executeCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
         executeCommand(command);
 
@@ -45,7 +41,7 @@ public class DeployListCommandTest extends Assert {
     @Test
     public void shouldPrintDeployedFatJar() throws JSchException, IOException {
         // Given
-        executeCommand("clearDeployed");
+        executeCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
         executeCommand(command);
 
