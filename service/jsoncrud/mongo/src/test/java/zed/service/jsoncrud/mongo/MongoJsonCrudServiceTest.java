@@ -38,6 +38,8 @@ public class MongoJsonCrudServiceTest extends Assert {
         return new RestJsonCrudServiceClient("http://0.0.0.0:18080");
     }
 
+    Invoice invoice = new Invoice("invoice001");
+
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
@@ -134,7 +136,6 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldFindByQuery() {
         // Given
-        Invoice invoice = new Invoice("invoice001");
         crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
@@ -144,6 +145,20 @@ public class MongoJsonCrudServiceTest extends Assert {
         // Then
         assertEquals(1, invoices.size());
         assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+    }
+
+    @Test
+    public void shouldFindAllByQuery() {
+        // Given
+        crudService.save(invoice);
+        crudService.save(invoice);
+
+        // When
+        InvoiceQuery query = new InvoiceQuery();
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(2, invoices.size());
     }
 
     @Test
@@ -162,7 +177,6 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldCountPositiveByQuery() {
         // Given
-        Invoice invoice = new Invoice("invoice001");
         crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
 
@@ -176,7 +190,7 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Test
     public void shouldCountNegativeByQuery() {
         // Given
-        crudService.save(new Invoice("invoice001"));
+        crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery("randomValue");
 
         // When

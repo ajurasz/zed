@@ -1,5 +1,6 @@
 package zed.service.jsoncrud.sdk;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -66,7 +67,9 @@ public class RestJsonCrudServiceClient implements JsonCrudService {
     private static RestTemplate createDefaultRestTemplate() {
         RestTemplate restTemplate = new RestTemplate();
         MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-        jacksonConverter.setObjectMapper(new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false));
+        jacksonConverter.setObjectMapper(
+                new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        );
         restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
         return restTemplate;
     }
