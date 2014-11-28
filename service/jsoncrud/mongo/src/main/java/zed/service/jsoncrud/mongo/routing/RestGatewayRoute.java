@@ -7,9 +7,9 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
-import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapBsonToJson;
-import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapJsonToBson;
-import static zed.service.jsoncrud.mongo.routing.MongoQueryBuilderProcessor.queryBuilder;
+import static zed.service.jsoncrud.mongo.bson.BsonMapperProcessor.mapBsonToJson;
+import static zed.service.jsoncrud.mongo.bson.BsonMapperProcessor.mapJsonToBson;
+import static zed.service.jsoncrud.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {

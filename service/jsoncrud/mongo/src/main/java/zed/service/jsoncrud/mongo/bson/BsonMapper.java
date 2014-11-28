@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.routing;
+package zed.service.jsoncrud.mongo.bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;

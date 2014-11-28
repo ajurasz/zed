@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.routing;
+package zed.service.jsoncrud.mongo.query;
 
 import com.mongodb.DBObject;
 import org.apache.camel.Exchange;
