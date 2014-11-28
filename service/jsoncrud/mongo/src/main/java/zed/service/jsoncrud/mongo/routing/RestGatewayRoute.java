@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapBsonToJson;
 import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapJsonToBson;
+import static zed.service.jsoncrud.mongo.routing.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {
@@ -71,6 +72,7 @@ public class RestGatewayRoute extends RouteBuilder {
         from("direct:findByQuery").
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("request.body.queryBuilder.query").
+                process(queryBuilder()).
                 to(BASE_MONGO_ENDPOINT + "findAll").
                 process(mapBsonToJson());
 
@@ -82,6 +84,7 @@ public class RestGatewayRoute extends RouteBuilder {
         from("direct:countByQuery").
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("request.body.queryBuilder.query").
+                process(queryBuilder()).
                 to(BASE_MONGO_ENDPOINT + "count");
 
     }

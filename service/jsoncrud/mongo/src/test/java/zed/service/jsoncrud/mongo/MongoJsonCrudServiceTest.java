@@ -175,6 +175,35 @@ public class MongoJsonCrudServiceTest extends Assert {
     }
 
     @Test
+    public void shouldFindByQueryWithContains() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery();
+        query.setInvoiceIdContains("voice");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+    }
+
+    @Test
+    public void shouldNotFindByQueryWithContains() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery();
+        query.setInvoiceIdContains("randomString");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
     public void shouldCountPositiveByQuery() {
         // Given
         crudService.save(invoice);
@@ -192,6 +221,34 @@ public class MongoJsonCrudServiceTest extends Assert {
         // Given
         crudService.save(invoice);
         InvoiceQuery query = new InvoiceQuery("randomValue");
+
+        // When
+        long invoices = crudService.countByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, invoices);
+    }
+
+    @Test
+    public void shouldCountPositiveByQueryWithContains() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery();
+        query.setInvoiceIdContains("voice");
+
+        // When
+        long invoices = crudService.countByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices);
+    }
+
+    @Test
+    public void shouldCountNegativeByQueryWithContains() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery();
+        query.setInvoiceIdContains("randomString");
 
         // When
         long invoices = crudService.countByQuery(Invoice.class, new QueryBuilder(query));
@@ -237,11 +294,13 @@ class InvoiceQuery {
 
     private String invoiceId;
 
+    private String invoiceIdContains;
+
     InvoiceQuery() {
     }
 
     InvoiceQuery(String invoiceId) {
-        this.invoiceId = invoiceId;
+        this.setInvoiceId(invoiceId);
     }
 
     public String getInvoiceId() {
@@ -250,6 +309,14 @@ class InvoiceQuery {
 
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public String getInvoiceIdContains() {
+        return invoiceIdContains;
+    }
+
+    public void setInvoiceIdContains(String invoiceIdLike) {
+        this.invoiceIdContains = invoiceIdLike;
     }
 
 }
