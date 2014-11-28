@@ -7,7 +7,8 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
-import static zed.service.jsoncrud.mongo.routing.BsonToJsonMapperProcessor.mapBsonToJson;
+import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapBsonToJson;
+import static zed.service.jsoncrud.mongo.routing.BsonMapperProcessor.mapJsonToBson;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {
@@ -55,10 +56,7 @@ public class RestGatewayRoute extends RouteBuilder {
                 setHeader(COLLECTION).groovy("request.body.collection").
                 setBody().groovy("request.body.pojo").
                 convertBodyTo(DBObject.class). // FIXED:CAMEL-7996
-                choice().
-                when().groovy("request.body.get('_id') != null").
-                setBody().groovy("request.body.put('_id', new org.bson.types.ObjectId(request.body.get('_id'))); request.body").endChoice().
-                otherwise().endChoice().
+                process(mapJsonToBson()).
                 setProperty("original", body()).
                 // TODO:CAMEL
                         to(BASE_MONGO_ENDPOINT + "save").

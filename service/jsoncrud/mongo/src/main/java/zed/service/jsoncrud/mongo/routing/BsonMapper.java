@@ -2,6 +2,7 @@ package zed.service.jsoncrud.mongo.routing;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.bson.types.ObjectId;
 
 public class BsonMapper {
 
@@ -13,6 +14,16 @@ public class BsonMapper {
             json.put("_id", id.toString());
         }
         return json;
+    }
+
+    public DBObject jsonToBson(DBObject json) {
+        DBObject bson = new BasicDBObject(json.toMap());
+        Object id = bson.get("_id");
+        if (id != null) {
+            bson.removeField("_id");
+            bson.put("_id", new ObjectId(id.toString()));
+        }
+        return bson;
     }
 
 }
