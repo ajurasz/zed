@@ -11,16 +11,16 @@ public class BsonMapper {
         Object id = json.get("_id");
         if (id != null) {
             json.removeField("_id");
-            json.put("_id", id.toString());
+            json.put("id", id.toString());
         }
         return json;
     }
 
     public DBObject jsonToBson(DBObject json) {
         DBObject bson = new BasicDBObject(json.toMap());
-        Object id = bson.get("_id");
+        Object id = bson.get("id");
         if (id != null) {
-            bson.removeField("_id");
+            bson.removeField("id");
             bson.put("_id", new ObjectId(id.toString()));
         }
         return bson;

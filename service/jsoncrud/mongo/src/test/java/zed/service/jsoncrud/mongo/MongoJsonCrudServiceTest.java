@@ -64,7 +64,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         // Given
         Invoice invoice = new Invoice();
         String oid = crudService.save(invoice);
-        invoice.set_id(oid);
+        invoice.setId(oid);
 
         // When
         crudService.save(invoice);
@@ -107,7 +107,7 @@ public class MongoJsonCrudServiceTest extends Assert {
         Invoice invoice = crudService.findOne(Invoice.class, savedOid);
 
         // Then
-        assertEquals(savedOid, invoice.get_id());
+        assertEquals(savedOid, invoice.getId());
     }
 
     @Test
@@ -190,7 +190,7 @@ public class MongoJsonCrudServiceTest extends Assert {
 
 class Invoice {
 
-    private String _id;
+    private String id;
 
     private String invoiceId;
 
@@ -201,12 +201,12 @@ class Invoice {
         this.invoiceId = invoiceId;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getInvoiceId() {
