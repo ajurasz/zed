@@ -4,6 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
@@ -17,12 +19,19 @@ public class RestGatewayRoute extends RouteBuilder {
     // TODO:CAMEL Collection should not be required for dynamic endpoints
     private static final String BASE_MONGO_ENDPOINT = "mongodb:mongo?database=zed_json_crud&collection=default&dynamicity=true&operation=";
 
+    private final int restPort;
+
+    @Autowired
+    public RestGatewayRoute(@Value("${zed.service.jsoncrud.rest.port:18080}") int restPort) {
+        this.restPort = restPort;
+    }
+
     @Override
     public void configure() throws Exception {
 
         // REST API facade
 
-        restConfiguration().component("netty-http").host("0.0.0.0").port(18080).bindingMode(RestBindingMode.auto);
+        restConfiguration().component("netty-http").host("0.0.0.0").port(restPort).bindingMode(RestBindingMode.auto);
 
         rest("/api/jsonCrud").
                 post("/save/{collection}").route().

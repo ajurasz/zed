@@ -8,9 +8,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
@@ -21,8 +23,10 @@ import zed.service.jsoncrud.sdk.RestJsonCrudServiceClient;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoJsonCrudServiceConfiguration.class, MongoJsonCrudServiceTest.class})
+@SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoJsonCrudServiceConfiguration.class, MongoJsonCrudServiceTestConfiguration.class})
 @IntegrationTest
 @ActiveProfiles("test")
 public class MongoJsonCrudServiceTest extends Assert {
@@ -33,15 +37,11 @@ public class MongoJsonCrudServiceTest extends Assert {
     @Autowired
     Mongo mongo;
 
-    @Bean
-    JsonCrudService jsonCrudService() {
-        return new RestJsonCrudServiceClient("http://0.0.0.0:18080");
-    }
-
     Invoice invoice = new Invoice("invoice001");
 
     @BeforeClass
     public static void beforeClass() {
+        System.setProperty("zed.service.jsoncrud.rest.port", findAvailableTcpPort() + "");
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 
@@ -72,8 +72,6 @@ public class MongoJsonCrudServiceTest extends Assert {
         crudService.save(invoice);
 
         // Then
-        List<Invoice> invs = crudService.findByQuery(Invoice.class, new QueryBuilder<>(new InvoiceQuery()));
-        System.out.println();
         assertEquals(1, mongo.getDB("zed_json_crud").getCollection("Invoice").count());
     }
 
@@ -255,6 +253,19 @@ public class MongoJsonCrudServiceTest extends Assert {
 
         // Then
         assertEquals(0, invoices);
+    }
+
+}
+
+@Configuration
+class MongoJsonCrudServiceTestConfiguration {
+
+    @Value("${zed.service.jsoncrud.rest.port}")
+    int restPort;
+
+    @Bean
+    JsonCrudService jsonCrudService() {
+        return new RestJsonCrudServiceClient("http://0.0.0.0:" + restPort);
     }
 
 }
