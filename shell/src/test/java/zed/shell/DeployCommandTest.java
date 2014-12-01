@@ -26,21 +26,21 @@ public class DeployCommandTest {
 
     @Test
     public void shouldDeployGuavaJar() {
-        ssh.executeCommand("deploy_clean");
+        ssh.printCommand("deploy_clean");
 
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
-        ssh.executeCommand(command);
+        ssh.printCommand(command);
         Assert.assertTrue(Arrays.asList(zedHome.deployDirectory().list()).contains("guava-18.0.jar"));
 
     }
 
     @Test
     public void shouldCleanDeployed() throws JSchException, IOException {
-        ssh.executeCommand("deploy_clean");
+        ssh.printCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
-        ssh.executeCommand(command);
+        ssh.printCommand(command);
 
-        ssh.executeCommand("deploy_clean");
+        ssh.printCommand("deploy_clean");
 
         Assert.assertEquals(0, zedHome.deployDirectory().list().length);
     }

@@ -21,12 +21,12 @@ public class DeployListCommandTest extends Assert {
     @Test
     public void shouldPrintHeader() throws JSchException, IOException {
         // Given
-        ssh.executeCommand("deploy_clean");
+        ssh.printCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
-        ssh.executeCommand(command);
+        ssh.printCommand(command);
 
         // When
-        List<String> output = ssh.executeCommandWithOutput("deploy_list");
+        List<String> output = ssh.command("deploy_list");
 
         // Then
         assertEquals(2, output.size());
@@ -36,12 +36,12 @@ public class DeployListCommandTest extends Assert {
     @Test
     public void shouldPrintDeployedFatJar() throws JSchException, IOException {
         // Given
-        ssh.executeCommand("deploy_clean");
+        ssh.printCommand("deploy_clean");
         String command = "deploy fatjar:mvn:com.google.guava/guava/18.0";
-        ssh.executeCommand(command);
+        ssh.printCommand(command);
 
         // When
-        List<String> output = ssh.executeCommandWithOutput("deploy_list");
+        List<String> output = ssh.command("deploy_list");
 
         // Then
         assertEquals(2, output.size());
