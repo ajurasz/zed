@@ -19,6 +19,7 @@
         <embedmongo.version>1.46.4</embedmongo.version>
         <extazi.version>4.3.0</extazi.version>
         <guava.version>18.0</guava.version>
+        <jsch.version>0.1.51</jsch.version>
         <spring.boot.version>1.2.0.RC2</spring.boot.version>
         <zed.version>${project.version}</zed.version>
     </properties>
@@ -62,6 +63,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
