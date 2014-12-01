@@ -1,6 +1,5 @@
 package zed.deployer;
 
-import com.google.common.io.Files;
 import org.apache.commons.io.IOUtils;
 import zed.mavenrepo.JcabiMavenRepositoryResolver;
 import zed.mavenrepo.MavenRepositoryResolver;
@@ -34,7 +33,6 @@ public class FatJarUriDeployHandler implements UriDeployHandler {
         File deployDirectory = new File(zedHome.deployDirectory(), mavenCoordinates[1] + "-" + mavenCoordinates[2] + ".jar");
         try {
             IOUtils.copy(in, new FileOutputStream(deployDirectory));
-            Files.write(deploymentDescriptor.uri().getBytes(), new File(zedHome.deployDirectory(), deploymentDescriptor.id() + ".deploy"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

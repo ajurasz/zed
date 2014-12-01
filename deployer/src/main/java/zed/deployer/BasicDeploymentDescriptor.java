@@ -1,14 +1,26 @@
 package zed.deployer;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
+
 public class BasicDeploymentDescriptor implements DeploymentDescriptor {
 
     private final String id;
 
     private final String uri;
 
-    public BasicDeploymentDescriptor(String id, String uri) {
+    private final String pid;
+
+    public BasicDeploymentDescriptor(String id, String uri, String pid) {
         this.id = id;
         this.uri = uri;
+        this.pid = pid;
+    }
+
+    public BasicDeploymentDescriptor(String id, String uri) {
+        this(id, uri, null);
     }
 
     @Override
@@ -22,8 +34,24 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
     }
 
     @Override
+    public String pid() {
+        return pid;
+    }
+
+    @Override
     public String toString() {
         return id + " " + uri;
+    }
+
+    public void save(File output) {
+        try {
+            Properties properties = new Properties();
+            properties.put("id", id);
+            properties.put("uri", uri);
+            properties.store(new FileOutputStream(output), "some-comment");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

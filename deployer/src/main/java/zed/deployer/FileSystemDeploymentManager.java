@@ -2,12 +2,13 @@ package zed.deployer;
 
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -17,28 +18,36 @@ public class FileSystemDeploymentManager implements DeploymentManager {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 
+    private final List<UriDeployHandler> deployHandlers = Arrays.asList(new FatJarUriDeployHandler(zedHome), new MongoUriDeployHandler(zedHome));
+
     @Override
     public DeploymentDescriptor deploy(String uri) {
         String id = UUID.randomUUID().toString();
         BasicDeploymentDescriptor deploymentDescriptor = new BasicDeploymentDescriptor(id, uri);
-        new FatJarUriDeployHandler(zedHome).deploy(deploymentDescriptor);
-        return deploymentDescriptor;
+        for (UriDeployHandler deployHandler : deployHandlers) {
+            if (deployHandler.supports(uri)) {
+                deployHandler.deploy(deploymentDescriptor);
+                deploymentDescriptor.save(new File(zedHome.deployDirectory(), deploymentDescriptor.id() + ".deploy"));
+                return deploymentDescriptor;
+            }
+        }
+        throw new RuntimeException("No handler for URI: " + uri);
     }
 
     @Override
     public List<DeploymentDescriptor> list() {
         return newArrayList(zedHome.deployDirectory().listFiles((dir, name) -> name.endsWith(".deploy"))).
-                parallelStream().
-                map(file -> new BasicDeploymentDescriptor(file.getName().replaceAll(".deploy", ""), fileToString(file))).
-                collect(Collectors.toList());
-    }
-
-    String fileToString(File file) {
-        try {
-            return IOUtils.toString(new FileInputStream(file));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                parallelStream().map(file -> {
+            try {
+                Properties props = new Properties();
+                props.load(new FileInputStream(file));
+                String pid = props.getProperty("pid");
+                String uri = props.getProperty("uri");
+                return new BasicDeploymentDescriptor(file.getName().replaceAll(".deploy", ""), uri, pid);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
     }
 
     @Override
