@@ -35,6 +35,12 @@
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-aether</artifactId>
             <version>0.10.1</version>
+            <exclusions>
+                <exclusion> <!-- Fat jar optimization. We don't need 9 MB of AWS-related code. -->
+                    <groupId>com.amazonaws</groupId>
+                    <artifactId>aws-java-sdk</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.el</groupId>
