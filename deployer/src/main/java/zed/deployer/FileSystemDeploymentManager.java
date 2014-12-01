@@ -35,6 +35,19 @@ public class FileSystemDeploymentManager implements DeploymentManager {
     }
 
     @Override
+    public DeploymentDescriptor update(DeploymentDescriptor pid) {
+        BasicDeploymentDescriptor basicDescriptor = (BasicDeploymentDescriptor) pid;
+        basicDescriptor.save(new File(zedHome.deployDirectory(), pid.id() + ".deploy"));
+        return basicDescriptor;
+    }
+
+    @Override
+    public DeploymentDescriptor deployment(String deploymentId) {
+        List<DeploymentDescriptor> deploymentDescriptors = list().parallelStream().filter(descriptor -> descriptor.id().equals(deploymentId)).collect(Collectors.toList());
+        return new BasicDeploymentDescriptor(deploymentId, deploymentDescriptors.get(0).uri(), deploymentDescriptors.get(0).pid());
+    }
+
+    @Override
     public List<DeploymentDescriptor> list() {
         return newArrayList(zedHome.deployDirectory().listFiles((dir, name) -> name.endsWith(".deploy"))).
                 parallelStream().map(file -> {

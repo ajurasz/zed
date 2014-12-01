@@ -7,4 +7,7 @@ public interface DeploymentDescriptor {
     String uri();
 
     String pid();
+
+    DeploymentDescriptor pid(String pid);
+
 }

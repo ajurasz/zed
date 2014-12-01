@@ -39,6 +39,11 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
     }
 
     @Override
+    public BasicDeploymentDescriptor pid(String pid) {
+        return new BasicDeploymentDescriptor(id, uri, pid);
+    }
+
+    @Override
     public String toString() {
         return id + " " + uri;
     }
@@ -48,6 +53,9 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
             Properties properties = new Properties();
             properties.put("id", id);
             properties.put("uri", uri);
+            if (pid != null) {
+                properties.put("pid", pid);
+            }
             properties.store(new FileOutputStream(output), "some-comment");
         } catch (IOException e) {
             throw new RuntimeException(e);
