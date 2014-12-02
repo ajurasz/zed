@@ -1,25 +1,51 @@
 package zed.deployer.executor;
 
-import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerCertificateException;
+import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.DefaultStatusResolver;
 import zed.deployer.DeploymentDescriptor;
 import zed.deployer.DeploymentManager;
 import zed.deployer.FileSystemDeploymentManager;
 import zed.deployer.StatusResolver;
 
+import static org.junit.Assume.assumeTrue;
+import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, MongoDockerProcessExecutorHandlerTestConfiguration.class})
+@IntegrationTest
 public class MongoDockerProcessExecutorHandlerTest extends Assert {
 
-    DeploymentManager deploymentManager = new FileSystemDeploymentManager();
+    @Autowired
+    DockerClient docker;
 
-    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler = new MongoDockerProcessExecutorHandler(deploymentManager);
+    @Autowired
+    DeploymentManager deploymentManager;
 
-    StatusResolver statusResolver = new DefaultStatusResolver(deploymentManager);
+    @Autowired
+    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler;
+
+    @Autowired
+    StatusResolver statusResolver;
 
     DeploymentDescriptor descriptor;
+
+    @Before
+    public void before() {
+        assumeTrue(isConnected(docker));
+    }
 
     @Test
     public void shouldStartMongoProcess() throws DockerCertificateException, DockerException, InterruptedException {
@@ -35,9 +61,32 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
             // Then
             assertTrue(statusResolver.status(descriptor.id()));
         } finally {
-            DefaultDockerClient.fromEnv().build().stopContainer(descriptor.pid(), 15);
+            docker.stopContainer(descriptor.pid(), 15);
             assertFalse(statusResolver.status(descriptor.id()));
         }
+    }
+
+}
+
+@Configuration
+class MongoDockerProcessExecutorHandlerTestConfiguration {
+
+    @Autowired
+    DockerClient docker;
+
+    @Bean
+    DeploymentManager deploymentManager() {
+        return new FileSystemDeploymentManager(docker);
+    }
+
+    @Bean
+    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler() {
+        return new MongoDockerProcessExecutorHandler(deploymentManager(), docker);
+    }
+
+    @Bean
+    StatusResolver statusResolver() {
+        return new DefaultStatusResolver(deploymentManager(), docker);
     }
 
 }

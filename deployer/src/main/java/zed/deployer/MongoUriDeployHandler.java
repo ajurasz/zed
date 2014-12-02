@@ -1,7 +1,5 @@
 package zed.deployer;
 
-import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificateException;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerException;
 
@@ -9,8 +7,11 @@ public class MongoUriDeployHandler implements UriDeployHandler {
 
     private final ZedHome zedHome;
 
-    public MongoUriDeployHandler(ZedHome zedHome) {
+    private final DockerClient docker;
+
+    public MongoUriDeployHandler(ZedHome zedHome, DockerClient docker) {
         this.zedHome = zedHome;
+        this.docker = docker;
     }
 
     @Override
@@ -21,11 +22,8 @@ public class MongoUriDeployHandler implements UriDeployHandler {
     @Override
     public void deploy(DeploymentDescriptor deploymentDescriptor) {
         try {
-            String image = "dockerfile/mongodb";
-
-            DockerClient docker = DefaultDockerClient.fromEnv().build();
-            docker.pull(image);
-        } catch (DockerCertificateException | InterruptedException | DockerException e) {
+            docker.pull("dockerfile/mongodb");
+        } catch (InterruptedException | DockerException e) {
             throw new RuntimeException(e);
         }
     }

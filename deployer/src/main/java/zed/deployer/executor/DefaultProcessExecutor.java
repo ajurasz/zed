@@ -1,5 +1,6 @@
 package zed.deployer.executor;
 
+import com.spotify.docker.client.DockerClient;
 import zed.deployer.DeploymentDescriptor;
 import zed.deployer.DeploymentManager;
 
@@ -12,8 +13,8 @@ public class DefaultProcessExecutor implements ProcessExecutor {
 
     private final List<ProcessExecutorHandler> handlers;
 
-    public DefaultProcessExecutor(DeploymentManager deploymentManager) {
-        this.handlers = Arrays.asList(new MongoDockerProcessExecutorHandler(deploymentManager));
+    public DefaultProcessExecutor(DeploymentManager deploymentManager, DockerClient docker) {
+        this.handlers = Arrays.asList(new MongoDockerProcessExecutorHandler(deploymentManager, docker));
         this.deploymentManager = deploymentManager;
     }
 

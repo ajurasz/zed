@@ -1,5 +1,7 @@
 package zed.deployer;
 
+import com.spotify.docker.client.DockerClient;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,9 +11,9 @@ public class DefaultStatusResolver implements StatusResolver {
 
     private final List<UriStatusResolver> statusResolvers;
 
-    public DefaultStatusResolver(DeploymentManager deploymentManager) {
+    public DefaultStatusResolver(DeploymentManager deploymentManager, DockerClient docker) {
         this.deploymentManager = deploymentManager;
-        this.statusResolvers = Arrays.asList(new ProcessUriStatusResolver(), new DockerUriStatusResolver());
+        this.statusResolvers = Arrays.asList(new ProcessUriStatusResolver(), new DockerUriStatusResolver(docker));
     }
 
     @Override

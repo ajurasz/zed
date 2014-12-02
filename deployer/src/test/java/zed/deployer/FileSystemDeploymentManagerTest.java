@@ -1,8 +1,19 @@
 package zed.deployer;
 
+import com.spotify.docker.client.DockerClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import zed.deployer.executor.DefaultProcessExecutor;
+import zed.deployer.executor.ProcessExecutor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,13 +22,23 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import static org.junit.Assume.assumeTrue;
+import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, FileSystemDeploymentManagerTestConfiguration.class})
+@IntegrationTest
 public class FileSystemDeploymentManagerTest extends Assert {
 
-    FileSystemDeploymentManager deployer = new FileSystemDeploymentManager();
+    @Autowired
+    DockerClient docker;
+
+    @Autowired
+    FileSystemDeploymentManager deploymentManager;
 
     @Before
     public void before() {
-        deployer.clear();
+        deploymentManager.clear();
     }
 
     // Tests
@@ -25,30 +46,30 @@ public class FileSystemDeploymentManagerTest extends Assert {
     @Test
     public void shouldDeployFatGuavaJar() {
         // When
-        deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+        deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // Then
-        assertTrue(Arrays.asList(deployer.zedHome().deployDirectory().list()).contains("guava-18.0.jar"));
+        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("guava-18.0.jar"));
     }
 
     @Test
     public void shouldWriteUriIntoFatJarMavenDescriptor() throws IOException {
         // When
-        DeploymentDescriptor deploymentDescriptor = deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deployer.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
     @Test
     public void shouldListDeploymentDescriptors() {
         // Given
-        DeploymentDescriptor descriptor = deployer.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+        DeploymentDescriptor descriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // When
-        List<DeploymentDescriptor> descriptors = deployer.list();
+        List<DeploymentDescriptor> descriptors = deploymentManager.list();
 
         // Then
         assertEquals(1, descriptors.size());
@@ -59,23 +80,45 @@ public class FileSystemDeploymentManagerTest extends Assert {
     @Test
     public void shouldWriteUriIntoDockerMongoDescriptor() throws IOException {
         // When
-        DeploymentDescriptor deploymentDescriptor = deployer.deploy("mongodb:docker:dockerfile/mongodb");
+        assumeTrue(isConnected(docker));
+        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deployer.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
     @Test
     public void shouldWriteIdIntoDockerMongoDescriptor() throws IOException {
+        // Given
+        assumeTrue(isConnected(docker));
+
         // When
-        DeploymentDescriptor deploymentDescriptor = deployer.deploy("mongodb:docker:dockerfile/mongodb");
+        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deployer.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.id(), savedDescriptor.getProperty("id"));
+    }
+
+}
+
+@Configuration
+class FileSystemDeploymentManagerTestConfiguration {
+
+    @Autowired
+    DockerClient docker;
+
+    @Bean
+    DeploymentManager deploymentManager() {
+        return new FileSystemDeploymentManager(docker);
+    }
+
+    @Bean
+    ProcessExecutor processExecutor() {
+        return new DefaultProcessExecutor(deploymentManager(), docker);
     }
 
 }

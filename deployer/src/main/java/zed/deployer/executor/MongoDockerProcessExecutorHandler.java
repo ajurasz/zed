@@ -1,6 +1,5 @@
 package zed.deployer.executor;
 
-import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.HostConfig;
@@ -9,10 +8,13 @@ import zed.deployer.DeploymentManager;
 
 public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler {
 
-    DeploymentManager deploymentManager;
+    private final DeploymentManager deploymentManager;
 
-    public MongoDockerProcessExecutorHandler(DeploymentManager deploymentManager) {
+    private final DockerClient docker;
+
+    public MongoDockerProcessExecutorHandler(DeploymentManager deploymentManager, DockerClient docker) {
         this.deploymentManager = deploymentManager;
+        this.docker = docker;
     }
 
     @Override
@@ -23,7 +25,6 @@ public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler
     @Override
     public String start(String deploymentId) {
         try {
-            DockerClient docker = DefaultDockerClient.fromEnv().build();
             String pid = docker.createContainer(ContainerConfig.builder().image("dockerfile/mongodb").build()).id();
             docker.startContainer(pid, HostConfig.builder().build());
             DeploymentDescriptor descriptor = deploymentManager.deployment(deploymentId);

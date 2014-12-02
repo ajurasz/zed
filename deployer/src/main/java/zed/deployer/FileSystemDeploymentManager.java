@@ -1,6 +1,7 @@
 package zed.deployer;
 
 
+import com.spotify.docker.client.DockerClient;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -18,7 +19,11 @@ public class FileSystemDeploymentManager implements DeploymentManager {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 
-    private final List<UriDeployHandler> deployHandlers = Arrays.asList(new FatJarUriDeployHandler(zedHome), new MongoUriDeployHandler(zedHome));
+    private final List<UriDeployHandler> deployHandlers;
+
+    public FileSystemDeploymentManager(DockerClient docker) {
+        deployHandlers = Arrays.asList(new FatJarUriDeployHandler(zedHome), new MongoUriDeployHandler(zedHome, docker));
+    }
 
     @Override
     public DeploymentDescriptor deploy(String uri) {
