@@ -13,7 +13,7 @@ public final class Dockers {
         try {
             return docker.ping().equals("OK");
         } catch (InterruptedException | DockerException e) {
-            LOG.info("Can't connect to Docker server.", e);
+            LOG.info("Can't connect to the Docker server.", e);
             return false;
         }
     }
