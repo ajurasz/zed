@@ -21,7 +21,7 @@ public class DockerUriStatusResolver implements UriStatusResolver {
         try {
             DockerClient docker = DefaultDockerClient.fromEnv().build();
             List<Container> containers = docker.listContainers(DockerClient.ListContainersParam.allContainers());
-            long size = containers.parallelStream().filter(c -> c.id().equals(deploymentDescriptor.pid())).collect(Collectors.toList()).size();
+            long size = containers.parallelStream().filter(c -> c.id().equals(deploymentDescriptor.pid()) && c.status().startsWith("Up ")).collect(Collectors.toList()).size();
             return size == 1;
         } catch (DockerCertificateException e) {
             throw new RuntimeException(e);

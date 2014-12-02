@@ -7,6 +7,8 @@ import zed.deployer.DefaultStatusResolver;
 import zed.deployer.DeploymentManager;
 import zed.deployer.FileSystemDeploymentManager;
 import zed.deployer.StatusResolver;
+import zed.deployer.executor.DefaultProcessExecutor;
+import zed.deployer.executor.ProcessExecutor;
 
 @EnableAutoConfiguration
 public class ShellConfiguration {
@@ -16,15 +18,18 @@ public class ShellConfiguration {
     }
 
     @Bean
-    DeploymentManager deployer() {
+    DeploymentManager deploymentManager() {
         return new FileSystemDeploymentManager();
     }
 
     @Bean
     StatusResolver statusResolver() {
-        return new DefaultStatusResolver(deployer());
+        return new DefaultStatusResolver(deploymentManager());
     }
 
-
+    @Bean
+    ProcessExecutor processExecutor() {
+        return new DefaultProcessExecutor(deploymentManager());
+    }
 
 }

@@ -36,6 +36,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
             assertTrue(statusResolver.status(descriptor.id()));
         } finally {
             DefaultDockerClient.fromEnv().build().stopContainer(descriptor.pid(), 15);
+            assertFalse(statusResolver.status(descriptor.id()));
         }
     }
 

@@ -3,6 +3,7 @@ package zed.deployer.executor;
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.messages.ContainerConfig;
+import com.spotify.docker.client.messages.HostConfig;
 import zed.deployer.DeploymentDescriptor;
 import zed.deployer.DeploymentManager;
 
@@ -16,7 +17,7 @@ public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler
 
     @Override
     public boolean supports(String uri) {
-        return uri.startsWith("mongo:docker");
+        return uri.startsWith("mongodb:docker");
     }
 
     @Override
@@ -24,7 +25,7 @@ public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler
         try {
             DockerClient docker = DefaultDockerClient.fromEnv().build();
             String pid = docker.createContainer(ContainerConfig.builder().image("dockerfile/mongodb").build()).id();
-            docker.startContainer(pid);
+            docker.startContainer(pid, HostConfig.builder().build());
             DeploymentDescriptor descriptor = deploymentManager.deployment(deploymentId);
             deploymentManager.update(descriptor.pid(pid));
             return pid;
