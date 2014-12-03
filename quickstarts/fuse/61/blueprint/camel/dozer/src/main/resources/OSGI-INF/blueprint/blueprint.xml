@@ -8,6 +8,11 @@
             <process ref="dozerProcessor"/>
             <to uri="log:test"/>
         </route>
+        <route>
+            <from uri="jetty://http://0.0.0.0:18082"/>
+            <process ref="dozerMapperProcessor"/>
+            <to uri="log:test"/>
+        </route>
     </camelContext>
 
     <bean id="dozerConverterLoader" class="org.apache.camel.converter.dozer.DozerTypeConverterLoader">
@@ -24,5 +29,7 @@
     </bean>
 
     <bean id="dozerProcessor" class="zed.quickstarts.fuse61.blueprint.camel.dozer.DozerProcessor"/>
+
+    <bean id="dozerMapperProcessor" class="zed.quickstarts.fuse61.blueprint.camel.dozer.DozerMapperProcessor"/>
 
 </blueprint>

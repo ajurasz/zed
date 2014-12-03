@@ -91,12 +91,14 @@
                                         <exportDir>/opt/jboss-fuse-6.1.0.redhat-379/deploy</exportDir>
                                         <ports>
                                             <port>18081</port>
+                                            <port>18082</port>
                                         </ports>
                                     </build>
 
                                     <run>
                                         <ports>
                                             <port>18081:18081</port>
+                                            <port>18082:18082</port>
                                         </ports>
                                     </run>
                                 </image>
