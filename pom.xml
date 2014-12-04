@@ -7,7 +7,7 @@
     <groupId>com.github.zed-platform</groupId>
     <artifactId>zed</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
 
     <modules>
         <module>bom</module>
