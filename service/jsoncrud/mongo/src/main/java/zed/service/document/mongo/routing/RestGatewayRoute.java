@@ -33,29 +33,29 @@ public class RestGatewayRoute extends RouteBuilder {
 
         restConfiguration().component("netty-http").host("0.0.0.0").port(restPort).bindingMode(RestBindingMode.auto);
 
-        rest("/api/jsonCrud").
+        rest("/api/document").
                 post("/save/{collection}").route().
                 setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(request.headers['collection'], request.body)").
                 to("direct:save").setBody().groovy("request.body.toString()");
 
-        rest("/api/jsonCrud").
+        rest("/api/document").
                 get("/count/{collection}").route().
                 // TODO:CAMEL Bind 'body' and 'headers' to Groovy script
                         // TODO:CAMEL Auto imports for Groovy? http://mrhaki.blogspot.com/2011/06/groovy-goodness-add-imports.html
                         setBody().groovy("new zed.service.document.mongo.routing.CountOperation(request.headers['collection'])").
                 to("direct:count");
 
-        rest("/api/jsonCrud").
+        rest("/api/document").
                 get("/findOne/{collection}/{oid}").route().
                 setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['oid'])").
                 to("direct:findOne");
 
-        rest("/api/jsonCrud").
+        rest("/api/document").
                 post("/findByQuery/{collection}").route().
                 setBody().groovy("new zed.service.document.mongo.routing.FindByQueryOperation(request.headers['collection'], request.body)").
                 to("direct:findByQuery");
 
-        rest("/api/jsonCrud").
+        rest("/api/document").
                 post("/countByQuery/{collection}").route().
                 setBody().groovy("new zed.service.document.mongo.routing.CountByQueryOperation(request.headers['collection'], request.body)").
                 to("direct:countByQuery");

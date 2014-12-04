@@ -61,7 +61,7 @@ public class RestDocumentServiceClient implements DocumentService {
     // Helpers
 
     private String baseUrlWithContextPath(String baseUrl) {
-        return baseUrl + "/api/jsonCrud";
+        return baseUrl + "/api/document";
     }
 
     private static RestTemplate createDefaultRestTemplate() {
