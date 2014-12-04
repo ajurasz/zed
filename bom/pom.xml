@@ -7,7 +7,35 @@
     <groupId>com.github.zed-platform</groupId>
     <artifactId>zed-bom</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>${project.artifactId}</name>
+    <description>A application used as an example on how to set up pushing
+        its components to the Central Repository.
+    </description>
+    <url>http://www.example.com/example-application</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Manfred Moser</name>
+            <email>manfred@sonatype.com</email>
+            <organization>Sonatype</organization>
+            <organizationUrl>http://www.sonatype.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
+        <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
+        <url>git@github.com:hekonsek/zed</url>
+    </scm>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
