@@ -30,6 +30,8 @@
 
     <bean id="dozerProcessor" class="zed.quickstarts.fuse61.blueprint.camel.dozer.DozerProcessor"/>
 
-    <bean id="dozerMapperProcessor" class="zed.quickstarts.fuse61.blueprint.camel.dozer.DozerMapperProcessor"/>
+    <bean id="dozerMapperProcessor" class="zed.quickstarts.fuse61.blueprint.camel.dozer.DozerBeanMapperProcessor">
+        <argument index="0" ref="dozerConverterLoader"/>
+    </bean>
 
 </blueprint>

@@ -7,7 +7,7 @@ public class DozerProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        Bar bar = exchange.getContext().getTypeConverter().convertTo(Bar.class, new Foo("someValue"));
+        Bar bar = exchange.getContext().getTypeConverter().convertTo(Bar.class, new Foo("mappedByDozerTypeConverter"));
         exchange.getIn().setBody(bar.getValue());
     }
 

@@ -1,6 +1,6 @@
 package zed.deployer.executor;
 
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
 import zed.deployer.DeploymentDescriptor;
 import zed.deployer.DeploymentManager;
 

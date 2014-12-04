@@ -1,8 +1,6 @@
 package zed.deployer.executor;
 
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.messages.ContainerConfig;
-import com.spotify.docker.client.messages.HostConfig;
+import com.github.dockerjava.api.DockerClient;
 import zed.deployer.DeploymentDescriptor;
 import zed.deployer.DeploymentManager;
 
@@ -25,8 +23,8 @@ public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler
     @Override
     public String start(String deploymentId) {
         try {
-            String pid = docker.createContainer(ContainerConfig.builder().image("dockerfile/mongodb").build()).id();
-            docker.startContainer(pid, HostConfig.builder().build());
+            String pid = docker.createContainerCmd("dockerfile/mongodb").exec().getId();
+            docker.startContainerCmd(pid).exec();
             DeploymentDescriptor descriptor = deploymentManager.deployment(deploymentId);
             deploymentManager.update(descriptor.pid(pid));
             return pid;

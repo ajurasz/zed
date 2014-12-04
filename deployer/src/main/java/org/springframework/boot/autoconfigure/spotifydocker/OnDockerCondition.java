@@ -1,7 +1,6 @@
 package org.springframework.boot.autoconfigure.spotifydocker;
 
-import com.spotify.docker.client.DockerClient;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.dockerjava.api.DockerClient;
 import org.springframework.boot.autoconfigure.condition.ConditionOutcome;
 import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.context.annotation.ConditionContext;
@@ -10,9 +9,6 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
 
 public class OnDockerCondition extends SpringBootCondition {
-
-    @Autowired
-    DockerClient dockerx;
 
     @Override
     public ConditionOutcome getMatchOutcome(ConditionContext context, AnnotatedTypeMetadata metadata) {

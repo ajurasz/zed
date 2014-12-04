@@ -1,8 +1,8 @@
 package org.springframework.boot.autoconfigure.spotifydocker;
 
-import com.spotify.docker.client.DefaultDockerClient;
-import com.spotify.docker.client.DockerCertificateException;
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,16 +14,14 @@ import org.springframework.context.annotation.Configuration;
 public class SpotifyDockerAutoConfiguration {
 
     @Bean
-    public DockerClient docker(SpotifyDockerProperties dockerProperties) throws DockerCertificateException {
-        DefaultDockerClient.Builder dockerBuilder = DefaultDockerClient.fromEnv();
+    public DockerClient docker(SpotifyDockerProperties dockerProperties) {
+        DockerClientConfig.DockerClientConfigBuilder config = DockerClientConfig.createDefaultConfigBuilder();
+        config.withVersion("1.14");
         if (dockerProperties.getUri() != null) {
-            dockerBuilder.uri(dockerProperties.getUri());
+            config.withUri(dockerProperties.getUri());
         }
-        dockerBuilder.
-                connectionPoolSize(dockerProperties.getConnectionPoolSize()).
-                connectTimeoutMillis(dockerProperties.getConnectTimeoutMilis()).
-                readTimeoutMillis(dockerProperties.getReadTimeoutMilis());
-        return dockerBuilder.build();
+        config.withReadTimeout(dockerProperties.getReadTimeoutMilis());
+        return DockerClientBuilder.getInstance(config).build();
     }
 
 }

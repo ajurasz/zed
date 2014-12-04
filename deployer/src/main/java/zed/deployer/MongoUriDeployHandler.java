@@ -1,7 +1,6 @@
 package zed.deployer;
 
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.DockerException;
+import com.github.dockerjava.api.DockerClient;
 
 public class MongoUriDeployHandler implements UriDeployHandler {
 
@@ -21,11 +20,7 @@ public class MongoUriDeployHandler implements UriDeployHandler {
 
     @Override
     public void deploy(DeploymentDescriptor deploymentDescriptor) {
-        try {
-            docker.pull("dockerfile/mongodb");
-        } catch (InterruptedException | DockerException e) {
-            throw new RuntimeException(e);
-        }
+        docker.pullImageCmd("dockerfile/mongodb").exec();
     }
 
 }

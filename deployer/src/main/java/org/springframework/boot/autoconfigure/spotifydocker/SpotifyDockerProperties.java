@@ -2,26 +2,12 @@ package org.springframework.boot.autoconfigure.spotifydocker;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-
 @ConfigurationProperties(prefix = "spring.spotifydocker")
 public class SpotifyDockerProperties {
 
     private String uri;
 
-    private int connectionPoolSize = 20;
-
-    private long connectTimeoutMilis = SECONDS.toMillis(5);
-
-    private long readTimeoutMilis = SECONDS.toMillis(30);
-
-    public int getConnectionPoolSize() {
-        return connectionPoolSize;
-    }
-
-    public void setConnectionPoolSize(int connectionPoolSize) {
-        this.connectionPoolSize = connectionPoolSize;
-    }
+    private int readTimeoutMilis = 30 * 1000;
 
     public String getUri() {
         return uri;
@@ -31,19 +17,11 @@ public class SpotifyDockerProperties {
         this.uri = uri;
     }
 
-    public long getConnectTimeoutMilis() {
-        return connectTimeoutMilis;
-    }
-
-    public void setConnectTimeoutMilis(long connectTimeoutMilis) {
-        this.connectTimeoutMilis = connectTimeoutMilis;
-    }
-
-    public long getReadTimeoutMilis() {
+    public int getReadTimeoutMilis() {
         return readTimeoutMilis;
     }
 
-    public void setReadTimeoutMilis(long readTimeoutMilis) {
+    public void setReadTimeoutMilis(int readTimeoutMilis) {
         this.readTimeoutMilis = readTimeoutMilis;
     }
 

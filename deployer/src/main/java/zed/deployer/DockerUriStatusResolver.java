@@ -1,8 +1,7 @@
 package zed.deployer;
 
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.DockerException;
-import com.spotify.docker.client.messages.Container;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +21,9 @@ public class DockerUriStatusResolver implements UriStatusResolver {
 
     @Override
     public boolean status(DeploymentDescriptor deploymentDescriptor) {
-        try {
-            List<Container> containers = docker.listContainers(DockerClient.ListContainersParam.allContainers());
-            long size = containers.parallelStream().filter(c -> c.id().equals(deploymentDescriptor.pid()) && c.status().startsWith("Up ")).collect(Collectors.toList()).size();
-            return size == 1;
-        } catch (InterruptedException | DockerException e) {
-            throw new RuntimeException(e);
-        }
+        List<Container> containers = docker.listContainersCmd().exec();
+        long size = containers.parallelStream().filter(c -> c.getId().equals(deploymentDescriptor.pid()) && c.getStatus().startsWith("Up ")).collect(Collectors.toList()).size();
+        return size == 1;
     }
 
 }

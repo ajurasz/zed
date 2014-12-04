@@ -1,6 +1,6 @@
 package zed.deployer;
 
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
 
 import java.util.Arrays;
 import java.util.List;

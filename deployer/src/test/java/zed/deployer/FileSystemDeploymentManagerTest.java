@@ -1,6 +1,6 @@
 package zed.deployer;
 
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

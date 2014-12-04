@@ -1,7 +1,7 @@
 package zed.deployer;
 
 
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

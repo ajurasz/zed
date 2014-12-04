@@ -1,9 +1,10 @@
 package org.springframework.boot.autoconfigure.spotifydocker;
 
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.DockerException;
+import com.github.dockerjava.api.DockerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.ProcessingException;
 
 public final class Dockers {
 
@@ -11,8 +12,9 @@ public final class Dockers {
 
     public static boolean isConnected(DockerClient docker) {
         try {
-            return docker.ping().equals("OK");
-        } catch (InterruptedException | DockerException e) {
+            docker.pingCmd().exec();
+            return true;
+        } catch (ProcessingException e) {
             LOG.info("Can't connect to the Docker server.", e);
             return false;
         }

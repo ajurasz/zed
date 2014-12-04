@@ -1,6 +1,6 @@
 package zed.shell;
 
-import com.spotify.docker.client.DockerClient;
+import com.github.dockerjava.api.DockerClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;

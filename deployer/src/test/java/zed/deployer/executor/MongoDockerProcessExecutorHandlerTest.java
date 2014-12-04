@@ -1,8 +1,6 @@
 package zed.deployer.executor;
 
-import com.spotify.docker.client.DockerCertificateException;
-import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.DockerException;
+import com.github.dockerjava.api.DockerClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +46,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
     }
 
     @Test
-    public void shouldStartMongoProcess() throws DockerCertificateException, DockerException, InterruptedException {
+    public void shouldStartMongoProcess() {
         try {
             // Given
             deploymentManager.clear();
@@ -61,7 +59,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
             // Then
             assertTrue(statusResolver.status(descriptor.id()));
         } finally {
-            docker.stopContainer(descriptor.pid(), 15);
+            docker.stopContainerCmd(descriptor.pid()).exec();
             assertFalse(statusResolver.status(descriptor.id()));
         }
     }
