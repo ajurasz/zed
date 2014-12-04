@@ -31,18 +31,18 @@ public class RestDocumentServiceClient implements DocumentService {
     }
 
     @Override
-    public String save(Object pojo) {
-        return restTemplate.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(pojo.getClass())), pojo, String.class);
+    public String save(Object document) {
+        return restTemplate.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
     }
 
     @Override
-    public <T> T findOne(Class<T> pojoClass, String oid) {
-        return restTemplate.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(pojoClass), oid), pojoClass);
+    public <T> T findOne(Class<T> documentClass, String id) {
+        return restTemplate.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), documentClass);
     }
 
     @Override
-    public long count(Class<?> pojoClass) {
-        return restTemplate.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(pojoClass)), Long.class);
+    public long count(Class<?> documentClass) {
+        return restTemplate.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), Long.class);
     }
 
     @Override
