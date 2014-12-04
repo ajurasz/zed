@@ -4,15 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
-public class MongoJsonCrudServiceBoot extends SpringBootServletInitializer {
+public class MongoDbDocumentServiceBoot extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        new SpringApplication(MongoJsonCrudServiceConfiguration.class).run(args);
+        new SpringApplication(MongoDbDocumentServiceConfiguration.class).run(args);
     }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(MongoJsonCrudServiceConfiguration.class);
+        return application.sources(MongoDbDocumentServiceConfiguration.class);
     }
 
 }

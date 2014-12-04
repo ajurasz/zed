@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
-public class MongoJsonCrudServiceConfiguration {
+public class MongoDbDocumentServiceConfiguration {
 
     @Autowired
     RoutesBuilder[] routes;

@@ -16,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
-import zed.service.jsoncrud.sdk.JsonCrudService;
-import zed.service.jsoncrud.sdk.QueryBuilder;
-import zed.service.jsoncrud.sdk.RestJsonCrudServiceClient;
+import zed.service.document.sdk.DocumentService;
+import zed.service.document.sdk.QueryBuilder;
+import zed.service.document.sdk.RestDocumentServiceClient;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -26,13 +26,13 @@ import java.util.List;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoJsonCrudServiceConfiguration.class, MongoJsonCrudServiceTestConfiguration.class})
+@SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoDbDocumentServiceConfiguration.class, MongoDocumentServiceTestConfiguration.class})
 @IntegrationTest
 @ActiveProfiles("test")
-public class MongoJsonCrudServiceTest extends Assert {
+public class MongoDocumentServiceTest extends Assert {
 
     @Autowired
-    JsonCrudService crudService;
+    DocumentService crudService;
 
     @Autowired
     Mongo mongo;
@@ -258,14 +258,14 @@ public class MongoJsonCrudServiceTest extends Assert {
 }
 
 @Configuration
-class MongoJsonCrudServiceTestConfiguration {
+class MongoDocumentServiceTestConfiguration {
 
     @Value("${zed.service.jsoncrud.rest.port}")
     int restPort;
 
     @Bean
-    JsonCrudService jsonCrudService() {
-        return new RestJsonCrudServiceClient("http://0.0.0.0:" + restPort);
+    DocumentService documentService() {
+        return new RestDocumentServiceClient("http://0.0.0.0:" + restPort);
     }
 
 }

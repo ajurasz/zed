@@ -1,8 +1,8 @@
-package zed.service.jsoncrud.sdk;
+package zed.service.document.sdk;
 
 import java.util.List;
 
-public interface JsonCrudService {
+public interface DocumentService {
 
     String save(Object pojo);
 

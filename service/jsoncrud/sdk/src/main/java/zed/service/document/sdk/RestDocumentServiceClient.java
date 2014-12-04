@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.sdk;
+package zed.service.document.sdk;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,20 +13,20 @@ import java.util.List;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
-import static zed.service.jsoncrud.sdk.Pojos.pojoClassToCollection;
+import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 
-public class RestJsonCrudServiceClient implements JsonCrudService {
+public class RestDocumentServiceClient implements DocumentService {
 
     private final String baseUrl;
 
     private final RestTemplate restTemplate;
 
-    public RestJsonCrudServiceClient(String baseUrl, RestTemplate restTemplate) {
+    public RestDocumentServiceClient(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = baseUrlWithContextPath(baseUrl);
         this.restTemplate = restTemplate;
     }
 
-    public RestJsonCrudServiceClient(String baseUrl) {
+    public RestDocumentServiceClient(String baseUrl) {
         this(baseUrl, createDefaultRestTemplate());
     }
 
