@@ -16,12 +16,15 @@
         <camel.version>2.14.0</camel.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.3.2</commons.lang.version>
+        <docker-java.version>0.10.3</docker-java.version>
+        <ekstazi.version>4.3.1</ekstazi.version>
         <embedmongo.version>1.46.4</embedmongo.version>
-        <extazi.version>4.3.0</extazi.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
         <spring.boot.version>1.2.0.RC2</spring.boot.version>
         <zed.version>${project.version}</zed.version>
+
+        <maven-war-plugin.version>2.5</maven-war-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -53,12 +56,22 @@
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-dockerunit</artifactId>
+                <version>${zed.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-service-jsoncrud-sdk</artifactId>
                 <version>${zed.version}</version>
             </dependency>
 
             <!-- 3rd parties dependencies -->
 
+            <dependency>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java</artifactId>
+                <version>${docker-java.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -93,7 +106,7 @@
                 <plugin>
                     <groupId>org.ekstazi</groupId>
                     <artifactId>ekstazi-maven-plugin</artifactId>
-                    <version>${extazi.version}</version>
+                    <version>${ekstazi.version}</version>
                     <executions>
                         <execution>
                             <id>doit</id>
@@ -128,7 +141,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>${maven-war-plugin.version}</version>
                     <configuration>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
                     </configuration>

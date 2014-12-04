@@ -52,6 +52,11 @@
             <version>0.10.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-dockerunit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -115,16 +120,6 @@
                     <plugin>
                         <groupId>org.ekstazi</groupId>
                         <artifactId>ekstazi-maven-plugin</artifactId>
-                        <version>${extazi.version}</version>
-                        <executions>
-                            <execution>
-                                <id>doit</id>
-                                <goals>
-                                    <goal>select</goal>
-                                    <goal>restore</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
                 </plugins>
             </build>
