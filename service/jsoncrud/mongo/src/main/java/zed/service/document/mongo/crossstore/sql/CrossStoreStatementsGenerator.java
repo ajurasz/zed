@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.crossstore.sql;
+package zed.service.document.mongo.crossstore.sql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

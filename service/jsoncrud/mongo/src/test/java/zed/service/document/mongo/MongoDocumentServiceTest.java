@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo;
+package zed.service.document.mongo;
 
 import com.mongodb.Mongo;
 import org.bson.types.ObjectId;
@@ -41,7 +41,7 @@ public class MongoDocumentServiceTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() {
-        System.setProperty("zed.service.jsoncrud.rest.port", findAvailableTcpPort() + "");
+        System.setProperty("zed.service.document.rest.port", findAvailableTcpPort() + "");
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 
@@ -260,7 +260,7 @@ public class MongoDocumentServiceTest extends Assert {
 @Configuration
 class MongoDocumentServiceTestConfiguration {
 
-    @Value("${zed.service.jsoncrud.rest.port}")
+    @Value("${zed.service.document.rest.port}")
     int restPort;
 
     @Bean

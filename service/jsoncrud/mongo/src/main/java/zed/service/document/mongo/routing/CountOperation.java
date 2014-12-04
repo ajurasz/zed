@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.routing;
+package zed.service.document.mongo.routing;
 
 public class CountOperation {
 

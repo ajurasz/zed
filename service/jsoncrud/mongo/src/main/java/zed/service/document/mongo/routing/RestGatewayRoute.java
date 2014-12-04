@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.routing;
+package zed.service.document.mongo.routing;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
-import static zed.service.jsoncrud.mongo.bson.BsonMapperProcessor.mapBsonToJson;
-import static zed.service.jsoncrud.mongo.bson.BsonMapperProcessor.mapJsonToBson;
-import static zed.service.jsoncrud.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
+import static zed.service.document.mongo.bson.BsonMapperProcessor.mapBsonToJson;
+import static zed.service.document.mongo.bson.BsonMapperProcessor.mapJsonToBson;
+import static zed.service.document.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
 public class RestGatewayRoute extends RouteBuilder {
@@ -22,7 +22,7 @@ public class RestGatewayRoute extends RouteBuilder {
     private final int restPort;
 
     @Autowired
-    public RestGatewayRoute(@Value("${zed.service.jsoncrud.rest.port:18080}") int restPort) {
+    public RestGatewayRoute(@Value("${zed.service.document.rest.port:18080}") int restPort) {
         this.restPort = restPort;
     }
 
@@ -35,29 +35,29 @@ public class RestGatewayRoute extends RouteBuilder {
 
         rest("/api/jsonCrud").
                 post("/save/{collection}").route().
-                setBody().groovy("new zed.service.jsoncrud.mongo.routing.SaveOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(request.headers['collection'], request.body)").
                 to("direct:save").setBody().groovy("request.body.toString()");
 
         rest("/api/jsonCrud").
                 get("/count/{collection}").route().
                 // TODO:CAMEL Bind 'body' and 'headers' to Groovy script
                         // TODO:CAMEL Auto imports for Groovy? http://mrhaki.blogspot.com/2011/06/groovy-goodness-add-imports.html
-                        setBody().groovy("new zed.service.jsoncrud.mongo.routing.CountOperation(request.headers['collection'])").
+                        setBody().groovy("new zed.service.document.mongo.routing.CountOperation(request.headers['collection'])").
                 to("direct:count");
 
         rest("/api/jsonCrud").
                 get("/findOne/{collection}/{oid}").route().
-                setBody().groovy("new zed.service.jsoncrud.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['oid'])").
+                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['oid'])").
                 to("direct:findOne");
 
         rest("/api/jsonCrud").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new zed.service.jsoncrud.mongo.routing.FindByQueryOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.FindByQueryOperation(request.headers['collection'], request.body)").
                 to("direct:findByQuery");
 
         rest("/api/jsonCrud").
                 post("/countByQuery/{collection}").route().
-                setBody().groovy("new zed.service.jsoncrud.mongo.routing.CountByQueryOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.CountByQueryOperation(request.headers['collection'], request.body)").
                 to("direct:countByQuery");
 
         // Operations handlers

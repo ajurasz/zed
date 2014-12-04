@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo;
+package zed.service.document.mongo;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;

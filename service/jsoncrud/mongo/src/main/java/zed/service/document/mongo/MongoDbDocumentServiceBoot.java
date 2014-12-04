@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo;
+package zed.service.document.mongo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

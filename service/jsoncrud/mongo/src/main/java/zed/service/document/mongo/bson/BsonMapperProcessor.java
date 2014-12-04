@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.bson;
+package zed.service.document.mongo.bson;
 
 import com.google.common.collect.Lists;
 import com.mongodb.DBObject;

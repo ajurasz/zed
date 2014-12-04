@@ -1,4 +1,4 @@
-package zed.service.jsoncrud.mongo.query;
+package zed.service.document.mongo.query;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
