@@ -255,9 +255,12 @@
         </repository>
     </distributionManagement>
 
+    <!-- Repositories -->
+
     <repositories>
         <repository>
             <id>spring-milestones</id>
+            <!-- Needed for Spring Boot RC -->
             <name>Spring Milestones</name>
             <url>http://repo.spring.io/milestone</url>
             <snapshots>
@@ -268,6 +271,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>spring-milestones</id>
+            <!-- Needed for Spring Boot Maven plugin RC -->
             <name>Spring Milestones</name>
             <url>http://repo.spring.io/milestone</url>
             <snapshots>
