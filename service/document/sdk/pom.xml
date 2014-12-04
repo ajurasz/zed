@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-service-jsoncrud</artifactId>
+        <artifactId>zed-service-document</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
@@ -21,7 +21,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
-    <artifactId>zed-service-jsoncrud-sdk</artifactId>
+    <artifactId>zed-service-document-sdk</artifactId>
 
     <dependencies>
         <dependency>

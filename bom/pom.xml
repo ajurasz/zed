@@ -93,7 +93,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
-                <artifactId>zed-service-jsoncrud-sdk</artifactId>
+                <artifactId>zed-service-document-sdk</artifactId>
                 <version>${zed.version}</version>
             </dependency>
 

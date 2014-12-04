@@ -21,7 +21,7 @@
     <url>http://www.example.com/example-application</url>
 
     <modules>
-        <module>jsoncrud</module>
+        <module>document</module>
     </modules>
 
 </project>

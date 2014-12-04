@@ -10,7 +10,7 @@
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zed-service-jsoncrud</artifactId>
+    <artifactId>zed-service-document</artifactId>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>

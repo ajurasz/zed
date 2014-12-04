@@ -6,11 +6,11 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-service-jsoncrud</artifactId>
+        <artifactId>zed-service-document</artifactId>
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zed-service-jsoncrud-mongo</artifactId>
+    <artifactId>zed-service-document-mongo</artifactId>
     <packaging>war</packaging>
 
     <name>${project.artifactId}</name>
@@ -79,7 +79,7 @@
         <!-- Testing -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-jsoncrud-sdk</artifactId>
+            <artifactId>zed-service-document-sdk</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
