@@ -46,6 +46,12 @@
             <version>1.6.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java</artifactId>
+            <version>0.10.3</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -76,7 +82,6 @@
                         </executions>
                     </plugin>
 
-
                     <plugin>
                         <groupId>org.jolokia</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
@@ -94,36 +99,29 @@
                                             <port>18082</port>
                                         </ports>
                                     </build>
-
-                                    <run>
-                                        <ports>
-                                            <port>18081:18081</port>
-                                            <port>18082:18082</port>
-                                        </ports>
-                                    </run>
                                 </image>
                             </images>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>start</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>start</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>stop</id>
-                                <phase>post-integration-test</phase>
-                                <goals>
-                                    <goal>stop</goal>
-                                </goals>
-                            </execution>
-                            <execution>
                                 <id>build</id>
                                 <phase>package</phase>
                                 <goals>
                                     <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.ekstazi</groupId>
+                        <artifactId>ekstazi-maven-plugin</artifactId>
+                        <version>${extazi.version}</version>
+                        <executions>
+                            <execution>
+                                <id>doit</id>
+                                <goals>
+                                    <goal>select</goal>
+                                    <goal>restore</goal>
                                 </goals>
                             </execution>
                         </executions>
