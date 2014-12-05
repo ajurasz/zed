@@ -15,18 +15,18 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 import static java.lang.String.format;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 
-public class RestDocumentServiceClient implements DocumentService {
+public class RestDocumentService implements DocumentService {
 
     private final String baseUrl;
 
     private final RestTemplate restTemplate;
 
-    public RestDocumentServiceClient(String baseUrl, RestTemplate restTemplate) {
+    public RestDocumentService(String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = baseUrlWithContextPath(baseUrl);
         this.restTemplate = restTemplate;
     }
 
-    public RestDocumentServiceClient(String baseUrl) {
+    public RestDocumentService(String baseUrl) {
         this(baseUrl, createDefaultRestTemplate());
     }
 
@@ -60,18 +60,16 @@ public class RestDocumentServiceClient implements DocumentService {
 
     // Helpers
 
-    private String baseUrlWithContextPath(String baseUrl) {
+    static String baseUrlWithContextPath(String baseUrl) {
+        baseUrl = baseUrl.trim();
         return baseUrl + "/api/document";
     }
 
-    private static RestTemplate createDefaultRestTemplate() {
-        RestTemplate restTemplate = new RestTemplate();
-        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter();
-        jacksonConverter.setObjectMapper(
-                new ObjectMapper().configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        );
-        restTemplate.setMessageConverters(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
-        return restTemplate;
+    static RestTemplate createDefaultRestTemplate() {
+        ObjectMapper objectMapper = new ObjectMapper().
+                configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
+        return new RestTemplate(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
     }
 
 }

@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
 import zed.service.document.sdk.DocumentService;
 import zed.service.document.sdk.QueryBuilder;
-import zed.service.document.sdk.RestDocumentServiceClient;
+import zed.service.document.sdk.RestDocumentService;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -265,7 +265,7 @@ class MongoDocumentServiceTestConfiguration {
 
     @Bean
     DocumentService documentService() {
-        return new RestDocumentServiceClient("http://0.0.0.0:" + restPort);
+        return new RestDocumentService("http://0.0.0.0:" + restPort);
     }
 
 }
