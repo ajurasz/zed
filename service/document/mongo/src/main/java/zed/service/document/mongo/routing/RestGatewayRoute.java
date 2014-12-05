@@ -37,41 +37,45 @@ public class RestGatewayRoute extends RouteBuilder {
 
         rest("/api/document").
                 post("/save/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(request.headers['collection'], request.body)").
-                to("direct:save").setBody().groovy("request.body.toString()");
+                setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(headers['collection'], body)").
+                to("direct:save").setBody().groovy("body.toString()");
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                // TODO:CAMEL Bind 'body' and 'headers' to Groovy script
                         // TODO:CAMEL Auto imports for Groovy? http://mrhaki.blogspot.com/2011/06/groovy-goodness-add-imports.html
-                        setBody().groovy("new zed.service.document.mongo.routing.CountOperation(request.headers['collection'])").
+                                setBody().groovy("new zed.service.document.mongo.routing.CountOperation(headers['collection'])").
                 to("direct:count");
 
         rest("/api/document").
                 get("/findOne/{collection}/{id}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['id'])").
+                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(headers['collection'], headers['id'])").
                 to("direct:findOne");
 
         rest("/api/document").
                 post("/findMany/{collection}").type(List.class).route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindManyOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.FindManyOperation(headers['collection'], body)").
                 to("direct:findMany");
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindByQueryOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.FindByQueryOperation(headers['collection'], body)").
                 to("direct:findByQuery");
 
         rest("/api/document").
                 post("/countByQuery/{collection}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.CountByQueryOperation(request.headers['collection'], request.body)").
+                setBody().groovy("new zed.service.document.mongo.routing.CountByQueryOperation(headers['collection'], body)").
                 to("direct:countByQuery");
+
+        rest("/api/document").
+                delete("/remove/{collection}/{id}").route().
+                setBody().groovy("new zed.service.document.mongo.routing.RemoveOperation(headers['collection'], headers['id'])").
+                to("direct:remove");
 
         // Operations handlers
 
         from("direct:save").
-                setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("request.body.pojo").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("body.pojo").
                 convertBodyTo(DBObject.class). // FIXED:CAMEL-7996
                 process(mapJsonToBson()).
                 setProperty("original", body()).
@@ -80,34 +84,40 @@ public class RestGatewayRoute extends RouteBuilder {
                 setBody().groovy("exchange.properties['original'].get('_id')");
 
         from("direct:findOne").
-                setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("new org.bson.types.ObjectId(request.body.id)").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("new org.bson.types.ObjectId(body.id)").
                 to(BASE_MONGO_ENDPOINT + "findById").
                 process(mapBsonToJson());
 
         from("direct:findMany").
-                setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', request.body.ids.collect{new org.bson.types.ObjectId(it)}))").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
                 to(BASE_MONGO_ENDPOINT + "findAll").
                 process(mapBsonToJson());
 
         from("direct:findByQuery").
-                setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("request.body.queryBuilder.query").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("body.queryBuilder.query").
                 process(queryBuilder()).
                 to(BASE_MONGO_ENDPOINT + "findAll").
                 process(mapBsonToJson());
 
         from("direct:count").
-                setHeader(COLLECTION).groovy("request.body.collection").
+                setHeader(COLLECTION).groovy("body.collection").
                 setBody().constant(new BasicDBObject()).
                 to(BASE_MONGO_ENDPOINT + "count");
 
         from("direct:countByQuery").
-                setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("request.body.queryBuilder.query").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("body.queryBuilder.query").
                 process(queryBuilder()).
                 to(BASE_MONGO_ENDPOINT + "count");
+
+        from("direct:remove").
+                setHeader(COLLECTION).groovy("body.collection").
+                setBody().groovy("new com.mongodb.BasicDBObject('_id', new org.bson.types.ObjectId(body.id))").
+                to(BASE_MONGO_ENDPOINT + "remove").
+                process(mapBsonToJson());
 
     }
 

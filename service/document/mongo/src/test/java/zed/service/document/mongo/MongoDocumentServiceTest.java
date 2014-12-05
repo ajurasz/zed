@@ -279,6 +279,19 @@ public class MongoDocumentServiceTest extends Assert {
         assertEquals(0, invoices);
     }
 
+    @Test
+    public void shouldRemoveDocument() {
+        // Given
+        String id = crudService.save(invoice);
+
+        // When
+        crudService.remove(Invoice.class, id);
+
+        // Then
+        long count = crudService.count(Invoice.class);
+        assertEquals(0, count);
+    }
+
 }
 
 @Configuration

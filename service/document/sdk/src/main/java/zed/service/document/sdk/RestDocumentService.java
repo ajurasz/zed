@@ -65,6 +65,11 @@ public class RestDocumentService implements DocumentService {
         return restTemplate.postForObject(format("%s/countByQuery/%s", baseUrl, pojoClassToCollection(documentClass)), query, Long.class);
     }
 
+    @Override
+    public void remove(Class<?> documentClass, String id) {
+        restTemplate.delete(format("%s/remove/%s/%s", baseUrl, pojoClassToCollection(documentClass), id));
+    }
+
     // Helpers
 
     static String baseUrlWithContextPath(String baseUrl) {

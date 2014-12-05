@@ -16,4 +16,6 @@ public interface DocumentService {
 
     <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query);
 
+    void remove(Class<?> documentClass, String id);
+
 }
