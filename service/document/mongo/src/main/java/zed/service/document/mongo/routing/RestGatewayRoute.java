@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapBsonToJson;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapJsonToBson;
@@ -46,9 +48,14 @@ public class RestGatewayRoute extends RouteBuilder {
                 to("direct:count");
 
         rest("/api/document").
-                get("/findOne/{collection}/{oid}").route().
-                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['oid'])").
+                get("/findOne/{collection}/{id}").route().
+                setBody().groovy("new zed.service.document.mongo.routing.FindOneOperation(request.headers['collection'], request.headers['id'])").
                 to("direct:findOne");
+
+        rest("/api/document").
+                post("/findMany/{collection}").type(List.class).route().
+                setBody().groovy("new zed.service.document.mongo.routing.FindManyOperation(request.headers['collection'], request.body)").
+                to("direct:findMany");
 
         rest("/api/document").
                 post("/findByQuery/{collection}").route().
@@ -74,8 +81,14 @@ public class RestGatewayRoute extends RouteBuilder {
 
         from("direct:findOne").
                 setHeader(COLLECTION).groovy("request.body.collection").
-                setBody().groovy("new org.bson.types.ObjectId(request.body.oid)").
+                setBody().groovy("new org.bson.types.ObjectId(request.body.id)").
                 to(BASE_MONGO_ENDPOINT + "findById").
+                process(mapBsonToJson());
+
+        from("direct:findMany").
+                setHeader(COLLECTION).groovy("request.body.collection").
+                setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', request.body.ids.collect{new org.bson.types.ObjectId(it)}))").
+                to(BASE_MONGO_ENDPOINT + "findAll").
                 process(mapBsonToJson());
 
         from("direct:findByQuery").

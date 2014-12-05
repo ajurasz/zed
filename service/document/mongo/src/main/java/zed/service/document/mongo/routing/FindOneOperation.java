@@ -4,19 +4,19 @@ public class FindOneOperation {
 
     private final String collection;
 
-    private final String oid;
+    private final String id;
 
-    public FindOneOperation(String collection, String oid) {
+    public FindOneOperation(String collection, String id) {
         this.collection = collection;
-        this.oid = oid;
+        this.id = id;
     }
 
     public String collection() {
         return collection;
     }
 
-    public String oid() {
-        return oid;
+    public String id() {
+        return id;
     }
 
 }

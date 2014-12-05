@@ -111,6 +111,30 @@ public class MongoDocumentServiceTest extends Assert {
     }
 
     @Test
+    public void shouldFindMany() {
+        // Given
+        String firstId = crudService.save(new Invoice("invoice001"));
+        String secondId = crudService.save(new Invoice("invoice002"));
+
+        // When
+        List<Invoice> invoices = crudService.findMany(Invoice.class, firstId, secondId);
+
+        // Then
+        assertEquals(2, invoices.size());
+        assertEquals(firstId, invoices.get(0).getId());
+        assertEquals(secondId, invoices.get(1).getId());
+    }
+
+    @Test
+    public void shouldNotFindMany() {
+        // When
+        List<Invoice> invoices = crudService.findMany(Invoice.class, ObjectId.get().toString(), ObjectId.get().toString());
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
     public void shouldNotFindOne() {
         // When
         Invoice invoice = crudService.findOne(Invoice.class, ObjectId.get().toString());

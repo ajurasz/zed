@@ -41,6 +41,13 @@ public class RestDocumentService implements DocumentService {
     }
 
     @Override
+    public <T> List<T> findMany(Class<T> documentClass, String... ids) {
+        Class<T[]> returnType = (Class<T[]>) Array.newInstance(documentClass, 1).getClass();
+        T[] results = restTemplate.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), ids, returnType);
+        return ImmutableList.copyOf(results);
+    }
+
+    @Override
     public long count(Class<?> documentClass) {
         return restTemplate.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), Long.class);
     }

@@ -8,6 +8,8 @@ public interface DocumentService {
 
     <T> T findOne(Class<T> documentClass, String id);
 
+    <T> List<T> findMany(Class<T> documentClass, String... ids);
+
     long count(Class<?> documentClass);
 
     <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query);
