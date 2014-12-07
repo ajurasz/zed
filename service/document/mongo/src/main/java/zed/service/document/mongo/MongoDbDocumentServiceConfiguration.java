@@ -1,5 +1,7 @@
 package zed.service.document.mongo;
 
+import boot.mongo.MongoDbEndpoint;
+import boot.mongo.MongoDbMvcEndpoint;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.RoutesBuilder;
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
 @EnableAutoConfiguration
@@ -32,6 +35,16 @@ public class MongoDbDocumentServiceConfiguration {
     @Bean
     ProducerTemplate producerTemplate() throws Exception {
         return camelContext().createProducerTemplate();
+    }
+
+    @Bean
+    MongoDbEndpoint mongoDbEndpoint(MongoTemplate mongoTemplate) {
+        return new MongoDbEndpoint(mongoTemplate);
+    }
+
+    @Bean
+    MongoDbMvcEndpoint mongoDbMvcEndpoint(MongoDbEndpoint mongoDbEndpoint) {
+        return new MongoDbMvcEndpoint(mongoDbEndpoint);
     }
 
 }
