@@ -21,8 +21,10 @@ import zed.service.document.sdk.QueryBuilder;
 import zed.service.document.sdk.RestDocumentService;
 
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.List;
 
+import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -226,6 +228,29 @@ public class MongoDocumentServiceTest extends Assert {
     }
 
     @Test
+    public void shouldFindByQueryBetweenDateRange() {
+        // Given
+        String id = crudService.save(invoice);
+        invoice = new Invoice();
+        invoice.setTimestamp(now().minusDays(2).toDate());
+        crudService.save(invoice);
+        invoice = new Invoice();
+        invoice.setTimestamp(now().plusDays(2).toDate());
+        crudService.save(invoice);
+
+        InvoiceQuery query = new InvoiceQuery();
+        query.setTimestampGreaterThanEqual(now().minusDays(1).toDate());
+        query.setTimestampLessThan(now().plusDays(1).toDate());
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(id, invoices.get(0).getId());
+    }
+
+    @Test
     public void shouldCountPositiveByQuery() {
         // Given
         crudService.save(invoice);
@@ -311,6 +336,8 @@ class Invoice {
 
     private String id;
 
+    private Date timestamp = new Date();
+
     private String invoiceId;
 
     Invoice() {
@@ -328,6 +355,14 @@ class Invoice {
         this.id = id;
     }
 
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public String getInvoiceId() {
         return invoiceId;
     }
@@ -335,7 +370,6 @@ class Invoice {
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
-
 }
 
 class InvoiceQuery {
@@ -343,6 +377,10 @@ class InvoiceQuery {
     private String invoiceId;
 
     private String invoiceIdContains;
+
+    private Date timestampLessThan;
+
+    private Date timestampGreaterThanEqual;
 
     InvoiceQuery() {
     }
@@ -365,6 +403,22 @@ class InvoiceQuery {
 
     public void setInvoiceIdContains(String invoiceIdLike) {
         this.invoiceIdContains = invoiceIdLike;
+    }
+
+    public Date getTimestampLessThan() {
+        return timestampLessThan;
+    }
+
+    public void setTimestampLessThan(Date timestampLessThan) {
+        this.timestampLessThan = timestampLessThan;
+    }
+
+    public Date getTimestampGreaterThanEqual() {
+        return timestampGreaterThanEqual;
+    }
+
+    public void setTimestampGreaterThanEqual(Date timestampGreaterThanEqual) {
+        this.timestampGreaterThanEqual = timestampGreaterThanEqual;
     }
 
 }
