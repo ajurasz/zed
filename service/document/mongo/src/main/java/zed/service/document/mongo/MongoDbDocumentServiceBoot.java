@@ -6,7 +6,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 public class MongoDbDocumentServiceBoot extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
         new SpringApplication(MongoDbDocumentServiceConfiguration.class).run(args);
     }
 
