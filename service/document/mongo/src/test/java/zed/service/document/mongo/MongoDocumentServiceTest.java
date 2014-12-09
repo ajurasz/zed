@@ -43,7 +43,9 @@ public class MongoDocumentServiceTest extends Assert {
 
     @BeforeClass
     public static void beforeClass() {
+        System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.document.rest.port", findAvailableTcpPort() + "");
+        System.setProperty("spring.data.mongodb.host", "localhost");
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 
