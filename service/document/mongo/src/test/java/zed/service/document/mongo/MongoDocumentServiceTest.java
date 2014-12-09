@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+import static zed.service.document.sdk.QueryBuilder.buildQuery;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoDbDocumentServiceConfiguration.class, MongoDocumentServiceTestConfiguration.class})
@@ -196,6 +197,46 @@ public class MongoDocumentServiceTest extends Assert {
 
         // Then
         assertEquals(0, invoices.size());
+    }
+
+    @Test
+    public void shouldReturnPageByQuery() {
+        // Given
+        Invoice firstInvoice = crudService.save(new Invoice());
+        Invoice secondInvoice = crudService.save(new Invoice());
+        Invoice thirdInvoice = crudService.save(new Invoice());
+
+        // When
+        List<Invoice> firstPage = crudService.findByQuery(Invoice.class, buildQuery(new InvoiceQuery()).page(0).size(2));
+        List<Invoice> secondPage = crudService.findByQuery(Invoice.class, buildQuery(new InvoiceQuery()).page(1).size(2));
+
+        // Then
+        assertEquals(2, firstPage.size());
+        assertEquals(1, secondPage.size());
+        assertEquals(firstInvoice.getId(), firstPage.get(0).getId());
+        assertEquals(secondInvoice.getId(), firstPage.get(1).getId());
+        assertEquals(thirdInvoice.getId(), secondPage.get(0).getId());
+    }
+
+    @Test
+    public void shouldSortDescending() {
+        // Given
+        Invoice firstInvoice = crudService.save(new Invoice().invoiceId("1"));
+        Invoice secondInvoice = crudService.save(new Invoice().invoiceId("2"));
+        Invoice thirdInvoice = crudService.save(new Invoice().invoiceId("3"));
+
+        // When
+        List<Invoice> firstPage = crudService.findByQuery(Invoice.class, buildQuery(
+                new InvoiceQuery()).size(2).orderBy("invoiceId").sortAscending(false).page(0));
+        List<Invoice> secondPage = crudService.findByQuery(Invoice.class, buildQuery(
+                new InvoiceQuery()).size(2).orderBy("invoiceId").sortAscending(false).page(1));
+
+        // Then
+        assertEquals(2, firstPage.size());
+        assertEquals(1, secondPage.size());
+        assertEquals(thirdInvoice.getId(), firstPage.get(0).getId());
+        assertEquals(secondInvoice.getId(), firstPage.get(1).getId());
+        assertEquals(firstInvoice.getId(), secondPage.get(0).getId());
     }
 
     @Test
@@ -370,6 +411,12 @@ class Invoice {
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
+
+    public Invoice invoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+        return this;
+    }
+
 }
 
 class InvoiceQuery {

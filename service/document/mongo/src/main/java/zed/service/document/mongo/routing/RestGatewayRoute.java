@@ -11,8 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
+import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
+import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
+import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapBsonToJson;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapJsonToBson;
+import static zed.service.document.mongo.query.MongoDbSortConditionExpression.sortCondition;
 import static zed.service.document.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
@@ -97,6 +101,9 @@ public class RestGatewayRoute extends RouteBuilder {
 
         from("direct:findByQuery").
                 setHeader(COLLECTION).groovy("body.collection").
+                setHeader(LIMIT).groovy("body.queryBuilder.size").
+                setHeader(NUM_TO_SKIP).groovy("body.queryBuilder.page * body.queryBuilder.size").
+                setHeader(SORT_BY).expression(sortCondition()).
                 setBody().groovy("body.queryBuilder.query").
                 process(queryBuilder()).
                 to(BASE_MONGO_ENDPOINT + "findAll").

@@ -1,8 +1,8 @@
 package zed.service.document.sdk;
 
-public class QueryBuilder<QUERY> {
+public class QueryBuilder {
 
-    private final QUERY query;
+    private final Object query;
 
     private int page = 0;
 
@@ -12,15 +12,15 @@ public class QueryBuilder<QUERY> {
 
     private String[] orderBy = new String[0];
 
-    public QueryBuilder(QUERY query) {
+    public static QueryBuilder buildQuery(Object query) {
+        return new QueryBuilder(query);
+    }
+
+    public QueryBuilder(Object query) {
         this.query = query;
     }
 
-    public QUERY query() {
-        return query;
-    }
-
-    public QUERY getQuery() {
+    public Object getQuery() {
         return query;
     }
 
@@ -32,8 +32,18 @@ public class QueryBuilder<QUERY> {
         this.page = page;
     }
 
+    public QueryBuilder page(int page) {
+        this.page = page;
+        return this;
+    }
+
     public int getSize() {
         return size;
+    }
+
+    public QueryBuilder size(int size) {
+        this.size = size;
+        return this;
     }
 
     public void setSize(int size) {
@@ -48,12 +58,22 @@ public class QueryBuilder<QUERY> {
         this.sortAscending = sortAscending;
     }
 
+    public QueryBuilder sortAscending(boolean sortAscending) {
+        this.sortAscending = sortAscending;
+        return this;
+    }
+
     public String[] getOrderBy() {
         return orderBy;
     }
 
     public void setOrderBy(String[] orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public QueryBuilder orderBy(String... orderBy) {
+        this.orderBy = orderBy;
+        return this;
     }
 
 }

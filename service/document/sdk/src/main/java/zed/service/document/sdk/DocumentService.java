@@ -12,9 +12,9 @@ public interface DocumentService {
 
     long count(Class<?> documentClass);
 
-    <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query);
+    <C> List<C> findByQuery(Class<C> documentClass, QueryBuilder queryBuilder);
 
-    <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query);
+    <C> long countByQuery(Class<C> documentClass, QueryBuilder queryBuilder);
 
     void remove(Class<?> documentClass, String id);
 
