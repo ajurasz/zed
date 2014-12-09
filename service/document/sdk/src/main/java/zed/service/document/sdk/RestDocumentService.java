@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Array;
@@ -13,61 +14,76 @@ import java.util.List;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.reflect.FieldUtils.writeField;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 
 public class RestDocumentService implements DocumentService {
 
+    // Configuration members
+
     private final String baseUrl;
 
-    private final RestTemplate restTemplate;
+    // Collaborators members
 
-    public RestDocumentService(String baseUrl, RestTemplate restTemplate) {
+    private final RestOperations restClient;
+
+    // Constructors
+
+    public RestDocumentService(String baseUrl, RestOperations restClient) {
         this.baseUrl = baseUrlWithContextPath(baseUrl);
-        this.restTemplate = restTemplate;
+        this.restClient = restClient;
     }
 
     public RestDocumentService(String baseUrl) {
         this(baseUrl, createDefaultRestTemplate());
     }
 
+    // Overridden
+
     @Override
-    public String save(Object document) {
-        return restTemplate.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
+    public <T> T save(T document) {
+        try {
+            String id = restClient.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
+            writeField(document, "id", id, true);
+            return document;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public <T> T findOne(Class<T> documentClass, String id) {
-        return restTemplate.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), documentClass);
+        return restClient.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), documentClass);
     }
 
     @Override
     public <T> List<T> findMany(Class<T> documentClass, String... ids) {
         Class<T[]> returnType = (Class<T[]>) Array.newInstance(documentClass, 1).getClass();
-        T[] results = restTemplate.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), ids, returnType);
+        T[] results = restClient.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), ids, returnType);
         return ImmutableList.copyOf(results);
     }
 
     @Override
     public long count(Class<?> documentClass) {
-        return restTemplate.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), Long.class);
+        return restClient.getForObject(format("%s/count/%s", baseUrl, pojoClassToCollection(documentClass)), Long.class);
     }
 
     @Override
     public <C, Q> List<C> findByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
         Class<C[]> returnType = (Class<C[]>) Array.newInstance(documentClass, 1).getClass();
         String collection = pojoClassToCollection(documentClass);
-        C[] documents = restTemplate.postForObject(format("%s/findByQuery/%s", baseUrl, collection), query, returnType);
+        C[] documents = restClient.postForObject(format("%s/findByQuery/%s", baseUrl, collection), query, returnType);
         return ImmutableList.copyOf(documents);
     }
 
     @Override
     public <C, Q> long countByQuery(Class<C> documentClass, QueryBuilder<Q> query) {
-        return restTemplate.postForObject(format("%s/countByQuery/%s", baseUrl, pojoClassToCollection(documentClass)), query, Long.class);
+        return restClient.postForObject(format("%s/countByQuery/%s", baseUrl, pojoClassToCollection(documentClass)), query, Long.class);
     }
 
     @Override
     public void remove(Class<?> documentClass, String id) {
-        restTemplate.delete(format("%s/remove/%s/%s", baseUrl, pojoClassToCollection(documentClass), id));
+        restClient.delete(format("%s/remove/%s/%s", baseUrl, pojoClassToCollection(documentClass), id));
     }
 
     // Helpers

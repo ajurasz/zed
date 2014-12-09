@@ -66,9 +66,7 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldUpdatePojoWithAssignedId() {
         // Given
-        Invoice invoice = new Invoice();
-        String oid = crudService.save(invoice);
-        invoice.setId(oid);
+        invoice = crudService.save(invoice);
 
         // When
         crudService.save(invoice);
@@ -80,8 +78,8 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldUpdateLoadedPojo() {
         // Given
-        String oid = crudService.save(new Invoice());
-        Invoice invoice = crudService.findOne(Invoice.class, oid);
+        invoice = crudService.save(invoice);
+        invoice = crudService.findOne(Invoice.class, invoice.getId());
 
         // When
         crudService.save(invoice);
@@ -93,38 +91,38 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldGenerateOid_fromPojo() throws UnknownHostException, InterruptedException {
         // When
-        String oid = crudService.save(new Invoice("invoice001"));
+        invoice = crudService.save(invoice);
 
         // Then
         String recordOid = mongo.getDB("zed_json_crud").getCollection("Invoice").find().iterator().next().get("_id").toString();
-        assertEquals(oid, recordOid);
+        assertEquals(invoice.getId(), recordOid);
     }
 
     @Test
     public void shouldFindOne() {
         // Given
-        String savedOid = crudService.save(new Invoice("invoice001"));
+        invoice = crudService.save(invoice);
 
         // When
-        Invoice invoice = crudService.findOne(Invoice.class, savedOid);
+        Invoice invoiceFound = crudService.findOne(Invoice.class, invoice.getId());
 
         // Then
-        assertEquals(savedOid, invoice.getId());
+        assertEquals(invoice.getId(), invoiceFound.getId());
     }
 
     @Test
     public void shouldFindMany() {
         // Given
-        String firstId = crudService.save(new Invoice("invoice001"));
-        String secondId = crudService.save(new Invoice("invoice002"));
+        Invoice firstInvoice = crudService.save(new Invoice("invoice001"));
+        Invoice secondInvoice = crudService.save(new Invoice("invoice002"));
 
         // When
-        List<Invoice> invoices = crudService.findMany(Invoice.class, firstId, secondId);
+        List<Invoice> invoices = crudService.findMany(Invoice.class, firstInvoice.getId(), secondInvoice.getId());
 
         // Then
         assertEquals(2, invoices.size());
-        assertEquals(firstId, invoices.get(0).getId());
-        assertEquals(secondId, invoices.get(1).getId());
+        assertEquals(firstInvoice.getId(), invoices.get(0).getId());
+        assertEquals(secondInvoice.getId(), invoices.get(1).getId());
     }
 
     @Test
@@ -174,8 +172,8 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldFindAllByQuery() {
         // Given
-        crudService.save(invoice);
-        crudService.save(invoice);
+        crudService.save(new Invoice());
+        crudService.save(new Invoice());
 
         // When
         InvoiceQuery query = new InvoiceQuery();
@@ -230,7 +228,7 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldFindByQueryBetweenDateRange() {
         // Given
-        String id = crudService.save(invoice);
+        Invoice todayInvoice = crudService.save(invoice);
         invoice = new Invoice();
         invoice.setTimestamp(now().minusDays(2).toDate());
         crudService.save(invoice);
@@ -247,7 +245,7 @@ public class MongoDocumentServiceTest extends Assert {
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(id, invoices.get(0).getId());
+        assertEquals(todayInvoice.getId(), invoices.get(0).getId());
     }
 
     @Test
@@ -307,10 +305,10 @@ public class MongoDocumentServiceTest extends Assert {
     @Test
     public void shouldRemoveDocument() {
         // Given
-        String id = crudService.save(invoice);
+        invoice = crudService.save(invoice);
 
         // When
-        crudService.remove(Invoice.class, id);
+        crudService.remove(Invoice.class, invoice.getId());
 
         // Then
         long count = crudService.count(Invoice.class);

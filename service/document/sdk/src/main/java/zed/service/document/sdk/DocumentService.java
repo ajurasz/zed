@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface DocumentService {
 
-    String save(Object document);
+    <T> T save(T document);
 
     <T> T findOne(Class<T> documentClass, String id);
 
