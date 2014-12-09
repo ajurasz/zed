@@ -19,6 +19,8 @@ import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 
 public class RestDocumentService implements DocumentService {
 
+    private static final int DEFAULT_DOCUMENT_SERVICE_PORT = 15001;
+
     // Configuration members
 
     private final String baseUrl;
@@ -36,6 +38,10 @@ public class RestDocumentService implements DocumentService {
 
     public RestDocumentService(String baseUrl) {
         this(baseUrl, createDefaultRestTemplate());
+    }
+
+    public RestDocumentService() {
+        this("http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT);
     }
 
     // Overridden

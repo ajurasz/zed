@@ -1,5 +1,5 @@
+server.port: 15000
 spring:
   groovy:
     template:
       check-template-location: false
-  data.mongodb.host: mongodb

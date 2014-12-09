@@ -24,7 +24,7 @@ public class RestGatewayRoute extends RouteBuilder {
     private final int restPort;
 
     @Autowired
-    public RestGatewayRoute(@Value("${zed.service.document.rest.port:18080}") int restPort) {
+    public RestGatewayRoute(@Value("${zed.service.document.rest.port:15001}") int restPort) {
         this.restPort = restPort;
     }
 
