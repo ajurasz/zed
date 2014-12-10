@@ -102,6 +102,11 @@
                 <artifactId>zed-service-document-sdk</artifactId>
                 <version>${zed.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-utils</artifactId>
+                <version>${zed.version}</version>
+            </dependency>
 
             <!-- 3rd parties dependencies -->
 

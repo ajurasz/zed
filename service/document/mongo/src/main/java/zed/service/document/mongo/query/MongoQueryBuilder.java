@@ -7,22 +7,30 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Boolean.parseBoolean;
+import static zed.utils.Maps.immutableMapOf;
 
 public class MongoQueryBuilder {
 
+    private static final Map<String, String> SIMPLE_SUFFIX_OPERATORS = immutableMapOf(
+            "GreaterThan", "$gt",
+            "GreaterThanEqual", "$gte",
+            "LessThan", "$lt",
+            "LessThanEqual", "$lte",
+            "NotIn", "$nin",
+            "In", "$in");
+
     public DBObject jsonToMongoQuery(DBObject jsonQuery) {
         BasicDBObject mongoQuery = new BasicDBObject();
+        keyLoop:
         for (String key : jsonQuery.keySet()) {
+            for (String suffixOperator : SIMPLE_SUFFIX_OPERATORS.keySet()) {
+                if (key.endsWith(suffixOperator)) {
+                    addRestriction(mongoQuery, key, suffixOperator, SIMPLE_SUFFIX_OPERATORS.get(suffixOperator), jsonQuery.get(key));
+                    continue keyLoop;
+                }
+            }
             if (key.endsWith("Contains")) {
                 addRestriction(mongoQuery, key, "Contains", "$regex", ".*" + jsonQuery.get(key) + ".*");
-            } else if (key.endsWith("GreaterThan")) {
-                addRestriction(mongoQuery, key, "GreaterThan", "$gt", jsonQuery.get(key));
-            } else if (key.endsWith("GreaterThanEqual")) {
-                addRestriction(mongoQuery, key, "GreaterThanEqual", "$gte", jsonQuery.get(key));
-            } else if (key.endsWith("LessThan")) {
-                addRestriction(mongoQuery, key, "LessThan", "$lt", jsonQuery.get(key));
-            } else if (key.endsWith("LessThanEqual")) {
-                addRestriction(mongoQuery, key, "LessThanEqual", "$lte", jsonQuery.get(key));
             } else {
                 mongoQuery.put(key, new BasicDBObject("$eq", jsonQuery.get(key)));
             }

@@ -269,6 +269,60 @@ public class MongoDocumentServiceTest extends Assert {
     }
 
     @Test
+    public void shouldFindByQueryWithIn() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery().invoiceIdIn(invoice.getInvoiceId(), "foo", "bar");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+    }
+
+    @Test
+    public void shouldNotFindByQueryWithIn() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery().invoiceIdIn("foo", "bar");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
+    public void shouldFindByQueryWithNotIn() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery().invoiceIdNotIn("foo", "bar");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+    }
+
+    @Test
+    public void shouldNotFindByQueryWithNotIn() {
+        // Given
+        crudService.save(invoice);
+        InvoiceQuery query = new InvoiceQuery().invoiceIdNotIn(invoice.getInvoiceId(), "foo", "bar");
+
+        // When
+        List<Invoice> invoices = crudService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
     public void shouldFindByQueryBetweenDateRange() {
         // Given
         Invoice todayInvoice = crudService.save(invoice);
@@ -425,6 +479,10 @@ class InvoiceQuery {
 
     private String invoiceIdContains;
 
+    private String[] invoiceIdIn;
+
+    private String[] invoiceIdNotIn;
+
     private Date timestampLessThan;
 
     private Date timestampGreaterThanEqual;
@@ -450,6 +508,32 @@ class InvoiceQuery {
 
     public void setInvoiceIdContains(String invoiceIdLike) {
         this.invoiceIdContains = invoiceIdLike;
+    }
+
+    public String[] getInvoiceIdIn() {
+        return invoiceIdIn;
+    }
+
+    public void setInvoiceIdIn(String[] invoiceIdIn) {
+        this.invoiceIdIn = invoiceIdIn;
+    }
+
+    public InvoiceQuery invoiceIdIn(String... invoiceIdIn) {
+        this.invoiceIdIn = invoiceIdIn;
+        return this;
+    }
+
+    public String[] getInvoiceIdNotIn() {
+        return invoiceIdNotIn;
+    }
+
+    public void setInvoiceIdNotIn(String[] invoiceIdNotIn) {
+        this.invoiceIdNotIn = invoiceIdNotIn;
+    }
+
+    public InvoiceQuery invoiceIdNotIn(String... invoiceIdNotIn) {
+        this.invoiceIdNotIn = invoiceIdNotIn;
+        return this;
     }
 
     public Date getTimestampLessThan() {
