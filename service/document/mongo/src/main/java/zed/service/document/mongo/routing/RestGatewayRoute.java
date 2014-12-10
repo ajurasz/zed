@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
 import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
@@ -22,13 +23,15 @@ import static zed.service.document.mongo.query.MongoQueryBuilderProcessor.queryB
 @Component
 public class RestGatewayRoute extends RouteBuilder {
 
-    // TODO:CAMEL Collection should not be required for dynamic endpoints
-    private static final String BASE_MONGO_ENDPOINT = "mongodb:mongo?database=zed_json_crud&collection=default&dynamicity=true&operation=";
+    private final String documentsDbName;
 
     private final int restPort;
 
     @Autowired
-    public RestGatewayRoute(@Value("${zed.service.document.rest.port:15001}") int restPort) {
+    public RestGatewayRoute(
+            @Value("${zed.service.document.mongo.db:zed_service_document}") String documentsDbName,
+            @Value("${zed.service.document.rest.port:15001}") int restPort) {
+        this.documentsDbName = documentsDbName;
         this.restPort = restPort;
     }
 
@@ -84,19 +87,19 @@ public class RestGatewayRoute extends RouteBuilder {
                 process(mapJsonToBson()).
                 setProperty("original", body()).
                 // TODO:CAMEL
-                        to(BASE_MONGO_ENDPOINT + "save").
+                        to(baseMongoDbEndpoint() + "save").
                 setBody().groovy("exchange.properties['original'].get('_id')");
 
         from("direct:findOne").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("new org.bson.types.ObjectId(body.id)").
-                to(BASE_MONGO_ENDPOINT + "findById").
+                to(baseMongoDbEndpoint() + "findById").
                 process(mapBsonToJson());
 
         from("direct:findMany").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new com.mongodb.BasicDBObject('$in', body.ids.collect{new org.bson.types.ObjectId(it)}))").
-                to(BASE_MONGO_ENDPOINT + "findAll").
+                to(baseMongoDbEndpoint() + "findAll").
                 process(mapBsonToJson());
 
         from("direct:findByQuery").
@@ -106,26 +109,31 @@ public class RestGatewayRoute extends RouteBuilder {
                 setHeader(SORT_BY).expression(sortCondition()).
                 setBody().groovy("body.queryBuilder.query").
                 process(queryBuilder()).
-                to(BASE_MONGO_ENDPOINT + "findAll").
+                to(baseMongoDbEndpoint() + "findAll").
                 process(mapBsonToJson());
 
         from("direct:count").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().constant(new BasicDBObject()).
-                to(BASE_MONGO_ENDPOINT + "count");
+                to(baseMongoDbEndpoint() + "count");
 
         from("direct:countByQuery").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("body.queryBuilder.query").
                 process(queryBuilder()).
-                to(BASE_MONGO_ENDPOINT + "count");
+                to(baseMongoDbEndpoint() + "count");
 
         from("direct:remove").
                 setHeader(COLLECTION).groovy("body.collection").
                 setBody().groovy("new com.mongodb.BasicDBObject('_id', new org.bson.types.ObjectId(body.id))").
-                to(BASE_MONGO_ENDPOINT + "remove").
+                to(baseMongoDbEndpoint() + "remove").
                 process(mapBsonToJson());
 
+    }
+
+    private String baseMongoDbEndpoint() {
+        // TODO:CAMEL Collection should not be required for dynamic endpoints
+        return format("mongodb:mongo?database=%s&collection=default&dynamicity=true&operation=", documentsDbName);
     }
 
 }
