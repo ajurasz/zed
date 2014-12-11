@@ -53,7 +53,7 @@
         <embedmongo.version>1.46.4</embedmongo.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
-        <spring.boot.version>1.2.0.RC2</spring.boot.version>
+        <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
         <zed.version>0.0.7-SNAPSHOT</zed.version>
 
         <maven-war-plugin.version>2.5</maven-war-plugin.version>
@@ -268,30 +268,5 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <!-- Repositories -->
-
-    <repositories>
-        <repository>
-            <id>spring-milestones</id>
-            <!-- Needed for Spring Boot RC -->
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <!-- Needed for Spring Boot Maven plugin RC -->
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
