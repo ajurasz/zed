@@ -3,8 +3,11 @@ package zed.service.document.sdk;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,10 +17,12 @@ import java.util.List;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
-import static zed.service.document.sdk.Reflections.classOfArrayOfClass;
-import static zed.service.document.sdk.Reflections.writeField;
+import static zed.utils.Reflections.classOfArrayOfClass;
+import static zed.utils.Reflections.writeField;
 
 public class RestDocumentService implements DocumentService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RestDocumentService.class);
 
     private static final int DEFAULT_DOCUMENT_SERVICE_PORT = 15001;
 
@@ -40,8 +45,20 @@ public class RestDocumentService implements DocumentService {
         this(baseUrl, createDefaultRestTemplate());
     }
 
-    public RestDocumentService() {
-        this("http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT);
+    public static RestDocumentService discover() {
+        LOG.debug("Starting document service discovery process.");
+        String serviceUrl = "http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT;
+        RestDocumentService service = new RestDocumentService(serviceUrl);
+        try {
+            service.count(RestDocumentServiceConnectivityTest.class);
+        } catch (ResourceAccessException e) {
+            String message = format("Can't connect to the document service %s . " +
+                    "Are you sure there is a DocumentService instance running there? " +
+                    "%s has been chosen as a default connection URL for DocumentService.", serviceUrl, serviceUrl);
+            LOG.debug(message);
+            throw new DocumentServiceDiscoveryException(message, e);
+        }
+        return service;
     }
 
     // Overridden
@@ -98,6 +115,9 @@ public class RestDocumentService implements DocumentService {
                 configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
         MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
         return new RestTemplate(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
+    }
+
+    private static final class RestDocumentServiceConnectivityTest {
     }
 
 }

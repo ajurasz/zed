@@ -1,4 +1,4 @@
-package zed.service.document.sdk;
+package zed.utils;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 

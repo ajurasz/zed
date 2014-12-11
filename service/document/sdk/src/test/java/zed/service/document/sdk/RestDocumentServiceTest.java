@@ -19,4 +19,16 @@ public class RestDocumentServiceTest extends Assert {
         assertEquals("http://app.com/api/document", normalizedUrl);
     }
 
+    @Test
+    public void should() {
+        try {
+            RestDocumentService.discover();
+        } catch (DocumentServiceDiscoveryException e) {
+            assertTrue(e.getMessage().contains("Are you sure"));
+            assertTrue(e.getMessage().contains("default connection URL for DocumentService"));
+            return;
+        }
+        fail();
+    }
+
 }
