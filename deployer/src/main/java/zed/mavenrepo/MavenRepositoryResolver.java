@@ -4,6 +4,6 @@ import java.io.InputStream;
 
 public interface MavenRepositoryResolver {
 
-    InputStream artifactStream(String groupId, String artifactId, String version, String extension);
+    InputStream artifactStream(String groupId, String artifactId, String version, String type);
 
 }

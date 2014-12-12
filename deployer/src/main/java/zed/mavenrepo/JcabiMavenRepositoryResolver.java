@@ -1,7 +1,7 @@
 package zed.mavenrepo;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.jcabi.aether.Aether;
@@ -14,25 +14,32 @@ import org.sonatype.aether.util.artifact.JavaScopes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
-public class JcabiMavenRepositoryResolver implements MavenRepositoryResolver {
+import static com.google.common.collect.Lists.transform;
 
-    public static void main(String[] args) throws IOException {
-        new JcabiMavenRepositoryResolver().artifactStream("org.apache.camel", "camel-guava-eventbus", "2.14.0", "jar").close();
-    }
+public class JcabiMavenRepositoryResolver extends ConfigurableMavenRepositoryResolver {
 
     private final Aether aether;
 
-    public JcabiMavenRepositoryResolver(List<RemoteRepository> remoteRepositories) {
-        aether = new Aether(ImmutableList.copyOf(remoteRepositories), new File(System.getProperty("user.home") + "/.m2/repository"));
+    public JcabiMavenRepositoryResolver(List<Repository> repositories) {
+        super(repositories);
+        aether = initializeAether();
     }
 
     public JcabiMavenRepositoryResolver() {
-        this(Arrays.asList(new RemoteRepository("mavenCentral", "default", "https://repo1.maven.org/maven2")));
+        super();
+        aether = initializeAether();
+    }
+
+    private Aether initializeAether() {
+        return new Aether(transform(repositories, new Function<Repository, RemoteRepository>() {
+            @Override
+            public RemoteRepository apply(Repository repository) {
+                return new RemoteRepository(repository.id(), "default", repository.url());
+            }
+        }), new File(System.getProperty("user.home") + "/.m2/repository"));
     }
 
     @Override
