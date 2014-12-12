@@ -37,7 +37,7 @@ public class SshClient {
         Channel channel = null;
         try {
             JSch jsch = new JSch();
-            session = jsch.getSession("zed", "localhost", 2000);
+            session = jsch.getSession("zed", host, port);
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
