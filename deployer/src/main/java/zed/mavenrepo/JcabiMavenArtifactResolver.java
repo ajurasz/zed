@@ -19,16 +19,16 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.transform;
 
-public class JcabiMavenRepositoryResolver extends ConfigurableMavenRepositoryResolver {
+public class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolver {
 
     private final Aether aether;
 
-    public JcabiMavenRepositoryResolver(List<Repository> repositories) {
+    public JcabiMavenArtifactResolver(List<Repository> repositories) {
         super(repositories);
         aether = initializeAether();
     }
 
-    public JcabiMavenRepositoryResolver() {
+    public JcabiMavenArtifactResolver() {
         super();
         aether = initializeAether();
     }

@@ -6,15 +6,15 @@ import java.util.List;
 
 import static zed.mavenrepo.Repository.mavenCentral;
 
-public abstract class ConfigurableMavenRepositoryResolver implements MavenRepositoryResolver {
+public abstract class ConfigurableMavenArtifactResolver implements MavenArtifactResolver {
 
     protected final List<Repository> repositories;
 
-    public ConfigurableMavenRepositoryResolver(List<Repository> repositories) {
+    public ConfigurableMavenArtifactResolver(List<Repository> repositories) {
         this.repositories = ImmutableList.copyOf(repositories);
     }
 
-    public ConfigurableMavenRepositoryResolver() {
+    public ConfigurableMavenArtifactResolver() {
         this.repositories = ImmutableList.of(mavenCentral());
     }
 

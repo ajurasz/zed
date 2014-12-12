@@ -1,8 +1,8 @@
 package zed.deployer;
 
 import org.apache.commons.io.IOUtils;
-import zed.mavenrepo.JcabiMavenRepositoryResolver;
-import zed.mavenrepo.MavenRepositoryResolver;
+import zed.mavenrepo.JcabiMavenArtifactResolver;
+import zed.mavenrepo.MavenArtifactResolver;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,7 +13,7 @@ public class FatJarUriDeployHandler implements UriDeployHandler {
 
     private final ZedHome zedHome;
 
-    private final MavenRepositoryResolver mavenRepositoryResolver = new JcabiMavenRepositoryResolver();
+    private final MavenArtifactResolver mavenArtifactResolver = new JcabiMavenArtifactResolver();
 
     public FatJarUriDeployHandler(ZedHome zedHome) {
         this.zedHome = zedHome;
@@ -32,7 +32,7 @@ public class FatJarUriDeployHandler implements UriDeployHandler {
             throw new IllegalArgumentException(mavenCoordinatesUri + " is not a valid Maven artifact URI. Proper URI format is fatjar:mvn:groupId/artifactId/version/[type] .");
         }
         String artifactType = mavenCoordinates.length == 4 ? mavenCoordinates[3] : "jar";
-        InputStream in = mavenRepositoryResolver.artifactStream(mavenCoordinates[0].replaceAll("\\.", "/"), mavenCoordinates[1].replaceAll("\\.", "/"), mavenCoordinates[2], artifactType);
+        InputStream in = mavenArtifactResolver.artifactStream(mavenCoordinates[0].replaceAll("\\.", "/"), mavenCoordinates[1].replaceAll("\\.", "/"), mavenCoordinates[2], artifactType);
         File deployDirectory = new File(zedHome.deployDirectory(), mavenCoordinates[1] + "-" + mavenCoordinates[2] + "." + artifactType);
         try {
             IOUtils.copy(in, new FileOutputStream(deployDirectory));
