@@ -26,11 +26,14 @@ public class FatJarUriDeployHandler implements UriDeployHandler {
 
     @Override
     public void deploy(DeploymentDescriptor deploymentDescriptor) {
-        String uri = deploymentDescriptor.uri();
-        uri = uri.replaceFirst("fatjar:mvn:", "");
-        String[] mavenCoordinates = uri.split("/");
-        InputStream in = mavenRepositoryResolver.artifactStream(mavenCoordinates[0].replaceAll("\\.", "/"), mavenCoordinates[1].replaceAll("\\.", "/"), mavenCoordinates[2], "jar");
-        File deployDirectory = new File(zedHome.deployDirectory(), mavenCoordinates[1] + "-" + mavenCoordinates[2] + ".jar");
+        String mavenCoordinatesUri = deploymentDescriptor.uri().replaceFirst("fatjar:mvn:", "");
+        String[] mavenCoordinates = mavenCoordinatesUri.split("/");
+        if (mavenCoordinates.length < 3) {
+            throw new IllegalArgumentException(mavenCoordinatesUri + " is not a valid Maven artifact URI. Proper URI format is fatjar:mvn:groupId/artifactId/version/[type] .");
+        }
+        String artifactType = mavenCoordinates.length == 4 ? mavenCoordinates[3] : "jar";
+        InputStream in = mavenRepositoryResolver.artifactStream(mavenCoordinates[0].replaceAll("\\.", "/"), mavenCoordinates[1].replaceAll("\\.", "/"), mavenCoordinates[2], artifactType);
+        File deployDirectory = new File(zedHome.deployDirectory(), mavenCoordinates[1] + "-" + mavenCoordinates[2] + "." + artifactType);
         try {
             IOUtils.copy(in, new FileOutputStream(deployDirectory));
         } catch (IOException e) {

@@ -44,12 +44,21 @@ public class FileSystemDeploymentManagerTest extends Assert {
     // Tests
 
     @Test
-    public void shouldDeployFatGuavaJar() {
+    public void shouldDeployFatJar() {
         // When
         deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // Then
         assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("guava-18.0.jar"));
+    }
+
+    @Test
+    public void shouldDeployFatWar() {
+        // When
+        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/0.0.6/war");
+
+        // Then
+        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-service-document-mongo-0.0.6.war"));
     }
 
     @Test
