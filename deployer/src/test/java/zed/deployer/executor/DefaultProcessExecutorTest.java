@@ -12,9 +12,9 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import zed.deployer.DeploymentDescriptor;
-import zed.deployer.DeploymentManager;
-import zed.deployer.FileSystemDeploymentManager;
+import zed.deployer.manager.DeployablesManager;
+import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.FileSystemDeployablesManager;
 
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
@@ -28,7 +28,7 @@ public class DefaultProcessExecutorTest extends Assert {
     DockerClient docker;
 
     @Autowired
-    DeploymentManager deploymentManager;
+    DeployablesManager deployableManager;
 
     @Autowired
     ProcessExecutor defaultProcessExecutor;
@@ -44,7 +44,7 @@ public class DefaultProcessExecutorTest extends Assert {
     public void shouldSupportMongoDocker() {
         try {
             // Given
-            DeploymentDescriptor descriptor = deploymentManager.deploy("mongodb:docker");
+            DeploymentDescriptor descriptor = deployableManager.deploy("mongodb:docker");
 
             // When
             pid = defaultProcessExecutor.start(descriptor.id());
@@ -67,8 +67,8 @@ class DefaultProcessExecutorTestConfiguration {
     DockerClient docker;
 
     @Bean
-    DeploymentManager deploymentManager() {
-        return new FileSystemDeploymentManager(docker);
+    DeployablesManager deploymentManager() {
+        return new FileSystemDeployablesManager(docker);
     }
 
     @Bean

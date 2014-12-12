@@ -1,4 +1,4 @@
-package zed.deployer;
+package zed.deployer.manager;
 
 import java.io.File;
 import java.io.FileOutputStream;

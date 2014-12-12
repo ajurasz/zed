@@ -1,4 +1,4 @@
-package zed.deployer;
+package zed.deployer.manager;
 
 public interface DeploymentDescriptor {
 

@@ -1,6 +1,8 @@
 package zed.deployer;
 
 import org.apache.commons.io.IOUtils;
+import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.ZedHome;
 import zed.mavenrepo.JcabiMavenArtifactResolver;
 import zed.mavenrepo.MavenArtifactResolver;
 

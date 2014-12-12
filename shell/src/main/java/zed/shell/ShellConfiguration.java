@@ -7,11 +7,11 @@ import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoCon
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import zed.deployer.DefaultStatusResolver;
-import zed.deployer.DeploymentManager;
-import zed.deployer.FileSystemDeploymentManager;
 import zed.deployer.StatusResolver;
 import zed.deployer.executor.DefaultProcessExecutor;
 import zed.deployer.executor.ProcessExecutor;
+import zed.deployer.manager.DeployablesManager;
+import zed.deployer.manager.FileSystemDeployablesManager;
 
 @EnableAutoConfiguration
 @Import(SpotifyDockerAutoConfiguration.class)
@@ -21,8 +21,8 @@ public class ShellConfiguration {
     DockerClient docker;
 
     @Bean
-    DeploymentManager deploymentManager() {
-        return new FileSystemDeploymentManager(docker);
+    DeployablesManager deploymentManager() {
+        return new FileSystemDeployablesManager(docker);
     }
 
     @Bean

@@ -13,10 +13,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.DefaultStatusResolver;
-import zed.deployer.DeploymentDescriptor;
-import zed.deployer.DeploymentManager;
-import zed.deployer.FileSystemDeploymentManager;
 import zed.deployer.StatusResolver;
+import zed.deployer.manager.DeployablesManager;
+import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.FileSystemDeployablesManager;
 
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
@@ -30,7 +30,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
     DockerClient docker;
 
     @Autowired
-    DeploymentManager deploymentManager;
+    DeployablesManager deployableManager;
 
     @Autowired
     MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler;
@@ -49,8 +49,8 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
     public void shouldStartMongoProcess() {
         try {
             // Given
-            deploymentManager.clear();
-            descriptor = deploymentManager.deploy("mongodb:docker");
+            deployableManager.clear();
+            descriptor = deployableManager.deploy("mongodb:docker");
 
             // When
             String pid = mongoDockerProcessExecutorHandler.start(descriptor.id());
@@ -73,8 +73,8 @@ class MongoDockerProcessExecutorHandlerTestConfiguration {
     DockerClient docker;
 
     @Bean
-    DeploymentManager deploymentManager() {
-        return new FileSystemDeploymentManager(docker);
+    DeployablesManager deploymentManager() {
+        return new FileSystemDeployablesManager(docker);
     }
 
     @Bean

@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.executor.DefaultProcessExecutor;
 import zed.deployer.executor.ProcessExecutor;
+import zed.deployer.manager.DeployablesManager;
+import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.FileSystemDeployablesManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,13 +31,13 @@ import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isCon
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, FileSystemDeploymentManagerTestConfiguration.class})
 @IntegrationTest
-public class FileSystemDeploymentManagerTest extends Assert {
+public class FileSystemDeployablesManagerTest extends Assert {
 
     @Autowired
     DockerClient docker;
 
     @Autowired
-    FileSystemDeploymentManager deploymentManager;
+    FileSystemDeployablesManager deploymentManager;
 
     @Before
     public void before() {
@@ -59,6 +62,20 @@ public class FileSystemDeploymentManagerTest extends Assert {
 
         // Then
         assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-service-document-mongo-0.0.6.war"));
+    }
+
+    @Test
+    public void shouldDeploySnapshot() throws IOException {
+        // Given
+        Properties versions = new Properties();
+        versions.load(getClass().getResourceAsStream("/META-INF/maven/dependencies.properties"));
+        String projectVersion = versions.getProperty("com.github.zed-platform/zed-deployer/version");
+
+        // When
+        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/" + projectVersion + "/war");
+
+        // Then
+        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-service-document-mongo-" + projectVersion + ".war"));
     }
 
     @Test
@@ -121,8 +138,8 @@ class FileSystemDeploymentManagerTestConfiguration {
     DockerClient docker;
 
     @Bean
-    DeploymentManager deploymentManager() {
-        return new FileSystemDeploymentManager(docker);
+    DeployablesManager deploymentManager() {
+        return new FileSystemDeployablesManager(docker);
     }
 
     @Bean

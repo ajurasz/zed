@@ -5,15 +5,19 @@ import org.crsh.cli.Command
 import org.crsh.cli.Required
 import org.crsh.cli.Usage
 import org.crsh.command.InvocationContext
-import zed.deployer.DeploymentManager
+import zed.deployer.manager.DeployablesManager
 
 class deploy {
 
     @Command
     def main(InvocationContext context, @Usage("URI of the artifact to deploy.") @Required @Argument String uri) {
-        DeploymentManager deployer = context.getAttributes().get('spring.beanfactory').getBean(DeploymentManager.class)
-        deployer.deploy(uri)
-        return "Deployed " + uri
+        try {
+            DeployablesManager deployer = context.getAttributes().get('spring.beanfactory').getBean(DeployablesManager.class)
+            deployer.deploy(uri)
+            return "Deployed " + uri
+        } catch (RuntimeException e) {
+            return e.getMessage()
+        }
     }
 
 }

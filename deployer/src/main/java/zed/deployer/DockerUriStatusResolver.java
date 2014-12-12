@@ -2,6 +2,7 @@ package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.Container;
+import zed.deployer.manager.DeploymentDescriptor;
 
 import java.util.List;
 import java.util.stream.Collectors;

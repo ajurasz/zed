@@ -1,8 +1,11 @@
-package zed.deployer;
+package zed.deployer.manager;
 
 
 import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.FileUtils;
+import zed.deployer.FatJarUriDeployHandler;
+import zed.deployer.MongoUriDeployHandler;
+import zed.deployer.UriDeployHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,13 +18,13 @@ import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class FileSystemDeploymentManager implements DeploymentManager {
+public class FileSystemDeployablesManager implements DeployablesManager {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 
     private final List<UriDeployHandler> deployHandlers;
 
-    public FileSystemDeploymentManager(DockerClient docker) {
+    public FileSystemDeployablesManager(DockerClient docker) {
         deployHandlers = Arrays.asList(new FatJarUriDeployHandler(zedHome), new MongoUriDeployHandler(zedHome, docker));
     }
 
@@ -36,7 +39,7 @@ public class FileSystemDeploymentManager implements DeploymentManager {
                 return deploymentDescriptor;
             }
         }
-        throw new RuntimeException("No handler for URI: " + uri);
+        throw new RuntimeException("No handler for deployable with URI: " + uri);
     }
 
     @Override

@@ -1,26 +1,26 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import zed.deployer.DeploymentDescriptor;
-import zed.deployer.DeploymentManager;
+import zed.deployer.manager.DeployablesManager;
+import zed.deployer.manager.DeploymentDescriptor;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class DefaultProcessExecutor implements ProcessExecutor {
 
-    private final DeploymentManager deploymentManager;
+    private final DeployablesManager deployableManager;
 
     private final List<ProcessExecutorHandler> handlers;
 
-    public DefaultProcessExecutor(DeploymentManager deploymentManager, DockerClient docker) {
-        this.handlers = Arrays.asList(new MongoDockerProcessExecutorHandler(deploymentManager, docker));
-        this.deploymentManager = deploymentManager;
+    public DefaultProcessExecutor(DeployablesManager deployableManager, DockerClient docker) {
+        this.handlers = Arrays.asList(new MongoDockerProcessExecutorHandler(deployableManager, docker));
+        this.deployableManager = deployableManager;
     }
 
     @Override
     public String start(String deploymentId) {
-        DeploymentDescriptor descriptor = deploymentManager.deployment(deploymentId);
+        DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
         for (ProcessExecutorHandler handler : handlers) {
             if (handler.supports(descriptor.uri())) {
                 return handler.start(deploymentId);

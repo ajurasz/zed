@@ -1,8 +1,8 @@
-package zed.deployer;
+package zed.deployer.manager;
 
 import java.util.List;
 
-public interface DeploymentManager {
+public interface DeployablesManager {
 
     DeploymentDescriptor deploy(String uri);
 

@@ -1,6 +1,8 @@
 package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
+import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.ZedHome;
 
 public class MongoUriDeployHandler implements UriDeployHandler {
 
