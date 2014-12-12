@@ -59,13 +59,13 @@ public class SshClient {
 
             channel.disconnect();
             session.disconnect();
-        } catch (JSchException jsche) {
+        } catch (JSchException | IOException jsche) {
             throw new RuntimeException(jsche);
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
         } finally {
-            channel.disconnect();
-            session.disconnect();
+            if (channel != null) {
+                channel.disconnect();
+                session.disconnect();
+            }
         }
     }
 
