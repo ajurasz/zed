@@ -20,7 +20,7 @@ public class DeployCommandTest extends Assert {
     static int port = findAvailableTcpPort();
 
     @BeforeClass
-    public void beforeClass() {
+    public static void beforeClass() {
         System.setProperty("shell.ssh.port", port + "");
     }
 
