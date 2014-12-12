@@ -72,10 +72,10 @@ public class FileSystemDeployablesManagerTest extends Assert {
         String projectVersion = versions.getProperty("com.github.zed-platform/zed-deployer/version");
 
         // When
-        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/" + projectVersion + "/war");
+        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-utils/" + projectVersion);
 
         // Then
-        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-service-document-mongo-" + projectVersion + ".war"));
+        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-utils-" + projectVersion + ".jar"));
     }
 
     @Test

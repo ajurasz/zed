@@ -60,7 +60,9 @@ public class JcabiMavenArtifactResolver extends ConfigurableMavenArtifactResolve
                 throw new RuntimeException("More than single main artifacts found: " + mainArtifacts);
             }
             return new FileInputStream(mainArtifacts.get(0).getFile());
-        } catch (DependencyResolutionException | FileNotFoundException e) {
+        } catch (DependencyResolutionException e) {
+            throw new MavenDependencyResolutionException(e);
+        } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
