@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ShellConfiguration.class)
+@SpringApplicationConfiguration(classes = {ShellConfiguration.class, DeployCommandTest.class})
 @IntegrationTest
 public class DeployCommandTest extends Assert {
 

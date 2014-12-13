@@ -22,17 +22,19 @@ public class DeployListCommandTest extends Assert {
 
     static int port = findAvailableTcpPort();
 
-    SshClient ssh = new SshClient("localhost", port);
-
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("shell.ssh.port", port + "");
     }
 
+    SshClient ssh;
+
     // Tests
 
     @Before
     public void before() {
+        ssh = new SshClient("localhost", port);
+
         ssh.printCommand("deploy_clean");
         ssh.printCommand("deploy fatjar:mvn:com.google.guava/guava/18.0");
     }
