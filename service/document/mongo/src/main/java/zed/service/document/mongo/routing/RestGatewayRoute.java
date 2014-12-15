@@ -43,14 +43,13 @@ public class RestGatewayRoute extends RouteBuilder {
         restConfiguration().component("netty-http").host("0.0.0.0").port(restPort).bindingMode(RestBindingMode.auto);
 
         rest("/api/document").
-                post("/save/{collection}").route().
+                post("/save/{collection}").type(Object.class).route().
                 setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(headers['collection'], body)").
                 to("direct:save").setBody().groovy("body.toString()");
 
         rest("/api/document").
                 get("/count/{collection}").route().
-                        // TODO:CAMEL Auto imports for Groovy? http://mrhaki.blogspot.com/2011/06/groovy-goodness-add-imports.html
-                                setBody().groovy("new zed.service.document.mongo.routing.CountOperation(headers['collection'])").
+                setBody().groovy("new zed.service.document.mongo.routing.CountOperation(headers['collection'])").
                 to("direct:count");
 
         rest("/api/document").
