@@ -1,6 +1,8 @@
 package zed.service.document.sdk;
 
-public class QueryBuilder {
+import java.io.Serializable;
+
+public class QueryBuilder implements Serializable {
 
     private final Object query;
 
