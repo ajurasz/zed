@@ -29,7 +29,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+
+import static zed.utils.Mavens.artifactVersion;
 
 @Mojo(name = "deploy", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class DeployMojo extends AbstractMojo {
@@ -46,9 +47,7 @@ public class DeployMojo extends AbstractMojo {
             throws MojoExecutionException {
         final Process p;
         try {
-            Properties versions = new Properties();
-            versions.load(getClass().getResourceAsStream("/META-INF/maven/dependencies.properties"));
-            String projectVersion = versions.getProperty("com.github.zed-platform/zed-maven-plugin/version");
+            String projectVersion = artifactVersion("com.github.zed-platform", "zed-maven-plugin");
             String zedShellUrl = String.format(System.getProperty("user.home") + "/.m2/repository/com/github/zed-platform/zed-shell/%s/zed-shell-%s.war", projectVersion, projectVersion);
             p = Runtime.getRuntime().exec(new String[]{"java", "-jar", zedShellUrl});
             Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -67,7 +66,6 @@ public class DeployMojo extends AbstractMojo {
             Thread.sleep(15000);
             for (String command : commands) {
                 getLog().info("Executing command: " + command);
-//                getLog().info(IOUtils.toString(p.getInputStream()));
                 getLog().info(new SshClient("localhost", 2000).command(command).toString());
             }
         } catch (IOException | InterruptedException e) {

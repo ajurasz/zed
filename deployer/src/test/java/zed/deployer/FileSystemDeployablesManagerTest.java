@@ -17,6 +17,7 @@ import zed.deployer.executor.ProcessExecutor;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
+import zed.utils.Mavens;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,9 +68,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
     @Test
     public void shouldDeploySnapshot() throws IOException {
         // Given
-        Properties versions = new Properties();
-        versions.load(getClass().getResourceAsStream("/META-INF/maven/dependencies.properties"));
-        String projectVersion = versions.getProperty("com.github.zed-platform/zed-deployer/version");
+        String projectVersion = Mavens.artifactVersion("com.github.zed-platform", "zed-deployer");
 
         // When
         deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-utils/" + projectVersion);
