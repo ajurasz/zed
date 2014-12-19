@@ -1,4 +1,4 @@
-package foo;
+package zed.maven.plugin;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;

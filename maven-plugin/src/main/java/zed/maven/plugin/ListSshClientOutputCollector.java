@@ -1,4 +1,4 @@
-package foo;
+package zed.maven.plugin;
 
 import com.google.common.collect.ImmutableList;
 

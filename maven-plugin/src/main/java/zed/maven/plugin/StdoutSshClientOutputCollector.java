@@ -1,4 +1,4 @@
-package foo;
+package zed.maven.plugin;
 
 public class StdoutSshClientOutputCollector implements SshClientOutputCollector {
 
