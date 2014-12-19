@@ -1,0 +1,1 @@
+deploy fatjar:mvn:com.google.guava/guava/18.0

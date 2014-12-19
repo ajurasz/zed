@@ -53,6 +53,7 @@
         <embedmongo.version>1.46.4</embedmongo.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
+        <maven.version>3.0.5</maven.version>
         <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
         <zed.version>0.0.7-SNAPSHOT</zed.version>
 

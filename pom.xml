@@ -14,6 +14,7 @@
         <module>dockerunit</module>
         <module>deployer</module>
         <module>shell</module>
+        <module>maven-plugin</module>
         <module>service</module>
         <module>quickstarts</module>
     </modules>
@@ -100,5 +101,3 @@
     </build>
 
 </project>
-        # Ekstazi excluded
-        **/*$*
