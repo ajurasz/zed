@@ -10,6 +10,7 @@ import org.apache.maven.project.MavenProject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_SOURCES;
@@ -40,7 +41,8 @@ public class DeployMojo extends AbstractMojo {
 
         File baseDir = project.getBasedir();
         try {
-            List<String> commands = IOUtils.readLines(new FileInputStream(new File(baseDir.getAbsolutePath() + "/src/main/resources/META-INF/zed", "deploy")));
+            File deployScript = Paths.get(baseDir.getAbsolutePath(), "src", "main", "resources", "META-INF", "zed", "deploy").toFile();
+            List<String> commands = IOUtils.readLines(new FileInputStream(deployScript));
             Thread.sleep(15000);
             for (String command : commands) {
                 getLog().info("Executing command: " + command);
