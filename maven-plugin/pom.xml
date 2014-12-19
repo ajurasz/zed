@@ -71,6 +71,11 @@
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>1.6.3</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>

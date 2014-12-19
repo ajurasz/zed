@@ -12,7 +12,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import static com.jayway.awaitility.Awaitility.await;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_SOURCES;
 import static zed.utils.Mavens.artifactVersion;
 
@@ -35,6 +38,17 @@ public class DeployMojo extends AbstractMojo {
                     p.destroy();
                 }
             });
+            await().atMost(1, MINUTES).until(new Callable<Boolean>() {
+                @Override
+                public Boolean call() throws Exception {
+                    try {
+                        new SshClient("localhost", 2000).command("foo");
+                    } catch (RuntimeException e) {
+                        return false;
+                    }
+                    return true;
+                }
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,12 +57,11 @@ public class DeployMojo extends AbstractMojo {
         try {
             File deployScript = Paths.get(baseDir.getAbsolutePath(), "src", "main", "resources", "META-INF", "zed", "deploy").toFile();
             List<String> commands = IOUtils.readLines(new FileInputStream(deployScript));
-            Thread.sleep(15000);
             for (String command : commands) {
                 getLog().info("Executing command: " + command);
                 getLog().info(new SshClient("localhost", 2000).command(command).toString());
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
