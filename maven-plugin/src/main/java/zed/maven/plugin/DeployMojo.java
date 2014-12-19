@@ -38,7 +38,7 @@ public class DeployMojo extends AbstractMojo {
                     p.destroy();
                 }
             });
-            await().atMost(1, MINUTES).until(new Callable<Boolean>() {
+            await().atMost(2, MINUTES).until(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
                     try {
