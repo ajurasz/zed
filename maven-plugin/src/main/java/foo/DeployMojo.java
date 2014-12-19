@@ -26,10 +26,10 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 @Mojo(name = "deploy", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class DeployMojo extends AbstractMojo {
@@ -46,7 +46,11 @@ public class DeployMojo extends AbstractMojo {
             throws MojoExecutionException {
         final Process p;
         try {
-            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", "/home/hekonsek/.m2/repository/com/github/zed-platform/zed-shell/0.0.7-SNAPSHOT/zed-shell-0.0.7-SNAPSHOT.war"});
+            Properties versions = new Properties();
+            versions.load(getClass().getResourceAsStream("/META-INF/maven/dependencies.properties"));
+            String projectVersion = versions.getProperty("com.github.zed-platform/zed-maven-plugin/version");
+            String zedShellUrl = String.format(System.getProperty("user.home") + "/.m2/repository/com/github/zed-platform/zed-shell/%s/zed-shell-%s.war", projectVersion, projectVersion);
+            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", zedShellUrl});
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -66,12 +70,8 @@ public class DeployMojo extends AbstractMojo {
 //                getLog().info(IOUtils.toString(p.getInputStream()));
                 getLog().info(new SshClient("localhost", 2000).command(command).toString());
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
         File f = outputDirectory;
