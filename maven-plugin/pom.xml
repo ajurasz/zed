@@ -3,7 +3,7 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.8</version>
+        <version>0.0.9-SNAPSHOT</version>
         <artifactId>zed</artifactId>
         <relativePath>../pom.xml</relativePath>
     </parent>
