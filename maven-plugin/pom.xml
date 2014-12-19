@@ -185,16 +185,16 @@
                         <goal>test-compile</goal>
                     </goals>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>install</goal>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <!--<executions>-->
+                <!--<execution>-->
+                <!--<id>integration-test</id>-->
+                <!--<goals>-->
+                <!--<goal>install</goal>-->
+                <!--<goal>integration-test</goal>-->
+                <!--<goal>verify</goal>-->
+                <!--</goals>-->
+                <!--</execution>-->
+                <!--</executions>-->
             </plugin>
         </plugins>
     </build>
