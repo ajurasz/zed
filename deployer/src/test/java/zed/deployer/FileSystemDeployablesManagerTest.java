@@ -3,7 +3,6 @@ package zed.deployer;
 import com.github.dockerjava.api.DockerClient;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,6 @@ public class FileSystemDeployablesManagerTest extends Assert {
     }
 
     @Test
-    @Ignore("Doesn't work during release tests (as projectVersion is not a snapshot anymore).")
     public void shouldDeploySnapshot() throws IOException {
         // Given
         String projectVersion = Mavens.artifactVersion("com.github.zed-platform", "zed-deployer");
