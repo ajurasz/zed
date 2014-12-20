@@ -16,7 +16,6 @@
         <module>shell</module>
         <module>maven-plugin</module>
         <module>service</module>
-        <module>quickstarts</module>
     </modules>
 
     <name>${project.artifactId}</name>
