@@ -1,4 +1,4 @@
-package zed.deployer;
+package zed.deployer.handlers;
 
 import zed.deployer.manager.DeploymentDescriptor;
 
