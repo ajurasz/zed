@@ -18,10 +18,12 @@ import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 
-import java.util.UUID;
+import java.io.File;
 
+import static com.google.common.io.Files.createTempDir;
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
+import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, MongoDockerProcessExecutorHandlerTestConfiguration.class})
@@ -76,7 +78,8 @@ class MongoDockerProcessExecutorHandlerTestConfiguration {
 
     @Bean
     DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(UUID.randomUUID().toString(), docker);
+        File workspace = createTempDir();
+        return new FileSystemDeployablesManager(workspace, allDeployableHandlers(workspace, docker));
     }
 
     @Bean

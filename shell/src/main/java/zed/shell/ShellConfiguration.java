@@ -13,6 +13,11 @@ import zed.deployer.executor.DefaultProcessExecutor;
 import zed.deployer.executor.ProcessExecutor;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.FileSystemDeployablesManager;
+import zed.deployer.manager.LocalFileSystemZedHome;
+
+import java.io.File;
+
+import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 
 @EnableAutoConfiguration
 @Import(SpotifyDockerAutoConfiguration.class)
@@ -23,7 +28,9 @@ public class ShellConfiguration {
 
     @Bean
     DeployablesManager deploymentManager(@Value("${zed.shell.workspace:default}") String workspace) {
-        return new FileSystemDeployablesManager(workspace, docker);
+        File deployDirectory = new LocalFileSystemZedHome().deployDirectory();
+        File workspaceFile = new File(deployDirectory, workspace);
+        return new FileSystemDeployablesManager(workspaceFile, allDeployableHandlers(workspaceFile, docker));
     }
 
     @Bean

@@ -25,10 +25,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
 
+import static com.google.common.io.Files.createTempDir;
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
+import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, FileSystemDeploymentManagerTestConfiguration.class})
@@ -139,7 +140,8 @@ class FileSystemDeploymentManagerTestConfiguration {
 
     @Bean
     DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(UUID.randomUUID().toString(), docker);
+        File workspace = createTempDir();
+        return new FileSystemDeployablesManager(workspace, allDeployableHandlers(workspace, docker));
     }
 
     @Bean

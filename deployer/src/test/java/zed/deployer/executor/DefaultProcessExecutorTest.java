@@ -12,12 +12,14 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import zed.deployer.handlers.DeployableHandlers;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 
-import java.util.UUID;
+import java.io.File;
 
+import static com.google.common.io.Files.createTempDir;
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
 
@@ -70,7 +72,8 @@ class DefaultProcessExecutorTestConfiguration {
 
     @Bean
     DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(UUID.randomUUID().toString(), docker);
+        File workspace = createTempDir();
+        return new FileSystemDeployablesManager(workspace, DeployableHandlers.allDeployableHandlers(workspace, docker));
     }
 
     @Bean

@@ -1,16 +1,12 @@
 package zed.deployer.manager;
 
 
-import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.FileUtils;
-import zed.deployer.MongoDeployableHandler;
 import zed.deployer.handlers.DeployableHandler;
-import zed.deployer.handlers.FatJarMavenDeployableHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -26,10 +22,10 @@ public class FileSystemDeployablesManager implements DeployablesManager {
 
     private final List<DeployableHandler> deployHandlers;
 
-    public FileSystemDeployablesManager(String workspace, DockerClient docker) {
-        this.workspace = new File(zedHome.deployDirectory(), workspace);
+    public FileSystemDeployablesManager(File workspace, List<DeployableHandler> deployHandlers) {
+        this.workspace = workspace;
         this.workspace.mkdirs();
-        deployHandlers = Arrays.asList(new FatJarMavenDeployableHandler(this.workspace), new MongoDeployableHandler(zedHome, docker));
+        this.deployHandlers = deployHandlers;
     }
 
     @Override
