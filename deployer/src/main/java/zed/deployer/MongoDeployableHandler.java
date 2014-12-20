@@ -4,13 +4,13 @@ import com.github.dockerjava.api.DockerClient;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.ZedHome;
 
-public class MongoUriDeployHandler implements UriDeployHandler {
+public class MongoDeployableHandler implements DeployableHandler {
 
     private final ZedHome zedHome;
 
     private final DockerClient docker;
 
-    public MongoUriDeployHandler(ZedHome zedHome, DockerClient docker) {
+    public MongoDeployableHandler(ZedHome zedHome, DockerClient docker) {
         this.zedHome = zedHome;
         this.docker = docker;
     }

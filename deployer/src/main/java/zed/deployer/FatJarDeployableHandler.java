@@ -10,13 +10,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FatJarUriDeployHandler implements UriDeployHandler {
+public class FatJarDeployableHandler implements DeployableHandler {
 
     private final File workspace;
 
     private final MavenArtifactResolver mavenArtifactResolver = new JcabiMavenArtifactResolver();
 
-    public FatJarUriDeployHandler(File workspace) {
+    public FatJarDeployableHandler(File workspace) {
         this.workspace = workspace;
     }
 

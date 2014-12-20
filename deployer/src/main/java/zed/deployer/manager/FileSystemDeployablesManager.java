@@ -3,9 +3,9 @@ package zed.deployer.manager;
 
 import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.FileUtils;
-import zed.deployer.FatJarUriDeployHandler;
-import zed.deployer.MongoUriDeployHandler;
-import zed.deployer.UriDeployHandler;
+import zed.deployer.DeployableHandler;
+import zed.deployer.FatJarDeployableHandler;
+import zed.deployer.MongoDeployableHandler;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,19 +24,19 @@ public class FileSystemDeployablesManager implements DeployablesManager {
 
     private final ZedHome zedHome = new LocalFileSystemZedHome();
 
-    private final List<UriDeployHandler> deployHandlers;
+    private final List<DeployableHandler> deployHandlers;
 
     public FileSystemDeployablesManager(String workspace, DockerClient docker) {
         this.workspace = new File(zedHome.deployDirectory(), workspace);
         this.workspace.mkdirs();
-        deployHandlers = Arrays.asList(new FatJarUriDeployHandler(this.workspace), new MongoUriDeployHandler(zedHome, docker));
+        deployHandlers = Arrays.asList(new FatJarDeployableHandler(this.workspace), new MongoDeployableHandler(zedHome, docker));
     }
 
     @Override
     public DeploymentDescriptor deploy(String uri) {
         String id = UUID.randomUUID().toString();
         BasicDeploymentDescriptor deploymentDescriptor = new BasicDeploymentDescriptor(workspace.getName(), id, uri);
-        for (UriDeployHandler deployHandler : deployHandlers) {
+        for (DeployableHandler deployHandler : deployHandlers) {
             if (deployHandler.supports(uri)) {
                 deployHandler.deploy(deploymentDescriptor);
                 deploymentDescriptor.save(new File(workspace, deploymentDescriptor.id() + ".deploy"));

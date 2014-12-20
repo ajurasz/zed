@@ -2,7 +2,7 @@ package zed.deployer;
 
 import zed.deployer.manager.DeploymentDescriptor;
 
-public interface UriDeployHandler {
+public interface DeployableHandler {
 
     boolean supports(String uri);
 
