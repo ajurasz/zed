@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
@@ -62,7 +63,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
         deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/0.0.6/war");
 
         // Then
-        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-service-document-mongo-0.0.6.war"));
+        assertTrue(Arrays.asList(deploymentManager.workspace().list()).contains("zed-service-document-mongo-0.0.6.war"));
     }
 
     @Test
@@ -74,7 +75,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
         deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-utils/" + projectVersion);
 
         // Then
-        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("zed-utils-" + projectVersion + ".jar"));
+        assertTrue(Arrays.asList(deploymentManager.workspace().list()).contains("zed-utils-" + projectVersion + ".jar"));
     }
 
     @Test
@@ -84,7 +85,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
@@ -110,7 +111,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
@@ -124,7 +125,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.zedHome().deployDirectory(), deploymentDescriptor.id() + ".deploy")));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
         assertEquals(deploymentDescriptor.id(), savedDescriptor.getProperty("id"));
     }
 
@@ -138,7 +139,7 @@ class FileSystemDeploymentManagerTestConfiguration {
 
     @Bean
     DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(docker);
+        return new FileSystemDeployablesManager(UUID.randomUUID().toString(), docker);
     }
 
     @Bean

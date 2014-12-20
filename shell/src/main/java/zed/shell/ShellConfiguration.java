@@ -2,6 +2,7 @@ package zed.shell;
 
 import com.github.dockerjava.api.DockerClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -21,18 +22,18 @@ public class ShellConfiguration {
     DockerClient docker;
 
     @Bean
-    DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(docker);
+    DeployablesManager deploymentManager(@Value("${zed.shell.workspace:default}") String workspace) {
+        return new FileSystemDeployablesManager(workspace, docker);
     }
 
     @Bean
-    StatusResolver statusResolver() {
-        return new DefaultStatusResolver(deploymentManager(), docker);
+    StatusResolver statusResolver(DeployablesManager deploymentManager) {
+        return new DefaultStatusResolver(deploymentManager, docker);
     }
 
     @Bean
-    ProcessExecutor processExecutor() {
-        return new DefaultProcessExecutor(deploymentManager(), docker);
+    ProcessExecutor processExecutor(DeployablesManager deploymentManager) {
+        return new DefaultProcessExecutor(deploymentManager, docker);
     }
 
 }

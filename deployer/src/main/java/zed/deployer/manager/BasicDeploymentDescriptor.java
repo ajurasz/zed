@@ -7,20 +7,28 @@ import java.util.Properties;
 
 public class BasicDeploymentDescriptor implements DeploymentDescriptor {
 
+    private final String workspace;
+
     private final String id;
 
     private final String uri;
 
     private final String pid;
 
-    public BasicDeploymentDescriptor(String id, String uri, String pid) {
+    public BasicDeploymentDescriptor(String workspace, String id, String uri, String pid) {
+        this.workspace = workspace;
         this.id = id;
         this.uri = uri;
         this.pid = pid;
     }
 
-    public BasicDeploymentDescriptor(String id, String uri) {
-        this(id, uri, null);
+    public BasicDeploymentDescriptor(String workspace, String id, String uri) {
+        this(workspace, id, uri, null);
+    }
+
+    @Override
+    public String workspace() {
+        return workspace;
     }
 
     @Override
@@ -40,7 +48,7 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
 
     @Override
     public BasicDeploymentDescriptor pid(String pid) {
-        return new BasicDeploymentDescriptor(id, uri, pid);
+        return new BasicDeploymentDescriptor(workspace, id, uri, pid);
     }
 
     @Override
@@ -51,6 +59,7 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
     public void save(File output) {
         try {
             Properties properties = new Properties();
+            properties.put("workspace", workspace);
             properties.put("id", id);
             properties.put("uri", uri);
             if (pid != null) {

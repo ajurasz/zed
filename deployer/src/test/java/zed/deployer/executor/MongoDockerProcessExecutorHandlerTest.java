@@ -18,6 +18,8 @@ import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 
+import java.util.UUID;
+
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
 
@@ -74,7 +76,7 @@ class MongoDockerProcessExecutorHandlerTestConfiguration {
 
     @Bean
     DeployablesManager deploymentManager() {
-        return new FileSystemDeployablesManager(docker);
+        return new FileSystemDeployablesManager(UUID.randomUUID().toString(), docker);
     }
 
     @Bean
