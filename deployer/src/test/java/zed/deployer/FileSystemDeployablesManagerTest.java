@@ -55,7 +55,7 @@ public class FileSystemDeployablesManagerTest extends Assert {
         deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // Then
-        assertTrue(Arrays.asList(deploymentManager.zedHome().deployDirectory().list()).contains("guava-18.0.jar"));
+        assertTrue(Arrays.asList(deploymentManager.workspace().list()).contains("guava-18.0.jar"));
     }
 
     @Test
