@@ -3,8 +3,11 @@ package zed.service.attachment.sdk;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 import zed.service.document.sdk.DocumentService;
@@ -17,15 +20,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
+import static java.lang.String.format;
 import static zed.utils.Reflections.writeField;
 
 public class RestAttachmentService<T extends Attachment> implements AttachmentService<T> {
 
-    String baseUrl;
+    private static final Logger LOG = LoggerFactory.getLogger(RestAttachmentService.class);
 
-    RestOperations restClient;
+    private static final int DEFAULT_DOCUMENT_SERVICE_PORT = 15003;
 
-    DocumentService<T> documentService;
+    private final String baseUrl;
+
+    private final RestOperations restClient;
+
+    private final DocumentService<T> documentService;
 
     public RestAttachmentService(String baseUrl, RestOperations restClient) {
         this.baseUrl = baseUrl;
@@ -36,6 +44,22 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
 
     public RestAttachmentService(String baseUrl) {
         this(baseUrl, createDefaultRestTemplate());
+    }
+
+    public static <V extends Attachment> RestAttachmentService<V> discover() {
+        LOG.debug("Starting attachment service discovery process.");
+        String serviceUrl = "http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT;
+        RestAttachmentService<V> service = new RestAttachmentService<>(serviceUrl);
+        try {
+            service.count(Attachment.class);
+        } catch (ResourceAccessException e) {
+            String message = format("Can't connect to the document service %s . " +
+                    "Are you sure there is a DocumentService instance running there? " +
+                    "%s has been chosen as a default connection URL for DocumentService.", serviceUrl, serviceUrl);
+            LOG.debug(message);
+            throw new DocumentServiceDiscoveryException(message, e);
+        }
+        return service;
     }
 
     @Override

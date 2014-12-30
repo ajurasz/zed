@@ -1,0 +1,6 @@
+server.port: 15002
+spring:
+  groovy:
+    template:
+      check-template-location: false
+zed.service.document.rest.port: 15003

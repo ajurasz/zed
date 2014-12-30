@@ -1,2 +1,4 @@
 15000   document service HTTP operation endpoints
 15001   document service REST API
+15002   attachment service HTTP operation endpoints
+15003   attachment service REST API
