@@ -185,6 +185,11 @@
                     </configuration>
                 </plugin>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.ekstazi</groupId>
                     <artifactId>ekstazi-maven-plugin</artifactId>
                     <version>${ekstazi.version}</version>
@@ -192,7 +197,7 @@
                         <execution>
                             <id>ekstazi</id>
                             <goals>
-                                <goal>select</goal>
+                                <goal>ekstazi</goal>
                             </goals>
                         </execution>
                     </executions>

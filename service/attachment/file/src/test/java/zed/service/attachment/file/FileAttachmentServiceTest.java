@@ -101,11 +101,8 @@ public class FileAttachmentServiceTest extends Assert {
 @Configuration
 class FileAttachmentServiceTestConfiguration {
 
-    @Value("${zed.service.api.port}")
-    int restPort;
-
     @Bean
-    AttachmentService<Attachment> attachmentService() {
+    AttachmentService<Attachment> attachmentService(@Value("${zed.service.api.port}") int restPort) {
         return new RestAttachmentService<>("http://0.0.0.0:" + restPort);
     }
 

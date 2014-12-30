@@ -420,11 +420,8 @@ public class MongoDocumentServiceTest extends Assert {
 @Configuration
 class MongoDocumentServiceTestConfiguration {
 
-    @Value("${zed.service.api.port}")
-    int restPort;
-
     @Bean
-    DocumentService documentService() {
+    DocumentService documentService(@Value("${zed.service.api.port}") int restPort) {
         return new RestDocumentService("http://0.0.0.0:" + restPort);
     }
 
