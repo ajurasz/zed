@@ -197,7 +197,7 @@
                         <execution>
                             <id>ekstazi</id>
                             <goals>
-                                <goal>ekstazi</goal>
+                                <goal>select</goal>
                             </goals>
                         </execution>
                     </executions>
