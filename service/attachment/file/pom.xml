@@ -40,16 +40,6 @@
             <classifier>classes</classifier>
         </dependency>
 
-        <!-- Operations -->
-        <dependency>
-            <groupId>org.jolokia</groupId>
-            <artifactId>jolokia-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-
         <!-- Testing -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
@@ -96,8 +86,8 @@
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
                 <configuration>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                 </configuration>
