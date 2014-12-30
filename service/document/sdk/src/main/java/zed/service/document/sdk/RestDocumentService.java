@@ -1,22 +1,16 @@
 package zed.service.document.sdk;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
+import static zed.service.sdk.base.RestTemplates.defaultRestTemplate;
 import static zed.utils.Reflections.classOfArrayOfClass;
 import static zed.utils.Reflections.writeField;
 
@@ -42,7 +36,7 @@ public class RestDocumentService<T> implements DocumentService<T> {
     }
 
     public RestDocumentService(String baseUrl) {
-        this(baseUrl, createDefaultRestTemplate());
+        this(baseUrl, defaultRestTemplate());
     }
 
     public static RestDocumentService discover() {
@@ -108,13 +102,6 @@ public class RestDocumentService<T> implements DocumentService<T> {
     static String baseUrlWithContextPath(String baseUrl) {
         baseUrl = baseUrl.trim();
         return baseUrl + "/api/document";
-    }
-
-    static RestTemplate createDefaultRestTemplate() {
-        ObjectMapper objectMapper = new ObjectMapper().
-                configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
-        return new RestTemplate(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
     }
 
     private static final class RestDocumentServiceConnectivityTest {

@@ -20,6 +20,7 @@
     <url>http://www.example.com/example-application</url>
 
     <modules>
+        <module>sdk-base</module>
         <module>document</module>
         <module>attachment</module>
     </modules>

@@ -117,6 +117,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-service-sdk-base</artifactId>
+                <version>${zed.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-shell</artifactId>
                 <type>war</type>
                 <version>${zed.version}</version>

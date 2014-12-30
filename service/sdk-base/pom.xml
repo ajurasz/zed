@@ -6,9 +6,12 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-service-attachment</artifactId>
+        <artifactId>zed-service</artifactId>
         <version>0.0.9-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <artifactId>zed-service-sdk-base</artifactId>
 
     <name>${project.artifactId}</name>
     <description>A application used as an example on how to set up pushing
@@ -16,29 +19,17 @@
     </description>
     <url>http://www.example.com/example-application</url>
 
-    <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-    </properties>
-
-    <artifactId>zed-service-attachment-sdk</artifactId>
-
     <dependencies>
+        <!-- RestTemplates -->
         <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-document-sdk</artifactId>
-        </dependency>
-
-        <!-- Testing -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

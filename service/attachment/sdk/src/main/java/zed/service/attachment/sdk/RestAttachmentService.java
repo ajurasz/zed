@@ -1,26 +1,20 @@
 package zed.service.attachment.sdk;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 import zed.service.document.sdk.DocumentService;
 import zed.service.document.sdk.QueryBuilder;
 import zed.service.document.sdk.RestDocumentService;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static java.lang.String.format;
+import static zed.service.sdk.base.RestTemplates.defaultRestTemplate;
 import static zed.utils.Reflections.writeField;
 
 public class RestAttachmentService<T extends Attachment> implements AttachmentService<T> {
@@ -43,7 +37,7 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
     }
 
     public RestAttachmentService(String baseUrl) {
-        this(baseUrl, createDefaultRestTemplate());
+        this(baseUrl, defaultRestTemplate());
     }
 
     public static <V extends Attachment> RestAttachmentService<V> discover() {
@@ -111,13 +105,6 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
     @Override
     public void remove(Class<?> documentClass, String id) {
 
-    }
-
-    static RestTemplate createDefaultRestTemplate() {
-        ObjectMapper objectMapper = new ObjectMapper().
-                configure(FAIL_ON_UNKNOWN_PROPERTIES, false).setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        MappingJackson2HttpMessageConverter jacksonConverter = new MappingJackson2HttpMessageConverter(objectMapper);
-        return new RestTemplate(Arrays.<HttpMessageConverter<?>>asList(jacksonConverter));
     }
 
 }

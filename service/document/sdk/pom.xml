@@ -24,6 +24,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-service-sdk-base</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
