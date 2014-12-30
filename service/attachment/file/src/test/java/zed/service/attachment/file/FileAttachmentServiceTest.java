@@ -50,7 +50,7 @@ public class FileAttachmentServiceTest extends Assert {
     @BeforeClass
     public static void beforeClass() {
         System.setProperty("server.port", findAvailableTcpPort() + "");
-        System.setProperty("zed.service.document.rest.port", findAvailableTcpPort() + "");
+        System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.attachment.file.path", storage.getAbsolutePath());
         System.setProperty("spring.data.mongodb.host", "localhost");
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
@@ -101,7 +101,7 @@ public class FileAttachmentServiceTest extends Assert {
 @Configuration
 class FileAttachmentServiceTestConfiguration {
 
-    @Value("${zed.service.document.rest.port}")
+    @Value("${zed.service.api.port}")
     int restPort;
 
     @Bean

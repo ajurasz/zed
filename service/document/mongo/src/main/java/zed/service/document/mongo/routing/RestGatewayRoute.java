@@ -30,7 +30,7 @@ public class RestGatewayRoute extends RouteBuilder {
     @Autowired
     public RestGatewayRoute(
             @Value("${zed.service.document.mongo.db:zed_service_document}") String documentsDbName,
-            @Value("${zed.service.document.rest.port:15001}") int restPort) {
+            @Value("${zed.service.api.port:15001}") int restPort) {
         this.documentsDbName = documentsDbName;
         this.restPort = restPort;
     }

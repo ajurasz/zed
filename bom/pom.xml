@@ -50,7 +50,7 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.3.2</commons.lang.version>
         <docker-java.version>0.10.3</docker-java.version>
-        <ekstazi.version>4.3.1</ekstazi.version>
+        <ekstazi.version>4.5.0</ekstazi.version>
         <embedmongo.version>1.46.4</embedmongo.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
@@ -177,15 +177,6 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
-                    <configuration>
-                        <!-- Needed for Ekstazi -->
-                        <excludesFile>pom.xml</excludesFile>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                     <configuration>
@@ -199,10 +190,9 @@
                     <version>${ekstazi.version}</version>
                     <executions>
                         <execution>
-                            <id>doit</id>
+                            <id>ekstazi</id>
                             <goals>
                                 <goal>select</goal>
-                                <goal>restore</goal>
                             </goals>
                         </execution>
                     </executions>

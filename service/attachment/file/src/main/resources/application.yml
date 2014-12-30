@@ -3,4 +3,4 @@ spring:
   groovy:
     template:
       check-template-location: false
-zed.service.document.rest.port: 15003
+zed.service.api.port: 15003
