@@ -95,6 +95,17 @@
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-service-attachment-file</artifactId>
+                <version>${zed.version}</version>
+                <classifier>classes</classifier>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-service-attachment-sdk</artifactId>
+                <version>${zed.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-service-document-mongo</artifactId>
                 <version>${zed.version}</version>
                 <classifier>classes</classifier>

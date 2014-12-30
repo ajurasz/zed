@@ -24,10 +24,6 @@
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-utils</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
 
         <!-- Service -->
         <dependency>
