@@ -14,32 +14,3 @@ class CamelGroovy {
 
 }
 
-class RichExchange {
-
-    private final Exchange exchange;
-
-    RichExchange(Exchange exchange) {
-        this.exchange = exchange
-    }
-
-    Exchange exchange() {
-        exchange
-    }
-
-    String id() {
-        exchange.getExchangeId()
-    }
-
-    def body() {
-        exchange.getIn().getBody()
-    }
-
-    public <T> T body(Class<T> type) {
-        exchange.getIn().getBody(type)
-    }
-
-    void setBody(Object body) {
-        exchange.getIn().setBody(body)
-    }
-
-}

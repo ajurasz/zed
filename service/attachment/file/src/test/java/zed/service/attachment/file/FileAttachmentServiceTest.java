@@ -1,6 +1,5 @@
 package zed.service.attachment.file;
 
-import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import com.mongodb.Mongo;
 import org.junit.Assert;
@@ -22,9 +21,9 @@ import zed.service.attachment.sdk.AttachmentService;
 import zed.service.attachment.sdk.RestAttachmentService;
 
 import java.io.File;
-import java.util.Base64;
 import java.util.Set;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,9 +41,11 @@ public class FileAttachmentServiceTest extends Assert {
     @Autowired
     Mongo mongo;
 
-    Attachment attachment = new Attachment();
-
     static File storage = Files.createTempDir();
+
+    String data = "foo";
+
+    Attachment attachment = new Attachment(data.getBytes());
 
     @BeforeClass
     public static void beforeClass() {
@@ -74,16 +75,25 @@ public class FileAttachmentServiceTest extends Assert {
 
     @Test
     public void shouldUpload() {
-        // Given
-        attachment.setData(Base64.getEncoder().encodeToString("foo".getBytes()));
-
         // When
         attachment = attachmentService.upload(attachment);
 
         // Then
         String id = attachment.getId();
-        Set<String> files = Sets.newHashSet(storage.list());
+        Set<String> files = newHashSet(storage.list());
         assertTrue(files.contains(id));
+    }
+
+    @Test
+    public void shouldDownload() {
+        // Given
+        attachment = attachmentService.upload(attachment);
+
+        // When
+        byte[] downloadedData = attachmentService.download(attachment.getId());
+
+        // Then
+        assertEquals(data, new String(downloadedData));
     }
 
 }

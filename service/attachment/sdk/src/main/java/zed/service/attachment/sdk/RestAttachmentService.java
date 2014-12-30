@@ -2,6 +2,7 @@ package zed.service.attachment.sdk;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.IOUtils;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestOperations;
@@ -10,6 +11,8 @@ import zed.service.document.sdk.DocumentService;
 import zed.service.document.sdk.QueryBuilder;
 import zed.service.document.sdk.RestDocumentService;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,7 +47,11 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
 
     @Override
     public byte[] download(String id) {
-        return new byte[0];
+        try {
+            return IOUtils.toByteArray(new URL(baseUrl + "/api/attachment/download/" + id).openStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

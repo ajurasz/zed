@@ -8,4 +8,8 @@ public class DownloadOperation {
         this.id = id;
     }
 
+    public String id() {
+        return id;
+    }
+
 }

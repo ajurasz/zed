@@ -1,14 +1,26 @@
 package zed.service.attachment.sdk;
 
+import java.util.Base64;
 import java.util.Date;
 
 public class Attachment {
 
+    public Attachment() {
+    }
+
+    public Attachment(String data) {
+        this.data = data;
+    }
+
+    public Attachment(byte[] data) {
+        this(Base64.getEncoder().encodeToString(data));
+    }
+
     private String id;
 
-    private Date created;
+    private Date created = new Date();
 
-    private Date edited;
+    private Date edited = new Date();
 
     private String title;
 

@@ -2,6 +2,7 @@ package zed.service.attachment.file.routing
 
 import com.google.common.io.Files
 import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.rest.RestBindingMode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import zed.service.document.mongo.routing.SaveOperation
@@ -23,7 +24,7 @@ public class AttachmentRestGatewayRoute extends RouteBuilder {
                 to("direct:upload");
 
         rest("/api/attachment").
-                get("/download/{id}").route().
+                get("/download/{id}").bindingMode(RestBindingMode.off).produces('application/octet-stream').route().
                 setBody().groovy("new zed.service.attachment.file.routing.DownloadOperation(headers['id'])").
                 to("direct:download");
 
@@ -32,16 +33,19 @@ public class AttachmentRestGatewayRoute extends RouteBuilder {
         from("direct:upload").
                 process(groovy { RichExchange exc ->
                     UploadOperation upload = exc.body(UploadOperation.class)
-                    Files.write(upload.data(), new File(storage, "tmp_" + exc.id()));
+                    Files.write(upload.data(), new File(storage, "tmp_" + exc.id()))
                     exc.body = new SaveOperation('attachment', upload.attachment())
                 }).
                 to("direct:save").
                 process(groovy { RichExchange exc ->
-                    new File(storage, "tmp_" + exc.id()).renameTo(new File(storage, exc.body(String.class)));
+                    new File(storage, "tmp_" + exc.id()).renameTo(new File(storage, exc.body(String.class)))
                 });
 
         from("direct:download").
-                to("direct:downloadFile");
+                process(groovy { RichExchange exc ->
+                    DownloadOperation download = exc.body(DownloadOperation.class)
+                    exc.body = new FileInputStream(new File(storage, download.id()))
+                })
 
     }
 
