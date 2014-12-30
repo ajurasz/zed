@@ -45,7 +45,7 @@ public class RestGatewayRoute extends RouteBuilder {
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
                 setBody().groovy("new zed.service.document.mongo.routing.SaveOperation(headers['collection'], body)").
-                to("direct:save").setBody().groovy("body.toString()");
+                to("direct:save");
 
         rest("/api/document").
                 get("/count/{collection}").route().
@@ -87,7 +87,7 @@ public class RestGatewayRoute extends RouteBuilder {
                 setProperty("original", body()).
                 // TODO:CAMEL
                         to(baseMongoDbEndpoint() + "save").
-                setBody().groovy("exchange.properties['original'].get('_id')");
+                setBody().groovy("exchange.properties['original'].get('_id').toString()");
 
         from("direct:findOne").
                 setHeader(COLLECTION).groovy("body.collection").

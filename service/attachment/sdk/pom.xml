@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.zed-platform</groupId>
+        <artifactId>zed-service-document</artifactId>
+        <version>0.0.9-SNAPSHOT</version>
+    </parent>
+
+    <name>${project.artifactId}</name>
+    <description>A application used as an example on how to set up pushing
+        its components to the Central Repository.
+    </description>
+    <url>http://www.example.com/example-application</url>
+
+    <properties>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+
+    <artifactId>zed-service-attachment-sdk</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-service-document-sdk</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.ekstazi</groupId>
+                <artifactId>ekstazi-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

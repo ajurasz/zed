@@ -38,7 +38,7 @@ public class MongoDocumentServiceTest extends Assert {
     String documentsDbName;
 
     @Autowired
-    DocumentService documentService;
+    DocumentService<Invoice> documentService;
 
     @Autowired
     Mongo mongo;

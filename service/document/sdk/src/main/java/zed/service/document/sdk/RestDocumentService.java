@@ -20,7 +20,7 @@ import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 import static zed.utils.Reflections.classOfArrayOfClass;
 import static zed.utils.Reflections.writeField;
 
-public class RestDocumentService implements DocumentService {
+public class RestDocumentService<T> implements DocumentService<T> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RestDocumentService.class);
 
@@ -48,7 +48,7 @@ public class RestDocumentService implements DocumentService {
     public static RestDocumentService discover() {
         LOG.debug("Starting document service discovery process.");
         String serviceUrl = "http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT;
-        RestDocumentService service = new RestDocumentService(serviceUrl);
+        RestDocumentService<RestDocumentServiceConnectivityTest> service = new RestDocumentService<>(serviceUrl);
         try {
             service.count(RestDocumentServiceConnectivityTest.class);
         } catch (ResourceAccessException e) {
@@ -64,19 +64,19 @@ public class RestDocumentService implements DocumentService {
     // Overridden
 
     @Override
-    public <T> T save(T document) {
+    public T save(T document) {
         String id = restClient.postForObject(format("%s/save/%s", baseUrl, pojoClassToCollection(document.getClass())), document, String.class);
         writeField(document, "id", id);
         return document;
     }
 
     @Override
-    public <T> T findOne(Class<T> documentClass, String id) {
+    public T findOne(Class<T> documentClass, String id) {
         return restClient.getForObject(format("%s/findOne/%s/%s", baseUrl, pojoClassToCollection(documentClass), id), documentClass);
     }
 
     @Override
-    public <T> List<T> findMany(Class<T> documentClass, String... ids) {
+    public List<T> findMany(Class<T> documentClass, String... ids) {
         T[] results = restClient.postForObject(format("%s/findMany/%s", baseUrl, pojoClassToCollection(documentClass)), ids, classOfArrayOfClass(documentClass));
         return ImmutableList.copyOf(results);
     }
@@ -87,14 +87,14 @@ public class RestDocumentService implements DocumentService {
     }
 
     @Override
-    public <T> List<T> findByQuery(Class<T> documentClass, QueryBuilder queryBuilder) {
+    public List<T> findByQuery(Class<T> documentClass, QueryBuilder queryBuilder) {
         String collection = pojoClassToCollection(documentClass);
         T[] documents = restClient.postForObject(format("%s/findByQuery/%s", baseUrl, collection), queryBuilder, classOfArrayOfClass(documentClass));
         return ImmutableList.copyOf(documents);
     }
 
     @Override
-    public <C> long countByQuery(Class<C> documentClass, QueryBuilder queryBuilder) {
+    public long countByQuery(Class<T> documentClass, QueryBuilder queryBuilder) {
         return restClient.postForObject(format("%s/countByQuery/%s", baseUrl, pojoClassToCollection(documentClass)), queryBuilder, Long.class);
     }
 
