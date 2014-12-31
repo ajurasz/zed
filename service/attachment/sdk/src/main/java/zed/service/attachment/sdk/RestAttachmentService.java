@@ -19,11 +19,19 @@ import static zed.utils.Reflections.writeField;
 
 public class RestAttachmentService<T extends Attachment> implements AttachmentService<T> {
 
+    // Constant Services
+
     private static final Logger LOG = LoggerFactory.getLogger(RestAttachmentService.class);
 
-    private static final int DEFAULT_DOCUMENT_SERVICE_PORT = 15003;
+    // Constants
+
+    private static final int DEFAULT_ATTACHMENT_SERVICE_PORT = 15003;
+
+    // Members
 
     private final String baseUrl;
+
+    // Member collaborators
 
     private final RestOperations restClient;
 
@@ -38,14 +46,16 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
 
     public RestAttachmentService(String baseUrl) {
         this(baseUrl, defaultRestTemplate());
+        LOG.debug("Service will use default RestTemplate instance.");
     }
 
-    public RestAttachmentService(int port) {
-        this("http://localhost:" + port);
+    public RestAttachmentService(int restApiPort) {
+        this("http://localhost:" + restApiPort);
+        LOG.debug("Service will connect to the localhost and REST API port {}.", restApiPort);
     }
 
     public static <V extends Attachment> RestAttachmentService<V> discover() {
-        String serviceUrl = Discoveries.discoverServiceUrl("attachment", DEFAULT_DOCUMENT_SERVICE_PORT, new HealthCheck() {
+        String serviceUrl = Discoveries.discoverServiceUrl("attachment", DEFAULT_ATTACHMENT_SERVICE_PORT, new HealthCheck() {
             @Override
             public void check(String serviceUrl) {
                 new RestAttachmentService<>(serviceUrl).count(Attachment.class);
