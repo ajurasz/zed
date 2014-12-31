@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 import static zed.service.sdk.base.RestTemplates.defaultRestTemplate;
 import static zed.utils.Reflections.writeField;
 
@@ -66,7 +67,7 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
 
     @Override
     public T upload(T attachment) {
-        String id = restClient.postForObject(baseUrl + "/api/attachment/upload", attachment, String.class);
+        String id = restClient.postForObject(baseUrl + "/api/attachment/upload/" + pojoClassToCollection(attachment.getClass()), attachment, String.class);
         writeField(attachment, "id", id);
         return attachment;
     }

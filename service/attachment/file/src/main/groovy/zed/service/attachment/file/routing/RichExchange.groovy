@@ -25,6 +25,14 @@ class RichExchange {
         exchange.getIn().headers.put(key, value)
     }
 
+    Object header(String key) {
+        exchange.getIn().getHeader(key)
+    }
+
+    String stringHeader(String key) {
+        exchange.getIn().getHeader(key, String.class)
+    }
+
     def body() {
         exchange.getIn().getBody()
     }

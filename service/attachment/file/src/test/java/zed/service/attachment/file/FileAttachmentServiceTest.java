@@ -17,10 +17,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
 import zed.service.attachment.sdk.Attachment;
+import zed.service.attachment.sdk.AttachmentQuery;
 import zed.service.attachment.sdk.AttachmentService;
 import zed.service.attachment.sdk.RestAttachmentService;
+import zed.service.document.sdk.QueryBuilder;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -59,6 +62,8 @@ public class FileAttachmentServiceTest extends Assert {
     @Before
     public void before() {
         mongo.getDB(documentsDbName).dropDatabase();
+
+        attachment.setTitle("someTitle");
     }
 
     // Tests
@@ -94,6 +99,35 @@ public class FileAttachmentServiceTest extends Assert {
 
         // Then
         assertEquals(data, new String(downloadedData));
+    }
+
+    @Test
+    public void shouldFindByQuery() {
+        // Given
+        attachment = attachmentService.upload(attachment);
+        AttachmentQuery query = new AttachmentQuery();
+        query.setTitle(attachment.getTitle());
+
+        // When
+        List<Attachment> attachments = attachmentService.findByQuery(Attachment.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, attachments.size());
+        assertEquals(attachment.getId(), attachments.get(0).getId());
+    }
+
+    @Test
+    public void shouldNotFindByQuery() {
+        // Given
+        attachment = attachmentService.upload(attachment);
+        AttachmentQuery query = new AttachmentQuery();
+        query.setTitle("some random title");
+
+        // When
+        List<Attachment> attachments = attachmentService.findByQuery(Attachment.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, attachments.size());
     }
 
 }

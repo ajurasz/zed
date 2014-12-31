@@ -19,7 +19,7 @@ public class AttachmentRestGatewayRoute extends RouteBuilder {
     public void configure() throws Exception {
 
         rest("/api/attachment").
-                post("/upload").type(Object.class).route().
+                post("/upload/{collection}").type(Object.class).route().
                 setBody().groovy("new zed.service.attachment.file.routing.UploadOperation(body)").
                 to("direct:upload");
 
@@ -34,7 +34,7 @@ public class AttachmentRestGatewayRoute extends RouteBuilder {
                 process(groovy { RichExchange exc ->
                     UploadOperation upload = exc.body(UploadOperation.class)
                     Files.write(upload.data(), new File(storage, "tmp_" + exc.id()))
-                    exc.body = new SaveOperation('attachment', upload.attachment())
+                    exc.body = new SaveOperation(exc.stringHeader('collection'), upload.attachment())
                 }).
                 to("direct:save").
                 process(groovy { RichExchange exc ->
