@@ -97,22 +97,22 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
 
     @Override
     public long count(Class<?> documentClass) {
-        return 0;
+        return documentService.count(documentClass);
     }
 
     @Override
     public List<T> findByQuery(Class<T> documentClass, QueryBuilder queryBuilder) {
-        return null;
+        return documentService.findByQuery(documentClass, queryBuilder);
     }
 
     @Override
     public long countByQuery(Class<T> documentClass, QueryBuilder queryBuilder) {
-        return 0;
+        return documentService.countByQuery(documentClass, queryBuilder);
     }
 
     @Override
-    public void remove(Class<?> documentClass, String id) {
-
+    public void remove(Class<T> documentClass, String id) {
+        documentService.remove(documentClass, id);
     }
 
 }

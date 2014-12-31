@@ -92,7 +92,7 @@ public class RestDocumentService<T> implements DocumentService<T> {
     }
 
     @Override
-    public void remove(Class<?> documentClass, String id) {
+    public void remove(Class<T> documentClass, String id) {
         restClient.delete(format("%s/remove/%s/%s", baseUrl, pojoClassToCollection(documentClass), id));
     }
 

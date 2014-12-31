@@ -32,6 +32,6 @@ public interface AttachmentService<T extends Attachment> extends DocumentService
     long countByQuery(Class<T> documentClass, QueryBuilder queryBuilder);
 
     @Override
-    void remove(Class<?> documentClass, String id);
+    void remove(Class<T> documentClass, String id);
 
 }
