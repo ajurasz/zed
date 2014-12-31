@@ -2,6 +2,7 @@ package zed.service.document.sdk;
 
 import org.junit.Assert;
 import org.junit.Test;
+import zed.service.sdk.base.ServiceDiscoveryException;
 
 import static zed.service.document.sdk.RestDocumentService.baseUrlWithContextPath;
 
@@ -23,9 +24,9 @@ public class RestDocumentServiceTest extends Assert {
     public void should() {
         try {
             RestDocumentService.discover();
-        } catch (DocumentServiceDiscoveryException e) {
+        } catch (ServiceDiscoveryException e) {
             assertTrue(e.getMessage().contains("Are you sure"));
-            assertTrue(e.getMessage().contains("default connection URL for DocumentService"));
+            assertTrue(e.getMessage().contains("default connection URL for document service"));
             return;
         }
         fail();

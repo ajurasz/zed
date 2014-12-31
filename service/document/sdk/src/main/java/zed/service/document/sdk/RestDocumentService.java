@@ -3,13 +3,14 @@ package zed.service.document.sdk;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestOperations;
+import zed.service.sdk.base.HealthCheck;
 
 import java.util.List;
 
 import static java.lang.String.format;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
+import static zed.service.sdk.base.Discoveries.discoverServiceUrl;
 import static zed.service.sdk.base.RestTemplates.defaultRestTemplate;
 import static zed.utils.Reflections.classOfArrayOfClass;
 import static zed.utils.Reflections.writeField;
@@ -39,20 +40,18 @@ public class RestDocumentService<T> implements DocumentService<T> {
         this(baseUrl, defaultRestTemplate());
     }
 
+    public RestDocumentService(int restApiPort) {
+        this("http://localhost:" + restApiPort);
+    }
+
     public static RestDocumentService discover() {
-        LOG.debug("Starting document service discovery process.");
-        String serviceUrl = "http://localhost:" + DEFAULT_DOCUMENT_SERVICE_PORT;
-        RestDocumentService<RestDocumentServiceConnectivityTest> service = new RestDocumentService<>(serviceUrl);
-        try {
-            service.count(RestDocumentServiceConnectivityTest.class);
-        } catch (ResourceAccessException e) {
-            String message = format("Can't connect to the document service %s . " +
-                    "Are you sure there is a DocumentService instance running there? " +
-                    "%s has been chosen as a default connection URL for DocumentService.", serviceUrl, serviceUrl);
-            LOG.debug(message);
-            throw new DocumentServiceDiscoveryException(message, e);
-        }
-        return service;
+        String serviceUrl = discoverServiceUrl("document", DEFAULT_DOCUMENT_SERVICE_PORT, new HealthCheck() {
+            @Override
+            public void check(String serviceUrl) {
+                new RestDocumentService<>(serviceUrl).count(RestDocumentServiceConnectivityTest.class);
+            }
+        });
+        return new RestDocumentService<>(serviceUrl);
     }
 
     // Overridden

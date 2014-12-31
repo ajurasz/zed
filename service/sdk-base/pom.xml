@@ -20,6 +20,10 @@
     <url>http://www.example.com/example-application</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
         <!-- RestTemplates -->
         <dependency>
             <groupId>org.springframework</groupId>
