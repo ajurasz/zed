@@ -1,6 +1,5 @@
 package zed.service.attachment.sdk;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestOperations;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import static org.apache.commons.io.IOUtils.toByteArray;
 import static zed.service.document.sdk.Pojos.pojoClassToCollection;
 import static zed.service.sdk.base.RestTemplates.defaultRestTemplate;
 import static zed.utils.Reflections.writeField;
@@ -42,7 +42,7 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
         this.baseUrl = baseUrl;
         this.restClient = restClient;
 
-        this.documentService = new RestDocumentService<T>(baseUrl, restClient);
+        this.documentService = new RestDocumentService<>(baseUrl, restClient);
     }
 
     public RestAttachmentService(String baseUrl) {
@@ -75,7 +75,7 @@ public class RestAttachmentService<T extends Attachment> implements AttachmentSe
     @Override
     public byte[] download(String id) {
         try {
-            return IOUtils.toByteArray(new URL(baseUrl + "/api/attachment/download/" + id).openStream());
+            return toByteArray(new URL(baseUrl + "/api/attachment/download/" + id).openStream());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
