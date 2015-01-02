@@ -42,7 +42,7 @@ public class MongoDbDocumentServiceTest extends Assert {
     @Autowired
     MongoTemplate mongo;
 
-    Invoice invoice = new Invoice("invoice001");
+    Invoice invoice = new Invoice().invoiceId("invoice001");
 
     @BeforeClass
     public static void beforeClass() {
@@ -65,7 +65,7 @@ public class MongoDbDocumentServiceTest extends Assert {
         invoice = documentService.save(invoice);
 
         // Then
-        Invoice loadedInvoice = documentService.findOne(Invoice.class, invoice.getId());
+        Invoice loadedInvoice = documentService.findOne(Invoice.class, invoice.id);
         assertNotNull(loadedInvoice);
     }
 
@@ -85,7 +85,7 @@ public class MongoDbDocumentServiceTest extends Assert {
     public void shouldUpdateLoadedDocument() {
         // Given
         invoice = documentService.save(invoice);
-        Invoice loadedInvoice = documentService.findOne(Invoice.class, invoice.getId());
+        Invoice loadedInvoice = documentService.findOne(Invoice.class, invoice.id);
 
         // When
         documentService.save(loadedInvoice);
@@ -100,7 +100,7 @@ public class MongoDbDocumentServiceTest extends Assert {
         invoice = documentService.save(invoice);
 
         // Then
-        assertNotNull(invoice.getId());
+        assertNotNull(invoice.id);
     }
 
     @Test
@@ -109,25 +109,25 @@ public class MongoDbDocumentServiceTest extends Assert {
         invoice = documentService.save(invoice);
 
         // When
-        Invoice invoiceFound = documentService.findOne(Invoice.class, invoice.getId());
+        Invoice invoiceFound = documentService.findOne(Invoice.class, invoice.id);
 
         // Then
-        assertEquals(invoice.getId(), invoiceFound.getId());
+        assertEquals(invoice.id, invoiceFound.id);
     }
 
     @Test
     public void shouldFindMany() {
         // Given
-        Invoice firstInvoice = documentService.save(new Invoice("invoice001"));
-        Invoice secondInvoice = documentService.save(new Invoice("invoice002"));
+        Invoice firstInvoice = documentService.save(new Invoice().invoiceId("invoice001"));
+        Invoice secondInvoice = documentService.save(new Invoice().invoiceId("invoice002"));
 
         // When
-        List<Invoice> invoices = documentService.findMany(Invoice.class, firstInvoice.getId(), secondInvoice.getId());
+        List<Invoice> invoices = documentService.findMany(Invoice.class, firstInvoice.id, secondInvoice.id);
 
         // Then
         assertEquals(2, invoices.size());
-        assertEquals(firstInvoice.getId(), invoices.get(0).getId());
-        assertEquals(secondInvoice.getId(), invoices.get(1).getId());
+        assertEquals(firstInvoice.id, invoices.get(0).id);
+        assertEquals(secondInvoice.id, invoices.get(1).id);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class MongoDbDocumentServiceTest extends Assert {
     @Test
     public void shouldCount() throws UnknownHostException, InterruptedException {
         // Given
-        documentService.save(new Invoice("invoice001"));
+        documentService.save(new Invoice().invoiceId("invoice001"));
 
         // When
         long invoices = documentService.count(Invoice.class);
@@ -164,14 +164,14 @@ public class MongoDbDocumentServiceTest extends Assert {
     public void shouldFindByQuery() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId());
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.invoiceId);
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+        assertEquals(invoice.invoiceId, invoices.get(0).invoiceId);
     }
 
     @Test
@@ -191,7 +191,7 @@ public class MongoDbDocumentServiceTest extends Assert {
     @Test
     public void shouldNotFindByQuery() {
         // Given
-        documentService.save(new Invoice("invoice001"));
+        documentService.save(new Invoice().invoiceId("invoice001"));
         InvoiceQuery query = new InvoiceQuery().invoiceId("randomValue");
 
         // When
@@ -205,27 +205,27 @@ public class MongoDbDocumentServiceTest extends Assert {
     public void shouldFindByNestedQuery() {
         // Given
         String street = "someStreet";
-        invoice.setAddress(new Address(street));
+        invoice.address = new Address().street(street);
         invoice = documentService.save(invoice);
 
-        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId()).address_street(street);
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.invoiceId).address_street(street);
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(street, invoices.get(0).getAddress().getStreet());
+        assertEquals(street, invoices.get(0).address.street);
     }
 
     @Test
     public void shouldNotFindByNestedQuery() {
         // Given
         String street = "someStreet";
-        invoice.setAddress(new Address(street));
+        invoice.address = new Address().street(street);
         invoice = documentService.save(invoice);
 
-        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId()).address_street("someRandomStreet");
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.invoiceId).address_street("someRandomStreet");
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
@@ -248,9 +248,9 @@ public class MongoDbDocumentServiceTest extends Assert {
         // Then
         assertEquals(2, firstPage.size());
         assertEquals(1, secondPage.size());
-        assertEquals(firstInvoice.getId(), firstPage.get(0).getId());
-        assertEquals(secondInvoice.getId(), firstPage.get(1).getId());
-        assertEquals(thirdInvoice.getId(), secondPage.get(0).getId());
+        assertEquals(firstInvoice.id, firstPage.get(0).id);
+        assertEquals(secondInvoice.id, firstPage.get(1).id);
+        assertEquals(thirdInvoice.id, secondPage.get(0).id);
     }
 
     @Test
@@ -269,9 +269,9 @@ public class MongoDbDocumentServiceTest extends Assert {
         // Then
         assertEquals(2, firstPage.size());
         assertEquals(1, secondPage.size());
-        assertEquals(thirdInvoice.getId(), firstPage.get(0).getId());
-        assertEquals(secondInvoice.getId(), firstPage.get(1).getId());
-        assertEquals(firstInvoice.getId(), secondPage.get(0).getId());
+        assertEquals(thirdInvoice.id, firstPage.get(0).id);
+        assertEquals(secondInvoice.id, firstPage.get(1).id);
+        assertEquals(firstInvoice.id, secondPage.get(0).id);
     }
 
     @Test
@@ -286,7 +286,7 @@ public class MongoDbDocumentServiceTest extends Assert {
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+        assertEquals(invoice.invoiceId, invoices.get(0).invoiceId);
     }
 
     @Test
@@ -307,14 +307,14 @@ public class MongoDbDocumentServiceTest extends Assert {
     public void shouldFindByQueryWithIn() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery().invoiceIdIn(invoice.getInvoiceId(), "foo", "bar");
+        InvoiceQuery query = new InvoiceQuery().invoiceIdIn(invoice.invoiceId, "foo", "bar");
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+        assertEquals(invoice.invoiceId, invoices.get(0).invoiceId);
     }
 
     @Test
@@ -341,14 +341,14 @@ public class MongoDbDocumentServiceTest extends Assert {
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(invoice.getInvoiceId(), invoices.get(0).getInvoiceId());
+        assertEquals(invoice.invoiceId, invoices.get(0).invoiceId);
     }
 
     @Test
     public void shouldNotFindByQueryWithNotIn() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery().invoiceIdNotIn(invoice.getInvoiceId(), "foo", "bar");
+        InvoiceQuery query = new InvoiceQuery().invoiceIdNotIn(invoice.invoiceId, "foo", "bar");
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
@@ -362,10 +362,10 @@ public class MongoDbDocumentServiceTest extends Assert {
         // Given
         Invoice todayInvoice = documentService.save(invoice);
         invoice = new Invoice();
-        invoice.setTimestamp(now().minusDays(2).toDate());
+        invoice.timestamp = now().minusDays(2).toDate();
         documentService.save(invoice);
         invoice = new Invoice();
-        invoice.setTimestamp(now().plusDays(2).toDate());
+        invoice.timestamp = now().plusDays(2).toDate();
         documentService.save(invoice);
 
         InvoiceQuery query = new InvoiceQuery();
@@ -377,14 +377,14 @@ public class MongoDbDocumentServiceTest extends Assert {
 
         // Then
         assertEquals(1, invoices.size());
-        assertEquals(todayInvoice.getId(), invoices.get(0).getId());
+        assertEquals(todayInvoice.id, invoices.get(0).id);
     }
 
     @Test
     public void shouldCountPositiveByQuery() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId());
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.invoiceId);
 
         // When
         long invoices = documentService.countByQuery(Invoice.class, new QueryBuilder(query));
@@ -440,7 +440,7 @@ public class MongoDbDocumentServiceTest extends Assert {
         invoice = documentService.save(invoice);
 
         // When
-        documentService.remove(Invoice.class, invoice.getId());
+        documentService.remove(Invoice.class, invoice.id);
 
         // Then
         long count = documentService.count(Invoice.class);
@@ -461,75 +461,26 @@ class MongoDocumentServiceTestConfiguration {
 
 class Invoice {
 
-    private String id;
+    public String id;
 
-    private Date timestamp = new Date();
+    public Date timestamp = new Date();
 
-    private String invoiceId;
+    public String invoiceId;
 
-    private Address address;
+    public Address address;
 
-    Invoice() {
-    }
-
-    Invoice(String invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getInvoiceId() {
-        return invoiceId;
-    }
-
-    public void setInvoiceId(String invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-
-    public Invoice invoiceId(String invoiceId) {
+    Invoice invoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
         return this;
     }
 
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
     static class Address {
 
-        private String street;
+        public String street;
 
-        public Address() {
-        }
-
-        public Address(String street) {
+        Address street(String street) {
             this.street = street;
-        }
-
-        public String getStreet() {
-            return street;
-        }
-
-        public void setStreet(String street) {
-            this.street = street;
+            return this;
         }
 
     }
