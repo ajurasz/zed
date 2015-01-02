@@ -1,6 +1,5 @@
 package zed.service.document.mongo;
 
-import com.mongodb.Mongo;
 import org.bson.types.ObjectId;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,9 +12,11 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
+import zed.service.document.mongo.Invoice.Address;
 import zed.service.document.sdk.DocumentService;
 import zed.service.document.sdk.QueryBuilder;
 import zed.service.document.sdk.RestDocumentService;
@@ -26,22 +27,20 @@ import java.util.List;
 
 import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
+import static zed.service.document.mongo.crossstore.sql.Pojos.pojoClassToCollection;
 import static zed.service.document.sdk.QueryBuilder.buildQuery;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {EmbedMongoConfiguration.class, MongoDbDocumentServiceConfiguration.class, MongoDocumentServiceTestConfiguration.class})
 @IntegrationTest
 @ActiveProfiles("test")
-public class MongoDocumentServiceTest extends Assert {
-
-    @Value("${zed.service.document.mongo.db:zed_service_document}")
-    String documentsDbName;
+public class MongoDbDocumentServiceTest extends Assert {
 
     @Autowired
     DocumentService<Invoice> documentService;
 
     @Autowired
-    Mongo mongo;
+    MongoTemplate mongo;
 
     Invoice invoice = new Invoice("invoice001");
 
@@ -55,7 +54,7 @@ public class MongoDocumentServiceTest extends Assert {
 
     @Before
     public void before() {
-        mongo.getDB(documentsDbName).dropDatabase();
+        mongo.dropCollection(pojoClassToCollection(Invoice.class));
     }
 
     // Tests
@@ -165,7 +164,7 @@ public class MongoDocumentServiceTest extends Assert {
     public void shouldFindByQuery() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId());
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
@@ -193,7 +192,40 @@ public class MongoDocumentServiceTest extends Assert {
     public void shouldNotFindByQuery() {
         // Given
         documentService.save(new Invoice("invoice001"));
-        InvoiceQuery query = new InvoiceQuery("randomValue");
+        InvoiceQuery query = new InvoiceQuery().invoiceId("randomValue");
+
+        // When
+        List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(0, invoices.size());
+    }
+
+    @Test
+    public void shouldFindByNestedQuery() {
+        // Given
+        String street = "someStreet";
+        invoice.setAddress(new Address(street));
+        invoice = documentService.save(invoice);
+
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId()).address_street(street);
+
+        // When
+        List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
+
+        // Then
+        assertEquals(1, invoices.size());
+        assertEquals(street, invoices.get(0).getAddress().getStreet());
+    }
+
+    @Test
+    public void shouldNotFindByNestedQuery() {
+        // Given
+        String street = "someStreet";
+        invoice.setAddress(new Address(street));
+        invoice = documentService.save(invoice);
+
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId()).address_street("someRandomStreet");
 
         // When
         List<Invoice> invoices = documentService.findByQuery(Invoice.class, new QueryBuilder(query));
@@ -352,7 +384,7 @@ public class MongoDocumentServiceTest extends Assert {
     public void shouldCountPositiveByQuery() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery(invoice.getInvoiceId());
+        InvoiceQuery query = new InvoiceQuery().invoiceId(invoice.getInvoiceId());
 
         // When
         long invoices = documentService.countByQuery(Invoice.class, new QueryBuilder(query));
@@ -365,7 +397,7 @@ public class MongoDocumentServiceTest extends Assert {
     public void shouldCountNegativeByQuery() {
         // Given
         documentService.save(invoice);
-        InvoiceQuery query = new InvoiceQuery("randomValue");
+        InvoiceQuery query = new InvoiceQuery().invoiceId("randomValue");
 
         // When
         long invoices = documentService.countByQuery(Invoice.class, new QueryBuilder(query));
@@ -435,6 +467,8 @@ class Invoice {
 
     private String invoiceId;
 
+    private Address address;
+
     Invoice() {
     }
 
@@ -471,6 +505,35 @@ class Invoice {
         return this;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    static class Address {
+
+        private String street;
+
+        public Address() {
+        }
+
+        public Address(String street) {
+            this.street = street;
+        }
+
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
+    }
+
 }
 
 class InvoiceQuery {
@@ -487,12 +550,7 @@ class InvoiceQuery {
 
     private Date timestampGreaterThanEqual;
 
-    InvoiceQuery() {
-    }
-
-    InvoiceQuery(String invoiceId) {
-        this.setInvoiceId(invoiceId);
-    }
+    private String address_street;
 
     public String getInvoiceId() {
         return invoiceId;
@@ -500,6 +558,11 @@ class InvoiceQuery {
 
     public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public InvoiceQuery invoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+        return this;
     }
 
     public String getInvoiceIdContains() {
@@ -550,6 +613,19 @@ class InvoiceQuery {
 
     public void setTimestampGreaterThanEqual(Date timestampGreaterThanEqual) {
         this.timestampGreaterThanEqual = timestampGreaterThanEqual;
+    }
+
+    public String getAddress_street() {
+        return address_street;
+    }
+
+    public void setAddress_street(String address_street) {
+        this.address_street = address_street;
+    }
+
+    public InvoiceQuery address_street(String address_street) {
+        this.setAddress_street(address_street);
+        return this;
     }
 
 }

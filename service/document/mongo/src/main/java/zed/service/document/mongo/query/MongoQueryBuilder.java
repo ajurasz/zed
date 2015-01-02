@@ -23,16 +23,17 @@ public class MongoQueryBuilder {
         BasicDBObject mongoQuery = new BasicDBObject();
         keyLoop:
         for (String key : jsonQuery.keySet()) {
+            String compoundKey = key.replaceAll("_", ".");
             for (String suffixOperator : SIMPLE_SUFFIX_OPERATORS.keySet()) {
                 if (key.endsWith(suffixOperator)) {
-                    addRestriction(mongoQuery, key, suffixOperator, SIMPLE_SUFFIX_OPERATORS.get(suffixOperator), jsonQuery.get(key));
+                    addRestriction(mongoQuery, compoundKey, suffixOperator, SIMPLE_SUFFIX_OPERATORS.get(suffixOperator), jsonQuery.get(key));
                     continue keyLoop;
                 }
             }
             if (key.endsWith("Contains")) {
-                addRestriction(mongoQuery, key, "Contains", "$regex", ".*" + jsonQuery.get(key) + ".*");
+                addRestriction(mongoQuery, compoundKey, "Contains", "$regex", ".*" + jsonQuery.get(key) + ".*");
             } else {
-                mongoQuery.put(key, new BasicDBObject("$eq", jsonQuery.get(key)));
+                mongoQuery.put(compoundKey, new BasicDBObject("$eq", jsonQuery.get(key)));
             }
         }
         return mongoQuery;
