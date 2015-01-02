@@ -9,7 +9,7 @@ import org.apache.camel.Processor
 class CamelGroovy {
 
     static Processor groovy(Closure closure) {
-        return { Exchange exchange -> closure(new RichExchange(exchange)) }
+        return { Exchange exchange -> closure(new ExchangeContext(exchange)) }
     }
 
 }

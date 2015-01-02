@@ -5,11 +5,11 @@ import org.apache.camel.Exchange
 /**
  * Created by hekonsek on 30.12.14.
  */
-class RichExchange {
+class ExchangeContext {
 
     private final Exchange exchange;
 
-    RichExchange(Exchange exchange) {
+    ExchangeContext(Exchange exchange) {
         this.exchange = exchange
     }
 
@@ -43,6 +43,10 @@ class RichExchange {
 
     void setBody(Object body) {
         exchange.getIn().setBody(body)
+    }
+
+    public <T> T bean(Class<T> type) {
+        exchange.getContext().getRegistry().findByType(type).iterator().next()
     }
 
 }
