@@ -1,4 +1,4 @@
-Zed - actuator services platform
+Zed - backend services platform
 ===
 
 Zed's goal is to provide predefined microservices covering common requirements of the business applications. Zed also
