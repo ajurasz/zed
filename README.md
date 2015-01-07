@@ -6,7 +6,7 @@ comes with the *Zed shell* to deliver top devOps experience while working with m
 
 ### Reference documentation
 
-Reference documentation of the project can be found [here](https://github.com/hekonsek/zed/wiki).
+Reference documentation of the project can be found [here](https://github.com/hekonsek/zed/blob/master/reference.MD).
 
 ### Build status 
 
