@@ -6,7 +6,7 @@
     <groupId>com.github.zed-platform</groupId>
     <artifactId>zed</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
 
     <modules>
         <module>bom</module>
@@ -44,7 +44,7 @@
         <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
         <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
         <url>git@github.com:hekonsek/zed</url>
-        <tag>HEAD</tag>
+        <tag>zed-0.0.9</tag>
     </scm>
 
     <distributionManagement>
@@ -63,7 +63,7 @@
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-bom</artifactId>
-                <version>0.0.9-SNAPSHOT</version>
+                <version>0.0.9</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

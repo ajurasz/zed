@@ -5,7 +5,7 @@
 
     <groupId>com.github.zed-platform</groupId>
     <artifactId>zed-bom</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.0.9</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -35,7 +35,7 @@
         <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
         <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
         <url>git@github.com:hekonsek/zed</url>
-        <tag>HEAD</tag>
+        <tag>zed-0.0.9</tag>
   </scm>
 
     <!-- Settings & dependencies -->
@@ -56,7 +56,7 @@
         <jsch.version>0.1.51</jsch.version>
         <maven.version>3.0.5</maven.version>
         <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
-        <zed.version>0.0.9-SNAPSHOT</zed.version>
+        <zed.version>0.0.9</zed.version>
 
         <maven-war-plugin.version>2.5</maven-war-plugin.version>
         <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
