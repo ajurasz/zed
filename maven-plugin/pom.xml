@@ -175,6 +175,7 @@
                 <artifactId>maven-invoker-plugin</artifactId>
                 <version>1.7</version>
                 <configuration>
+                    <skipInvocation>${skipTests}</skipInvocation>
                     <streamLogs>true</streamLogs>
                     <debug>true</debug>
                     <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
@@ -199,6 +200,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.zed-platform</groupId>
+                        <artifactId>zed-utils</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
