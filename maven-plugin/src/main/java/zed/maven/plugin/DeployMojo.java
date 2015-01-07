@@ -25,13 +25,16 @@ public class DeployMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true)
     private MavenProject project;
 
+    @Parameter(defaultValue = "default", required = true)
+    String workspace;
+
     public void execute()
             throws MojoExecutionException {
         final Process p;
         try {
             String projectVersion = artifactVersion("com.github.zed-platform", "zed-maven-plugin");
             String zedShellUrl = String.format(System.getProperty("user.home") + "/.m2/repository/com/github/zed-platform/zed-shell/%s/zed-shell-%s.war", projectVersion, projectVersion);
-            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", zedShellUrl});
+            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", zedShellUrl}, new String[]{"zed.shell.workspace=" + workspace});
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {

@@ -43,6 +43,11 @@
     <dependencies>
         <dependency>
             <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-shell</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-utils</artifactId>
         </dependency>
         <dependency>

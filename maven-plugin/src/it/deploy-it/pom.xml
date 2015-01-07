@@ -3,15 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>foo.it</groupId>
-    <artifactId>simple-it</artifactId>
+    <groupId>test</groupId>
+    <artifactId>deploy-it</artifactId>
     <version>1.0-SNAPSHOT</version>
-
-    <description>A simple IT verifying the basic use case.</description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <plugins>
@@ -19,6 +13,9 @@
                 <groupId>@project.groupId@</groupId>
                 <artifactId>@project.artifactId@</artifactId>
                 <version>@project.version@</version>
+                <configuration>
+                    <workspace>myworkspace</workspace>
+                </configuration>
                 <executions>
                     <execution>
                         <id>deploy</id>
@@ -31,4 +28,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
