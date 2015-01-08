@@ -13,10 +13,6 @@
     <artifactId>zed-utils</artifactId>
 
     <name>${project.artifactId}</name>
-    <description>A application used as an example on how to set up pushing
-        its components to the Central Repository.
-    </description>
-    <url>http://www.example.com/example-application</url>
 
     <dependencies>
         <dependency>
@@ -24,12 +20,16 @@
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

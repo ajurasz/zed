@@ -3,6 +3,10 @@ package zed.utils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang3.reflect.FieldUtils.getField;
 
 public final class Reflections {
 
@@ -22,4 +26,16 @@ public final class Reflections {
         }
     }
 
+    public static <T> T readField(Object object, String field, Class<T> type) {
+        try {
+            Field actualField = getField(object.getClass(), field, true);
+            if(actualField.getType() != type) {
+                String message = format("Field %s is a type of %s instead of %s.", field, actualField.getType(), type);
+                throw new IllegalStateException(message);
+            }
+            return (T) FieldUtils.readField(actualField, object, true);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
