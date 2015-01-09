@@ -18,11 +18,12 @@ public class FileSystemDeployablesManager implements DeployablesManager {
 
     private final File workspace;
 
-    private final ZedHome zedHome = new LocalFileSystemZedHome();
+    private final ZedHome zedHome;
 
     private final List<DeployableHandler> deployHandlers;
 
-    public FileSystemDeployablesManager(File workspace, List<DeployableHandler> deployHandlers) {
+    public FileSystemDeployablesManager(ZedHome zedHome, File workspace, List<DeployableHandler> deployHandlers) {
+        this.zedHome = zedHome;
         this.workspace = workspace;
         this.workspace.mkdirs();
         this.deployHandlers = deployHandlers;

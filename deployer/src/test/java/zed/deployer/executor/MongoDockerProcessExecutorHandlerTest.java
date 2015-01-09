@@ -6,17 +6,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.DefaultStatusResolver;
 import zed.deployer.StatusResolver;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
+import zed.deployer.manager.ZedHome;
 
 import java.io.File;
 
@@ -70,26 +71,26 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
 
 }
 
-@Configuration
+@SpringBootApplication
 class MongoDockerProcessExecutorHandlerTestConfiguration {
 
     @Autowired
     DockerClient docker;
 
     @Bean
-    DeployablesManager deploymentManager() {
+    DeployablesManager deploymentManager(ZedHome zedHome) {
         File workspace = createTempDir();
-        return new FileSystemDeployablesManager(workspace, allDeployableHandlers(workspace, docker));
+        return new FileSystemDeployablesManager(zedHome, workspace, allDeployableHandlers(workspace, docker));
     }
 
     @Bean
-    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler() {
-        return new MongoDockerProcessExecutorHandler(deploymentManager(), docker);
+    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
+        return new MongoDockerProcessExecutorHandler(deployablesManager, docker);
     }
 
     @Bean
-    StatusResolver statusResolver() {
-        return new DefaultStatusResolver(deploymentManager(), docker);
+    StatusResolver statusResolver(DeployablesManager deployablesManager) {
+        return new DefaultStatusResolver(deployablesManager, docker);
     }
 
 }

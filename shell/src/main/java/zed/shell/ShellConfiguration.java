@@ -9,11 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import zed.deployer.DefaultStatusResolver;
 import zed.deployer.StatusResolver;
-import zed.deployer.executor.DefaultProcessExecutor;
-import zed.deployer.executor.ProcessExecutor;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.FileSystemDeployablesManager;
-import zed.deployer.manager.LocalFileSystemZedHome;
+import zed.deployer.manager.ZedHome;
 
 import java.io.File;
 
@@ -27,20 +25,15 @@ public class ShellConfiguration {
     DockerClient docker;
 
     @Bean
-    DeployablesManager deploymentManager(@Value("${zed.shell.workspace:default}") String workspace) {
-        File deployDirectory = new LocalFileSystemZedHome().deployDirectory();
+    DeployablesManager deploymentManager(@Value("${zed.shell.workspace:default}") String workspace, ZedHome zedHome) {
+        File deployDirectory = zedHome.deployDirectory();
         File workspaceFile = new File(deployDirectory, workspace);
-        return new FileSystemDeployablesManager(workspaceFile, allDeployableHandlers(workspaceFile, docker));
+        return new FileSystemDeployablesManager(zedHome, workspaceFile, allDeployableHandlers(workspaceFile, docker));
     }
 
     @Bean
     StatusResolver statusResolver(DeployablesManager deploymentManager) {
         return new DefaultStatusResolver(deploymentManager, docker);
-    }
-
-    @Bean
-    ProcessExecutor processExecutor(DeployablesManager deploymentManager) {
-        return new DefaultProcessExecutor(deploymentManager, docker);
     }
 
 }

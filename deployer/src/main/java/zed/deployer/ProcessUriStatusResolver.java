@@ -11,7 +11,7 @@ public class ProcessUriStatusResolver implements UriStatusResolver {
 
     @Override
     public boolean support(String uri) {
-        return uri.startsWith("fatJar:mvn");
+        return uri.startsWith("fatjar:mvn");
     }
 
     @Override

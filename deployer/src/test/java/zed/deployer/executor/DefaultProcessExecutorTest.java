@@ -6,16 +6,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.handlers.DeployableHandlers;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
+import zed.deployer.manager.ZedHome;
 
 import java.io.File;
 
@@ -64,21 +65,15 @@ public class DefaultProcessExecutorTest extends Assert {
 
 }
 
-@Configuration
+@SpringBootApplication
 class DefaultProcessExecutorTestConfiguration {
 
     @Autowired
     DockerClient docker;
 
     @Bean
-    DeployablesManager deploymentManager() {
+    DeployablesManager deploymentManager(ZedHome zedHome) {
         File workspace = createTempDir();
-        return new FileSystemDeployablesManager(workspace, DeployableHandlers.allDeployableHandlers(workspace, docker));
+        return new FileSystemDeployablesManager(zedHome, workspace, DeployableHandlers.allDeployableHandlers(workspace, docker));
     }
-
-    @Bean
-    ProcessExecutor processExecutor() {
-        return new DefaultProcessExecutor(deploymentManager(), docker);
-    }
-
 }
