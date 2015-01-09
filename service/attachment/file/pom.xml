@@ -42,7 +42,7 @@
         <!-- Testing -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-document-sdk</artifactId>
+            <artifactId>zed-service-attachment-sdk</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -51,18 +51,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-attachment-sdk</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
