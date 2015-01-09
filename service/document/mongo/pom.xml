@@ -13,10 +13,6 @@
     <packaging>war</packaging>
 
     <name>${project.artifactId}</name>
-    <description>A application used as an example on how to set up pushing
-        its components to the Central Repository.
-    </description>
-    <url>http://www.example.com/example-application</url>
 
     <dependencies>
         <!-- Utils -->
@@ -60,10 +56,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
 
         <!-- Operations -->
         <dependency>
@@ -82,13 +74,13 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
