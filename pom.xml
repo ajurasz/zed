@@ -3,10 +3,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.zed-platform</groupId>
+    <parent>
+        <groupId>com.github.zed-platform</groupId>
+        <artifactId>zed-bom</artifactId>
+        <version>0.0.10-SNAPSHOT</version>
+        <relativePath>bom</relativePath>
+    </parent>
     <artifactId>zed</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.10-SNAPSHOT</version>
 
     <modules>
         <module>bom</module>
@@ -18,6 +22,12 @@
         <module>maven-plugin</module>
         <module>service</module>
     </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 
     <name>${project.artifactId}</name>
     <description>A application used as an example on how to set up pushing
@@ -63,6 +73,32 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.5</version>
                 <executions>
@@ -96,6 +132,24 @@
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.ekstazi</groupId>
+                <artifactId>ekstazi-maven-plugin</artifactId>
+                <version>4.5.0</version>
+                <executions>
+                    <execution>
+                        <id>ekstazi</id>
+                        <goals>
+                            <goal>select</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
