@@ -3,10 +3,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.zed-platform</groupId>
+    <parent>
+        <groupId>com.github.zed-platform</groupId>
+        <artifactId>zed-bom</artifactId>
+        <version>0.0.10-SNAPSHOT</version>
+        <relativePath>bom</relativePath>
+    </parent>
     <artifactId>zed</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.10-SNAPSHOT</version>
 
     <modules>
         <module>bom</module>
