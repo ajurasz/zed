@@ -5,18 +5,12 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-bom</artifactId>
+        <artifactId>zed</artifactId>
         <version>0.0.10-SNAPSHOT</version>
         <relativePath>../bom</relativePath>
     </parent>
 
     <artifactId>zed-dockerunit</artifactId>
-
-    <name>${project.artifactId}</name>
-    <description>A application used as an example on how to set up pushing
-        its components to the Central Repository.
-    </description>
-    <url>http://www.example.com/example-application</url>
 
     <dependencies>
         <dependency>
@@ -28,14 +22,5 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.ekstazi</groupId>
-                <artifactId>ekstazi-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
