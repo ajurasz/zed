@@ -16,8 +16,6 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <ekstazi.version>4.5.0</ekstazi.version>
     </properties>
 
     <build>
@@ -25,20 +23,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.ekstazi</groupId>
                 <artifactId>ekstazi-maven-plugin</artifactId>
-                <version>${ekstazi.version}</version>
-                <executions>
-                    <execution>
-                        <id>ekstazi</id>
-                        <goals>
-                            <goal>select</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

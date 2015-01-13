@@ -1,8 +1,9 @@
-Zed - backend services platform
+Zed - Backend as a Service (BaaS) platform
 ===
 
-Zed's goal is to provide predefined microservices covering common requirements of the business applications. Zed also
-comes with the *Zed shell* to deliver top devOps experience while working with microservices architectures.
+Zed's goal is to provide *Backend as a Service* (BaaS) platform in the form of the predefined microservices covering
+common requirements of the business applications. Zed also comes with the *Zed shell* to deliver top devOps experience
+while working with microservices architectures.
 
 ### Reference documentation
 

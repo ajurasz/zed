@@ -8,36 +8,6 @@
     <version>0.0.11-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-
-    <!-- Maven Central metadata -->
-
-    <name>${project.artifactId}</name>
-    <description>Zed - the actuator services platform</description>
-    <url>https://github.com/hekonsek/zed</url>
-
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Henryk Konsek</name>
-            <email>hekonsek@gmail.com</email>
-            <organization>Red Hat</organization>
-            <organizationUrl>http://redhat.com</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
-        <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
-        <url>git@github.com:hekonsek/zed</url>
-        <tag>HEAD</tag>
-  </scm>
-
     <!-- Settings & dependencies -->
 
     <properties>
@@ -55,6 +25,9 @@
         <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
         <zed.version>0.0.11-SNAPSHOT</zed.version>
 
+        <ekstazi.version>4.5.0</ekstazi.version>
+        <maven.compiler.version>3.2</maven.compiler.version>
+        <maven.javadoc.version>2.10.1</maven.javadoc.version>
         <maven-war-plugin.version>2.5</maven-war-plugin.version>
         <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
     </properties>
@@ -174,6 +147,38 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven.javadoc.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.ekstazi</groupId>
+                    <artifactId>ekstazi-maven-plugin</artifactId>
+                    <version>${ekstazi.version}</version>
+                    <executions>
+                        <execution>
+                            <id>ekstazi</id>
+                            <goals>
+                                <goal>select</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                     <configuration>
@@ -217,6 +222,7 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -227,19 +233,6 @@
                         <id>attach-sources</id>
                         <goals>
                             <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -293,5 +286,34 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <!-- Maven Central metadata -->
+
+    <name>${project.artifactId}</name>
+    <description>Backend as a Service (BaaS) platform</description>
+    <url>https://github.com/hekonsek/zed</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Henryk Konsek</name>
+            <email>hekonsek@gmail.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://redhat.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
+        <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
+        <url>git@github.com:hekonsek/zed</url>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>
