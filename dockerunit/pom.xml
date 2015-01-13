@@ -7,7 +7,7 @@
         <groupId>com.github.zed-platform</groupId>
         <artifactId>zed</artifactId>
         <version>0.0.10-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <artifactId>zed-dockerunit</artifactId>

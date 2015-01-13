@@ -5,7 +5,7 @@
         <groupId>com.github.zed-platform</groupId>
         <version>0.0.10-SNAPSHOT</version>
         <artifactId>zed</artifactId>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <artifactId>zed-maven-plugin</artifactId>
