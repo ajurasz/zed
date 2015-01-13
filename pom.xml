@@ -10,6 +10,7 @@
 
     <modules>
         <module>bom</module>
+        <module>parent</module>
         <module>utils</module>
         <module>dockerunit</module>
         <module>deployer</module>
@@ -57,18 +58,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.github.zed-platform</groupId>
-                <artifactId>zed-bom</artifactId>
-                <version>0.0.10-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

@@ -8,10 +8,10 @@
     <version>0.0.10-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>${project.artifactId}</name>
 
     <!-- Maven Central metadata -->
 
+    <name>${project.artifactId}</name>
     <description>Zed - the actuator services platform</description>
     <url>https://github.com/hekonsek/zed</url>
 
@@ -41,8 +41,6 @@
     <!-- Settings & dependencies -->
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <awaitility.version>1.6.3</awaitility.version>
@@ -50,7 +48,6 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.3.2</commons.lang.version>
         <docker-java.version>0.10.3</docker-java.version>
-        <ekstazi.version>4.5.0</ekstazi.version>
         <embedmongo.version>1.46.4</embedmongo.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
@@ -190,19 +187,6 @@
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.ekstazi</groupId>
-                    <artifactId>ekstazi-maven-plugin</artifactId>
-                    <version>${ekstazi.version}</version>
-                    <executions>
-                        <execution>
-                            <id>ekstazi</id>
-                            <goals>
-                                <goal>select</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.jolokia</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>0.10.5</version>
@@ -295,11 +279,6 @@
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
             </plugin>
         </plugins>
     </build>

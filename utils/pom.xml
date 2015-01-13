@@ -5,9 +5,9 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-bom</artifactId>
+        <artifactId>zed-parent</artifactId>
         <version>0.0.10-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>zed-utils</artifactId>
@@ -36,14 +36,5 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.ekstazi</groupId>
-                <artifactId>ekstazi-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

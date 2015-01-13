@@ -4,8 +4,8 @@
     <parent>
         <groupId>com.github.zed-platform</groupId>
         <version>0.0.10-SNAPSHOT</version>
-        <artifactId>zed</artifactId>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>zed-parent</artifactId>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>zed-maven-plugin</artifactId>
@@ -38,6 +38,7 @@
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
     <dependencies>
