@@ -5,14 +5,12 @@
 
     <parent>
         <groupId>com.github.zed-platform</groupId>
-        <artifactId>zed-bom</artifactId>
+        <artifactId>zed</artifactId>
         <version>0.0.10-SNAPSHOT</version>
-        <relativePath>../bom</relativePath>
+        <relativePath>..</relativePath>
     </parent>
 
     <artifactId>zed-utils</artifactId>
-
-    <name>${project.artifactId}</name>
 
     <dependencies>
         <dependency>
