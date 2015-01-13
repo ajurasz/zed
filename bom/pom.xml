@@ -203,6 +203,23 @@
                     </executions>
                 </plugin>
                 <plugin>
+                    <groupId>org.jolokia</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.10.5</version>
+                    <configuration>
+                        <images>
+                            <image>
+                                <name>hekonsek/${project.artifactId}:${project.version}</name>
+                                <build>
+                                    <from>hekonsek/fatjar:0.0.10-SNAPSHOT</from>
+                                    <assemblyDescriptorRef>artifact</assemblyDescriptorRef>
+                                    <exportDir>/jars</exportDir>
+                                </build>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
