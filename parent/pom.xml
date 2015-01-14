@@ -13,4 +13,17 @@
     <artifactId>zed-parent</artifactId>
     <packaging>pom</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.ekstazi</groupId>
+                <artifactId>ekstazi-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
