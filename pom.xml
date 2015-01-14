@@ -13,6 +13,7 @@
         <module>parent</module>
         <module>utils</module>
         <module>dockerunit</module>
+        <module>rest-client</module>
         <module>deployer</module>
         <module>shell</module>
         <module>maven-plugin</module>
