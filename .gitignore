@@ -8,3 +8,5 @@ target/
 # Ekstazi
 .ekstazi
 
+# Mock Server
+mockserver*.log
