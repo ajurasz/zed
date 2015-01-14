@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import static java.lang.Character.toLowerCase;
 import static java.lang.reflect.Proxy.newProxyInstance;
+import static zed.utils.Reflections.classNameToCamelCase;
 
 public class SimpleRestProxyFactory {
 
@@ -30,11 +30,6 @@ public class SimpleRestProxyFactory {
     }
 
     // private helpers
-
-    private String classNameToLowerCase(Class<?> clazz) {
-        String simpleName = clazz.getSimpleName();
-        return toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
-    }
 
     private String normalizeBaseServiceUrl(String baseServiceUrl) {
         return baseServiceUrl.
@@ -80,7 +75,7 @@ public class SimpleRestProxyFactory {
 
                 Class<?> returnType = method.getReturnType();
                 String normalizedBaseServiceUrl = normalizeBaseServiceUrl(baseServiceUrl);
-                String url = normalizedBaseServiceUrl + "/" + classNameToLowerCase(serviceClass) + "/" + method.getName();
+                String url = normalizedBaseServiceUrl + "/" + classNameToCamelCase(serviceClass) + "/" + method.getName();
                 if (args != null) {
                     int argumentsInUri = isGet ? args.length : args.length - 1;
                     for (int i = 0; i < argumentsInUri; i++) {
