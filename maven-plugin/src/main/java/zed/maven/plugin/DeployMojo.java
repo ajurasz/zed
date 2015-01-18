@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static com.jayway.awaitility.Awaitility.await;
+import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PROCESS_SOURCES;
 import static zed.utils.Mavens.artifactVersion;
+import static zed.utils.Mavens.localMavenRepository;
 
 @Mojo(name = "deploy", defaultPhase = PROCESS_SOURCES)
 public class DeployMojo extends AbstractMojo {
@@ -33,8 +35,10 @@ public class DeployMojo extends AbstractMojo {
         final Process p;
         try {
             String projectVersion = artifactVersion("com.github.zed-platform", "zed-maven-plugin");
-            String zedShellUrl = String.format(System.getProperty("user.home") + "/.m2/repository/com/github/zed-platform/zed-shell/%s/zed-shell-%s.war", projectVersion, projectVersion);
-            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", zedShellUrl}, new String[]{"zed.shell.workspace=" + workspace});
+            String shellWarFilename = format("zed-shell-%s.war", projectVersion);
+            String shellWarPath = Paths.get(localMavenRepository().getAbsolutePath(),
+                    "com", "github", "zed-platform", "zed-shell", projectVersion, shellWarFilename).toFile().getAbsolutePath();
+            p = Runtime.getRuntime().exec(new String[]{"java", "-jar", shellWarPath}, new String[]{"zed.shell.workspace=" + workspace});
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {

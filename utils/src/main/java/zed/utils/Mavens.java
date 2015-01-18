@@ -3,13 +3,16 @@ package zed.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Properties;
 
 import static java.lang.String.format;
+import static org.apache.commons.lang3.SystemUtils.USER_HOME;
 
 public final class Mavens {
 
@@ -33,6 +36,10 @@ public final class Mavens {
     }
 
     private Mavens() {
+    }
+
+    public static File localMavenRepository() {
+        return Paths.get(USER_HOME, ".m2", "repository").toFile();
     }
 
     public static String artifactVersion(String groupId, String artifactId) {
