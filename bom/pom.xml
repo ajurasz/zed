@@ -24,7 +24,7 @@
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
         <maven.version>3.0.5</maven.version>
-        <spring.boot.version>1.2.0.RELEASE</spring.boot.version>
+        <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
         <zed.version>0.0.11-SNAPSHOT</zed.version>
 
         <ekstazi.version>4.5.0</ekstazi.version>
