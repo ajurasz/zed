@@ -19,7 +19,7 @@
         <camel.version>2.14.1</camel.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.3.2</commons.lang.version>
-        <docker-java.version>0.10.3</docker-java.version>
+        <docker-java.version>0.10.4</docker-java.version>
         <embedmongo.version>1.46.4</embedmongo.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
@@ -31,8 +31,8 @@
         <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
         <maven.compiler.version>3.2</maven.compiler.version>
         <maven.javadoc.version>2.10.1</maven.javadoc.version>
-        <maven-war-plugin.version>2.5</maven-war-plugin.version>
-        <maven-surefire-plugin.version>2.18</maven-surefire-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
         <plexus-compiler-api.version>2.4</plexus-compiler-api.version>
     </properties>
 
