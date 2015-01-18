@@ -1,6 +1,6 @@
+server.port: 15004
 shell:
-  auth:
-    simple:
-      user:
-        name: zed
-        password: zed
+  auth.simple.user:
+    name: zed
+    password: zed
+  ssh.port: 15005

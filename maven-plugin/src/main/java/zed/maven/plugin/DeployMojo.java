@@ -49,7 +49,7 @@ public class DeployMojo extends AbstractMojo {
                 @Override
                 public Boolean call() throws Exception {
                     try {
-                        new SshClient("localhost", 2000).command("foo");
+                        new SshClient("localhost", 15005).command("foo");
                     } catch (RuntimeException e) {
                         return false;
                     }
@@ -66,7 +66,7 @@ public class DeployMojo extends AbstractMojo {
             List<String> commands = IOUtils.readLines(new FileInputStream(deployScript));
             for (String command : commands) {
                 getLog().info("Executing command: " + command);
-                getLog().info(new SshClient("localhost", 2000).command(command).toString());
+                getLog().info(new SshClient("localhost", 15005).command(command).toString());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
