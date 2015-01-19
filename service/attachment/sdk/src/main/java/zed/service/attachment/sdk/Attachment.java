@@ -1,9 +1,10 @@
 package zed.service.attachment.sdk;
 
+import java.io.Serializable;
 import java.util.Base64;
 import java.util.Date;
 
-public class Attachment {
+public class Attachment implements Serializable {
 
     public Attachment() {
     }

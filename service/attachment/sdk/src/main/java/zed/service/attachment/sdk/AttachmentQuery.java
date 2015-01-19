@@ -1,8 +1,9 @@
 package zed.service.attachment.sdk;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class AttachmentQuery {
+public class AttachmentQuery implements Serializable {
 
     private String id;
 
