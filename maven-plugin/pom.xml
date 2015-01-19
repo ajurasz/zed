@@ -67,12 +67,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-shell</artifactId>
-            <type>war</type>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
