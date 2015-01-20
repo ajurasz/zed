@@ -25,6 +25,10 @@ public class DefaultBeanToExpose implements BeanToExpose {
         return new PojoWithValue(arg1);
     }
 
+    @RestOperation
+    public void voidOperation(String arg) {
+    }
+
 }
 
 class PojoWithValue {

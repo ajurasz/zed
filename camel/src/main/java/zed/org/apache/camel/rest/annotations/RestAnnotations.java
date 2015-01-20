@@ -61,12 +61,16 @@ public class RestAnnotations {
                         Method method = findRestOperations(type, seg[2]).get(0);
                         Object[] methodParameters = new Object[method.getParameterCount()];
                         for (int i = 0; i < method.getParameterCount(); i++) {
-                            Object x = exchange.getContext().getTypeConverter().convertTo(method.getParameterTypes()[i], exchange.getIn().getHeader("p" + i));
-                            methodParameters[i] = x;
+                            Object convertedParameter = exchange.getContext().getTypeConverter().convertTo(method.getParameterTypes()[i], exchange.getIn().getHeader("p" + i));
+                            methodParameters[i] = convertedParameter;
                         }
                         exchange.getIn().setBody(methodParameters);
+                        if (method.getReturnType() == Void.TYPE) {
+                            exchange.getIn().setHeader("CAMEL_REST_VOID_OPERATION", true);
+                        }
                     }
-                }).to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true");
+                }).to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true").
+                        choice().when(routeBuilder.header("CAMEL_REST_VOID_OPERATION").isNotNull()).setBody().constant("").endChoice();
             }
         }
     }

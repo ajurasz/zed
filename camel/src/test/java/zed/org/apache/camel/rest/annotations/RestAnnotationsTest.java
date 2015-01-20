@@ -43,6 +43,12 @@ public class RestAnnotationsTest extends CamelTestSupport {
         assertEquals("{\"value\":\"10\"}", response);
     }
 
+    @Test
+    public void shouldHandleVoidMethod() throws IOException {
+        String response = IOUtils.toString(new URL(baseUrl + "voidOperation/10"));
+        assertEquals("\"\"", response);
+    }
+
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
