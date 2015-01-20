@@ -52,7 +52,7 @@ public class RestAnnotationsTest extends CamelTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry registry = new JndiRegistry();
-        registry.bind("someName", new BeanToExpose());
+        registry.bind("someName", new DefaultBeanToExpose());
         return registry;
     }
 

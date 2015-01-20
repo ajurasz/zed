@@ -20,6 +20,9 @@ public class RestAnnotations {
                 methods.add(method);
             }
         }
+        for (Class<?> iface : type.getInterfaces()) {
+            methods.addAll(findRestOperations(iface));
+        }
         return methods;
     }
 
