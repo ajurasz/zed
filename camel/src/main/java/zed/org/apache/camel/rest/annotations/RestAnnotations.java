@@ -1,7 +1,5 @@
 package zed.org.apache.camel.rest.annotations;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.Registry;
 
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
+import static zed.org.apache.camel.rest.annotations.RestParametersBindingProcessor.restParametersBindingProcessor;
 
 public class RestAnnotations {
 
@@ -51,25 +50,8 @@ public class RestAnnotations {
                 for (int i = 0; i < method.getParameterCount(); i++) {
                     uri += "/{p" + i + "}";
                 }
-                routeBuilder.rest(uri).get().route().process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        String path = exchange.getIn().getHeader(Exchange.HTTP_PATH, String.class);
-                        String[] seg = path.split("/");
-                        Object bean = exchange.getContext().getRegistry().lookupByName(seg[1]);
-                        Class<?> type = bean.getClass();
-                        Method method = findRestOperations(type, seg[2]).get(0);
-                        Object[] methodParameters = new Object[method.getParameterCount()];
-                        for (int i = 0; i < method.getParameterCount(); i++) {
-                            Object convertedParameter = exchange.getContext().getTypeConverter().convertTo(method.getParameterTypes()[i], exchange.getIn().getHeader("p" + i));
-                            methodParameters[i] = convertedParameter;
-                        }
-                        exchange.getIn().setBody(methodParameters);
-                        if (method.getReturnType() == Void.TYPE) {
-                            exchange.getIn().setHeader("CAMEL_REST_VOID_OPERATION", true);
-                        }
-                    }
-                }).to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true").
+                routeBuilder.rest(uri).get().route().process(restParametersBindingProcessor()).
+                        to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true").
                         choice().when(routeBuilder.header("CAMEL_REST_VOID_OPERATION").isNotNull()).setBody().constant("").endChoice();
             }
         }
