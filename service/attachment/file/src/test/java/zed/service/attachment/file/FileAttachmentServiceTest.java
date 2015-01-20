@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import spring.boot.EmbedMongoConfiguration;
+import zed.service.attachment.file.strategy.IdToFileMappingStrategy;
 import zed.service.attachment.sdk.Attachment;
 import zed.service.attachment.sdk.AttachmentQuery;
 import zed.service.attachment.sdk.AttachmentService;
@@ -43,6 +44,9 @@ public class FileAttachmentServiceTest extends Assert {
 
     @Autowired
     Mongo mongo;
+
+    @Autowired
+    IdToFileMappingStrategy idToFileMappingStrategy;
 
     static File storage = Files.createTempDir();
 
@@ -85,7 +89,7 @@ public class FileAttachmentServiceTest extends Assert {
 
         // Then
         String id = attachment.getId();
-        Set<String> files = newHashSet(storage.list());
+        Set<String> files = newHashSet(new File(storage, idToFileMappingStrategy.mapIdToFile(id).getParent()).list());
         assertTrue(files.contains(id));
     }
 
