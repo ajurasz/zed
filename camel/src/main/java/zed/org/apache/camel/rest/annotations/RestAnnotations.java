@@ -15,17 +15,23 @@ import static java.util.Collections.unmodifiableList;
 
 public class RestAnnotations {
 
-    public static List<Method> findRestOperations(Class<?> type) {
+    public static List<Method> findRestOperations(Class<?> type, String name) {
         List<Method> annotatedMethods = new LinkedList<>();
-        for (Method method : type.getDeclaredMethods()) {
+        for (Method method : type.getMethods()) {
             if (method.isAnnotationPresent(RestOperation.class)) {
-                annotatedMethods.add(method);
+                if (name == null || method.getName().equals(name)) {
+                    annotatedMethods.add(method);
+                }
             }
         }
         for (Class<?> iface : type.getInterfaces()) {
-            annotatedMethods.addAll(findRestOperations(iface));
+            annotatedMethods.addAll(findRestOperations(iface, name));
         }
         return unmodifiableList(annotatedMethods);
+    }
+
+    public static List<Method> findRestOperations(Class<?> type) {
+        return findRestOperations(type, null);
     }
 
     public static Map<String, Object> findBeansWithRestOperations(Registry registry) {
@@ -52,19 +58,13 @@ public class RestAnnotations {
                         String[] seg = path.split("/");
                         Object bean = exchange.getContext().getRegistry().lookupByName(seg[1]);
                         Class<?> type = bean.getClass();
-                        Method method = null;
-                        for (Method m : type.getDeclaredMethods()) {
-                            if (m.getName().equals(seg[2])) {
-                                method = m;
-                                break;
-                            }
-                        }
-                        Object[] array = new Object[method.getParameterCount()];
+                        Method method = findRestOperations(type, seg[2]).get(0);
+                        Object[] methodParameters = new Object[method.getParameterCount()];
                         for (int i = 0; i < method.getParameterCount(); i++) {
                             Object x = exchange.getContext().getTypeConverter().convertTo(method.getParameterTypes()[i], exchange.getIn().getHeader("p" + i));
-                            array[i] = x;
+                            methodParameters[i] = x;
                         }
-                        exchange.getIn().setBody(array);
+                        exchange.getIn().setBody(methodParameters);
                     }
                 }).to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true");
             }
