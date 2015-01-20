@@ -11,19 +11,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.unmodifiableList;
+
 public class RestAnnotations {
 
     public static List<Method> findRestOperations(Class<?> type) {
-        List<Method> methods = new LinkedList<>();
+        List<Method> annotatedMethods = new LinkedList<>();
         for (Method method : type.getDeclaredMethods()) {
             if (method.isAnnotationPresent(RestOperation.class)) {
-                methods.add(method);
+                annotatedMethods.add(method);
             }
         }
         for (Class<?> iface : type.getInterfaces()) {
-            methods.addAll(findRestOperations(iface));
+            annotatedMethods.addAll(findRestOperations(iface));
         }
-        return methods;
+        return unmodifiableList(annotatedMethods);
     }
 
     public static Map<String, Object> findBeansWithRestOperations(Registry registry) {
