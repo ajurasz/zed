@@ -1,6 +1,5 @@
 package zed.org.apache.camel.rest.annotations;
 
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.spi.Registry;
 
 import java.lang.reflect.Method;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableList;
-import static zed.org.apache.camel.rest.annotations.RestParametersBindingProcessor.restParametersBindingProcessor;
 
 public class RestAnnotations {
 
@@ -41,20 +39,6 @@ public class RestAnnotations {
             }
         }
         return beans;
-    }
-
-    public static void exposeAnnotatedBeans(RouteBuilder routeBuilder) {
-        for (Map.Entry<String, Object> bean : findBeansWithRestOperations(routeBuilder.getContext().getRegistry()).entrySet()) {
-            for (Method method : findRestOperations(bean.getValue().getClass())) {
-                String uri = "/" + bean.getKey() + "/" + method.getName();
-                for (int i = 0; i < method.getParameterCount(); i++) {
-                    uri += "/{p" + i + "}";
-                }
-                routeBuilder.rest(uri).get().route().process(restParametersBindingProcessor()).
-                        to("bean:" + bean.getKey() + "?method=" + method.getName() + "&multiParameterArray=true").
-                        choice().when(routeBuilder.header("CAMEL_REST_VOID_OPERATION").isNotNull()).setBody().constant("").endChoice();
-            }
-        }
     }
 
 }

@@ -29,6 +29,11 @@ public class DefaultBeanToExpose implements BeanToExpose {
     public void voidOperation(String arg) {
     }
 
+    @RestOperation
+    public String noArguments() {
+        return "noArguments";
+    }
+
 }
 
 class PojoWithValue {

@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URL;
 
-import static zed.org.apache.camel.rest.annotations.RestAnnotations.exposeAnnotatedBeans;
+import static zed.org.apache.camel.rest.annotations.RestAnnotationsExposer.exposeAnnotatedBeans;
 
 public class RestAnnotationsTest extends CamelTestSupport {
 
@@ -47,6 +47,12 @@ public class RestAnnotationsTest extends CamelTestSupport {
     public void shouldHandleVoidMethod() throws IOException {
         String response = IOUtils.toString(new URL(baseUrl + "voidOperation/10"));
         assertEquals("\"\"", response);
+    }
+
+    @Test
+    public void shouldHandleNoArgumentsMethod() throws IOException {
+        String response = IOUtils.toString(new URL(baseUrl + "noArguments"));
+        assertEquals("\"noArguments\"", response);
     }
 
     @Override
