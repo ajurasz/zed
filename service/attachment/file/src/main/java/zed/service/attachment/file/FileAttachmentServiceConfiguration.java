@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import zed.service.attachment.file.service.BinaryStorage;
 import zed.service.attachment.file.service.FileSystemBinaryStorage;
-import zed.service.attachment.file.strategy.CustomIdToFileMappingStrategy;
+import zed.service.attachment.file.strategy.TenFirstLettersCustomIdToFileMappingStrategy;
 import zed.service.attachment.file.strategy.IdToFileMappingStrategy;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class FileAttachmentServiceConfiguration {
     @Bean
     @ConditionalOnMissingBean(IdToFileMappingStrategy.class)
     IdToFileMappingStrategy idToFileMappingStrategy() {
-        return new CustomIdToFileMappingStrategy();
+        return new TenFirstLettersCustomIdToFileMappingStrategy();
     }
 
     @Bean

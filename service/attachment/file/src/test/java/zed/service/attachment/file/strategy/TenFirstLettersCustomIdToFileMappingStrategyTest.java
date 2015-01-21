@@ -2,20 +2,12 @@ package zed.service.attachment.file.strategy;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import zed.service.attachment.file.FileAttachmentServiceConfiguration;
 
 import java.io.File;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = FileAttachmentServiceConfiguration.class)
-public class CustomIdToFileMappingStrategyTest extends Assert {
+public class TenFirstLettersCustomIdToFileMappingStrategyTest extends Assert {
 
-    @Autowired
-    IdToFileMappingStrategy idToFileMappingStrategy;
+    IdToFileMappingStrategy idToFileMappingStrategy = new TenFirstLettersCustomIdToFileMappingStrategy();
 
     @Test
     public void shouldCreateCorrectFileWhenIdLessThanTenCharacters() {

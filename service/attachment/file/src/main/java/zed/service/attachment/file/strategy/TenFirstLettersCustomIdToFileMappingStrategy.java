@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.nio.file.Paths;
 
-public class CustomIdToFileMappingStrategy implements IdToFileMappingStrategy {
+public class TenFirstLettersCustomIdToFileMappingStrategy implements IdToFileMappingStrategy {
 
     @Override
     public File mapIdToFile(String id) {
