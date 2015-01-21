@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component
 import zed.service.attachment.file.service.BinaryStorage
 import zed.service.document.mongo.routing.SaveOperation
 
-import static zed.service.attachment.file.routing.CamelGroovy.groovy
-
 @Component
 public class AttachmentRestGatewayRoute extends RouteBuilder {
 
@@ -27,21 +25,24 @@ public class AttachmentRestGatewayRoute extends RouteBuilder {
         // Operations handlers
 
         from("direct:upload").
-                process(groovy { ExchangeContext exc ->
+                process {
+                    def exc = new ExchangeContext(it)
                     UploadOperation upload = exc.body(UploadOperation.class)
                     exc.bean(BinaryStorage.class).stageData(exc.id(), upload.data())
                     exc.body = new SaveOperation(exc.stringHeader('collection'), upload.attachment())
-                }).
+                }.
                 to("direct:save").
-                process(groovy { ExchangeContext exc ->
+                process {
+                    def exc = new ExchangeContext(it)
                     exc.bean(BinaryStorage.class).commitData(exc.id(), exc.body(String.class))
-                });
+                }
 
         from("direct:download").
-                process(groovy { ExchangeContext exc ->
+                process {
+                    def exc = new ExchangeContext(it)
                     DownloadOperation download = exc.body(DownloadOperation.class)
                     exc.body = exc.bean(BinaryStorage.class).readData(download.id())
-                })
+                }
 
     }
 
