@@ -23,6 +23,7 @@
         <module>sdk-base</module>
         <module>document</module>
         <module>attachment</module>
+        <module>messagestore</module>
     </modules>
 
 </project>

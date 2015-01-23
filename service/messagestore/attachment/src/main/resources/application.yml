@@ -1,0 +1,5 @@
+server.port: 15006
+spring:
+  activemq.inMemory: false
+  groovy.template.check-template-location: false
+zed.service.api.port: 15007

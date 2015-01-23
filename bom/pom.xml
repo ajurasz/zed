@@ -15,6 +15,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <activemq.version>5.10.0</activemq.version>
         <awaitility.version>1.6.3</awaitility.version>
         <camel.version>2.14.1</camel.version>
         <commons.io.version>2.4</commons.io.version>
@@ -51,6 +52,13 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
                 <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-parent</artifactId>
+                <version>${activemq.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -314,6 +322,13 @@
             </build>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <id>pahoRepository</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <snapshotRepository>
