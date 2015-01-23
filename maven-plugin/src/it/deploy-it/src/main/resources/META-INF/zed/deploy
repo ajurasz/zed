@@ -1,2 +1,2 @@
 deploy_clean
-deploy fatjar:mvn:com.google.guava/guava/18.0
+deploy fatjar:mvn:com.google.guava/guava/${guava.version}
