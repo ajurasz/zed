@@ -7,6 +7,8 @@ public class SpotifyDockerProperties {
 
     private String uri;
 
+    private String version = "1.14";
+
     private int readTimeoutMilis = 30 * 1000;
 
     public String getUri() {
@@ -15,6 +17,14 @@ public class SpotifyDockerProperties {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public int getReadTimeoutMilis() {

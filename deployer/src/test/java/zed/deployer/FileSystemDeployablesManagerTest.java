@@ -1,10 +1,8 @@
 package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import com.github.dockerjava.api.NotFoundException;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,15 +34,38 @@ import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 @IntegrationTest
 public class FileSystemDeployablesManagerTest extends Assert {
 
+    static String TEST_IMAGE = "ajurasz/busybox:latest";
+
     @Autowired
     DockerClient docker;
 
     @Autowired
     FileSystemDeployablesManager deploymentManager;
 
+    DeploymentDescriptor deploymentDescriptor;
+
     @Before
     public void before() {
         deploymentManager.clear();
+
+        try {
+            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
+        } catch (NotFoundException e) {
+            // just ignore if not exist
+        }
+    }
+
+    @After
+    public void after() {
+        try {
+            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
+            if (deploymentDescriptor.pid() != null) {
+                docker.stopContainerCmd(deploymentDescriptor.pid()).exec();
+                docker.removeContainerCmd(deploymentDescriptor.pid()).withForce().exec();
+            }
+        } catch (NotFoundException e) {
+            // just ignore if not exist
+        }
     }
 
     // Tests
@@ -106,10 +127,10 @@ public class FileSystemDeployablesManagerTest extends Assert {
     }
 
     @Test
-    public void shouldWriteUriIntoDockerMongoDescriptor() throws IOException {
+    public void shouldWriteUriIntoDockerDescriptor() throws IOException {
         // When
         assumeTrue(isConnected(docker));
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
+        deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();
@@ -118,12 +139,12 @@ public class FileSystemDeployablesManagerTest extends Assert {
     }
 
     @Test
-    public void shouldWriteIdIntoDockerMongoDescriptor() throws IOException {
+    public void shouldWriteIdIntoDockerDescriptor() throws IOException {
         // Given
         assumeTrue(isConnected(docker));
 
         // When
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
+        deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();

@@ -17,7 +17,7 @@ public class DockerUriStatusResolver implements UriStatusResolver {
 
     @Override
     public boolean support(String uri) {
-        return uri.contains(":docker");
+        return uri.contains("docker:");
     }
 
     @Override

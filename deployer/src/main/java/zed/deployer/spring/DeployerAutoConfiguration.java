@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import zed.deployer.executor.DefaultProcessExecutor;
-import zed.deployer.executor.FatJarLocalProcessExecutionHandler;
-import zed.deployer.executor.MongoDockerProcessExecutorHandler;
-import zed.deployer.executor.ProcessExecutor;
-import zed.deployer.executor.ProcessExecutorHandler;
+import zed.deployer.executor.*;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.LocalFileSystemZedHome;
 import zed.deployer.manager.ZedHome;
@@ -36,8 +32,8 @@ public class DeployerAutoConfiguration {
     }
 
     @Bean
-    ProcessExecutorHandler mongoDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
-        return new MongoDockerProcessExecutorHandler(deployablesManager, dockerClient);
+    ProcessExecutorHandler baseDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
+        return new BaseDockerProcessExecutorHandler(deployablesManager, dockerClient);
     }
 
     @Bean

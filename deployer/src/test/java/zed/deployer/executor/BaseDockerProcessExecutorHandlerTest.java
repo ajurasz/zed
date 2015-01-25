@@ -1,6 +1,8 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.NotFoundException;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +29,11 @@ import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isCon
 import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, MongoDockerProcessExecutorHandlerTestConfiguration.class})
+@SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, BaseDockerProcessExecutorHandlerTestConfiguration.class})
 @IntegrationTest
-public class MongoDockerProcessExecutorHandlerTest extends Assert {
+public class BaseDockerProcessExecutorHandlerTest extends Assert {
+
+    static String TEST_IMAGE = "ajurasz/busybox:latest";
 
     @Autowired
     DockerClient docker;
@@ -38,7 +42,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
     DeployablesManager deployableManager;
 
     @Autowired
-    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler;
+    BaseDockerProcessExecutorHandler baseDockerProcessExecutorHandler;
 
     @Autowired
     StatusResolver statusResolver;
@@ -48,17 +52,36 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
     @Before
     public void before() {
         assumeTrue(isConnected(docker));
+
+        try {
+            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
+        } catch (NotFoundException e) {
+            // just ignore if not exist
+        }
+    }
+
+    @After
+    public void after() {
+        try {
+            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
+            if (descriptor.id() != null) {
+                docker.stopContainerCmd(descriptor.pid()).exec();
+                docker.removeContainerCmd(descriptor.pid()).withForce().exec();
+            }
+        } catch (NotFoundException e) {
+            // just ignore if not exist
+        }
     }
 
     @Test
-    public void shouldStartMongoProcess() {
+    public void shouldStartDockerProcess() {
         try {
             // Given
             deployableManager.clear();
-            descriptor = deployableManager.deploy("mongodb:docker");
+            descriptor = deployableManager.deploy("docker:" + TEST_IMAGE);
 
             // When
-            String pid = mongoDockerProcessExecutorHandler.start(descriptor.id());
+            String pid = baseDockerProcessExecutorHandler.start(descriptor.id());
             descriptor = descriptor.pid(pid);
 
             // Then
@@ -72,7 +95,7 @@ public class MongoDockerProcessExecutorHandlerTest extends Assert {
 }
 
 @SpringBootApplication
-class MongoDockerProcessExecutorHandlerTestConfiguration {
+class BaseDockerProcessExecutorHandlerTestConfiguration {
 
     @Autowired
     DockerClient docker;
@@ -84,8 +107,8 @@ class MongoDockerProcessExecutorHandlerTestConfiguration {
     }
 
     @Bean
-    MongoDockerProcessExecutorHandler mongoDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
-        return new MongoDockerProcessExecutorHandler(deployablesManager, docker);
+    BaseDockerProcessExecutorHandler baseDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
+        return new BaseDockerProcessExecutorHandler(deployablesManager, docker);
     }
 
     @Bean

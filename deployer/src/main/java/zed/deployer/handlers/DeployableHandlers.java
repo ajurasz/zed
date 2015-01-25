@@ -12,7 +12,7 @@ public final class DeployableHandlers {
     }
 
     public static List<DeployableHandler> allDeployableHandlers(File workspace, DockerClient docker) {
-        return ImmutableList.of(new FatJarMavenDeployableHandler(workspace), new MongoDbDockerDeployableHandler(docker));
+        return ImmutableList.of(new FatJarMavenDeployableHandler(workspace), new BaseDockerDeployableHandler(docker));
     }
 
 }
