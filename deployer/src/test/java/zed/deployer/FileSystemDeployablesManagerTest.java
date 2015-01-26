@@ -1,10 +1,7 @@
 package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,6 +32,8 @@ import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 @SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, FileSystemDeploymentManagerTestConfiguration.class})
 @IntegrationTest
 public class FileSystemDeployablesManagerTest extends Assert {
+
+    static String TEST_IMAGE = "ajurasz/busybox:latest";
 
     @Autowired
     DockerClient docker;
@@ -106,10 +105,10 @@ public class FileSystemDeployablesManagerTest extends Assert {
     }
 
     @Test
-    public void shouldWriteUriIntoDockerMongoDescriptor() throws IOException {
+    public void shouldWriteUriIntoDockerDescriptor() throws IOException {
         // When
         assumeTrue(isConnected(docker));
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
+        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();
@@ -118,12 +117,12 @@ public class FileSystemDeployablesManagerTest extends Assert {
     }
 
     @Test
-    public void shouldWriteIdIntoDockerMongoDescriptor() throws IOException {
+    public void shouldWriteIdIntoDockerDescriptor() throws IOException {
         // Given
         assumeTrue(isConnected(docker));
 
         // When
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("mongodb:docker:dockerfile/mongodb");
+        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();

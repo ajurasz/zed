@@ -4,33 +4,22 @@ import com.github.dockerjava.api.DockerClient;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 
-public class MongoDockerProcessExecutorHandler implements ProcessExecutorHandler {
+public class MongoDockerProcessExecutorHandler extends BaseDockerProcessExecutorHandler {
 
-    private final DeployablesManager deployableManager;
-
-    private final DockerClient docker;
+    private static final String URI_PREFIX = "mongodb:docker";
+    private static final String MONGO_IMAGE = "dockerfile/mongodb";
 
     public MongoDockerProcessExecutorHandler(DeployablesManager deployableManager, DockerClient docker) {
-        this.deployableManager = deployableManager;
-        this.docker = docker;
+        super(deployableManager, docker);
     }
 
     @Override
     public boolean supports(String uri) {
-        return uri.startsWith("mongodb:docker");
+        return uri.startsWith(URI_PREFIX);
     }
 
     @Override
-    public String start(String deploymentId) {
-        try {
-            String pid = docker.createContainerCmd("dockerfile/mongodb").exec().getId();
-            docker.startContainerCmd(pid).exec();
-            DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
-            deployableManager.update(descriptor.pid(pid));
-            return pid;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    protected String getImageName(DeploymentDescriptor descriptor) {
+        return MONGO_IMAGE;
     }
-
 }

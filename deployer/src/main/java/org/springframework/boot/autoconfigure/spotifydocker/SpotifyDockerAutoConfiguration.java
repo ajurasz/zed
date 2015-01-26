@@ -16,7 +16,7 @@ public class SpotifyDockerAutoConfiguration {
     @Bean
     public DockerClient docker(SpotifyDockerProperties dockerProperties) {
         DockerClientConfig.DockerClientConfigBuilder config = DockerClientConfig.createDefaultConfigBuilder();
-        config.withVersion("1.14");
+        config.withVersion(dockerProperties.getVersion());
         if (dockerProperties.getUri() != null) {
             config.withUri(dockerProperties.getUri());
         }
