@@ -1,8 +1,7 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.NotFoundException;
-import org.junit.After;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,25 +46,6 @@ public class DefaultProcessExecutorTest extends Assert {
     @Before
     public void before() {
         assumeTrue(isConnected(docker));
-
-        try {
-            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
-        } catch (NotFoundException e) {
-            // just ignore if not exist
-        }
-    }
-
-    @After
-    public void after() {
-        try {
-            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
-            if (pid != null) {
-                docker.stopContainerCmd(pid).exec();
-                docker.removeContainerCmd(pid).withForce().exec();
-            }
-        } catch (NotFoundException e) {
-            // just ignore if not exist
-        }
     }
 
     @Test
@@ -82,7 +62,30 @@ public class DefaultProcessExecutorTest extends Assert {
         } finally {
             if (pid != null) {
                 docker.stopContainerCmd(pid).exec();
-                docker.removeContainerCmd(pid);
+                docker.removeContainerCmd(pid).withForce().exec();
+            }
+        }
+    }
+
+    @Test
+    public void shouldSupportDockerMongo() {
+        try {
+            // Given
+            DeploymentDescriptor descriptor = deployableManager.deploy("mongodb:docker");
+
+            // When
+            pid = defaultProcessExecutor.start(descriptor.id());
+
+            // Then
+            assertNotNull(pid);
+            if (StringUtils.isNotEmpty(pid)) {
+                assertTrue(docker.inspectContainerCmd(pid).exec().getState().isRunning());
+                assertTrue(docker.inspectContainerCmd(pid).exec().getConfig().getImage().contains("dockerfile/mongodb"));
+            }
+        } finally {
+            if (pid != null) {
+                docker.stopContainerCmd(pid).exec();
+                docker.removeContainerCmd(pid).withForce().exec();
             }
         }
     }

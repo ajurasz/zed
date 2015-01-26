@@ -22,12 +22,16 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
         return uri.startsWith(URI_PREFIX);
     }
 
+    protected String getImageName(DeploymentDescriptor descriptor) {
+        return descriptor.uri().substring(URI_PREFIX.length());
+    }
+
     @Override
     public String start(String deploymentId) {
         try {
             DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
 
-            String pid = docker.createContainerCmd(descriptor.uri().substring(URI_PREFIX.length())).exec().getId();
+            String pid = docker.createContainerCmd(getImageName(descriptor)).exec().getId();
             docker.startContainerCmd(pid).exec();
 
             deployableManager.update(descriptor.pid(pid));

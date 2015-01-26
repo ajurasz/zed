@@ -1,8 +1,6 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.NotFoundException;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,25 +50,6 @@ public class BaseDockerProcessExecutorHandlerTest extends Assert {
     @Before
     public void before() {
         assumeTrue(isConnected(docker));
-
-        try {
-            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
-        } catch (NotFoundException e) {
-            // just ignore if not exist
-        }
-    }
-
-    @After
-    public void after() {
-        try {
-            docker.removeImageCmd(TEST_IMAGE).withForce().exec();
-            if (descriptor.id() != null) {
-                docker.stopContainerCmd(descriptor.pid()).exec();
-                docker.removeContainerCmd(descriptor.pid()).withForce().exec();
-            }
-        } catch (NotFoundException e) {
-            // just ignore if not exist
-        }
     }
 
     @Test
@@ -88,6 +67,7 @@ public class BaseDockerProcessExecutorHandlerTest extends Assert {
             assertTrue(statusResolver.status(descriptor.id()));
         } finally {
             docker.stopContainerCmd(descriptor.pid()).exec();
+            docker.removeContainerCmd(descriptor.pid()).withForce().exec();
             assertFalse(statusResolver.status(descriptor.id()));
         }
     }

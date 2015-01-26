@@ -2,12 +2,10 @@ package zed.deployer.handlers;
 
 import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.LineIterator;
 import zed.deployer.manager.DeploymentDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 
 public class BaseDockerDeployableHandler implements DeployableHandler {
 
@@ -17,6 +15,10 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
 
     public BaseDockerDeployableHandler(DockerClient docker) {
         this.docker = docker;
+    }
+
+    protected DockerClient docker() {
+        return this.docker;
     }
 
     @Override
@@ -41,25 +43,11 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         asString(inputStream);
     }
 
-    protected String asString(InputStream response)  {
-
-        StringWriter logwriter = new StringWriter();
-
+    protected String asString(InputStream inputStream) {
         try {
-            LineIterator itr = IOUtils.lineIterator(
-                    response, "UTF-8");
-
-            while (itr.hasNext()) {
-                String line = itr.next();
-                logwriter.write(line + (itr.hasNext() ? "\n" : ""));
-            }
-            response.close();
-
-            return logwriter.toString();
+            return IOUtils.toString(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            IOUtils.closeQuietly(response);
         }
     }
 }

@@ -41,4 +41,9 @@ public class DeployerAutoConfiguration {
         return new FatJarLocalProcessExecutionHandler(zedHome, deployablesManager);
     }
 
+    @Bean
+    ProcessExecutorHandler mongodbDockerProcessExecutorHandler(DeployablesManager deployablesManager) {
+        return new MongoDockerProcessExecutorHandler(deployablesManager, dockerClient);
+    }
+
 }
