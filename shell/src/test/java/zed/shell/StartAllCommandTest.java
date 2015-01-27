@@ -32,7 +32,7 @@ public class StartAllCommandTest extends Assert {
     public void shouldStartDeployedService() {
         // Given
         ssh.printCommand("deploy_clean");
-        ssh.printCommand("deploy fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/0.0.9/war");
+        ssh.printCommand("deploy fatjar:mvn:com.github.zed-platform/zed-shell/0.0.9/war");
 
         // When
         ssh.printCommand("deploy_start_all");

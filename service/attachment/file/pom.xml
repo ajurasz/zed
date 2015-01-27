@@ -35,7 +35,7 @@
         <!-- Service -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-document-mongo</artifactId>
+            <artifactId>zed-service-document-mongodb</artifactId>
             <classifier>classes</classifier>
         </dependency>
 

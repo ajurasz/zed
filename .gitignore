@@ -10,3 +10,6 @@ target/
 
 # Mock Server
 mockserver*.log
+
+# AMQ integration tests
+KahaDB/

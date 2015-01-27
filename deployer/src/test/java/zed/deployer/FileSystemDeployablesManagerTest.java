@@ -1,7 +1,10 @@
 package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -60,10 +63,10 @@ public class FileSystemDeployablesManagerTest extends Assert {
     @Test
     public void shouldDeployFatWar() {
         // When
-        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-service-document-mongo/0.0.6/war");
+        deploymentManager.deploy("fatjar:mvn:com.github.zed-platform/zed-shell/0.0.6/war");
 
         // Then
-        assertTrue(Arrays.asList(deploymentManager.workspace().list()).contains("zed-service-document-mongo-0.0.6.war"));
+        assertTrue(Arrays.asList(deploymentManager.workspace().list()).contains("zed-shell-0.0.6.war"));
     }
 
     @Ignore("This test is not release-friendly.")
