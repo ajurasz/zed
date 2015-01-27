@@ -1,0 +1,2 @@
+deploy_clean
+deploy fatjar:mvn:com.github.zed-platform/zed-shell/0.0.13/war
