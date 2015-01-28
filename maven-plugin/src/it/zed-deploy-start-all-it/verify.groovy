@@ -1,11 +1,7 @@
 import java.io.*
-import java.lang.*
 
-def found=false
-new File(basedir, "build.log").eachLine {
-    line ->
-        if (line.contains("has been started with PID")) {
-            found=true
-        }
+def expectedOutputLine = new File(basedir, "build.log").readLines().find {
+    it.contains("has been started with PID")
 }
-assert found:"Process was not started."
+assert expectedOutputLine != null
+
