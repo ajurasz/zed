@@ -19,6 +19,7 @@
         <module>shell</module>
         <module>maven-plugin</module>
         <module>service</module>
+        <module>panel</module>
     </modules>
 
     <properties>
