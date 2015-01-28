@@ -35,5 +35,3 @@ dump_output
 
 # nicely terminate the ping output loop
 kill $PING_LOOP_PID
-
-echo Travis CI build complete!
