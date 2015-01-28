@@ -12,12 +12,6 @@
 
     <artifactId>zed-service-sdk-base</artifactId>
 
-    <name>${project.artifactId}</name>
-    <description>A application used as an example on how to set up pushing
-        its components to the Central Repository.
-    </description>
-    <url>http://www.example.com/example-application</url>
-
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
