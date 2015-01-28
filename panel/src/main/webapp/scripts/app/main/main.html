@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <h1 translate="main.title">Welcome, Java Hipster!</h1>
 
-            <p class="lead" translate="main.subtitle">This is your homepage</p>
+            <p class="lead" translate="main.subtitle">Services</p>
 
             <div ng-switch="isAuthenticated()">
                 <div class="alert alert-success" ng-switch-when="true"
@@ -24,20 +24,24 @@
                 </div>
             </div>
 
-            <p translate="main.question">
-                If you have any question on JHipster:
+            <p>
+                Collections:
             </p>
 
             <ul>
-                <li><a href="http://jhipster.github.io/" target="_blank" translate="main.link.homepage">JHipster
-                    homepage</a></li>
-                <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank"
-                       translate="main.link.stackoverflow">JHipster on Stack Overflow</a></li>
-                <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank"
-                       translate="main.link.bugtracker">JHipster bug tracker</a></li>
-                <li><a href="https://twitter.com/java_hipster" target="_blank" translate="main.link.contact">contact
-                    @java_hipster on Twitter</a></li>
+                <div data-ng-repeat="collection in collections">
+                    <li><a ng-click="details(collection)" href="#/">{{collection}}</a></li>
+                </div>
             </ul>
+
+            <p>
+
+            <div class="alert alert-success">
+                {{flash}}
+            </div>
+
+            Count: {{collectionCount}}
+            </p>
 
             <p>
                 <span translate="main.like">If you like JHipster, don't forget to give us a star on </span>&nbsp;<a
