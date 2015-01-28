@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.zed-platform</groupId>
         <artifactId>zed-service-attachment</artifactId>
+        <groupId>com.github.zed-platform</groupId>
         <version>0.0.14-SNAPSHOT</version>
     </parent>
 
@@ -18,18 +18,13 @@
     </description>
     <url>http://www.example.com/example-application</url>
 
-
     <dependencies>
-        <!-- Language -->
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
 
-        <!-- Utils -->
+        <!-- Testing -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-utils</artifactId>
+            <artifactId>zed-service-attachment-sdk</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- Service -->
@@ -39,16 +34,20 @@
             <classifier>classes</classifier>
         </dependency>
 
-        <!-- Testing -->
+        <!-- Utils -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-attachment-sdk</artifactId>
-            <scope>test</scope>
+            <artifactId>zed-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- Language -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,27 +59,13 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>zed.service.attachment.file.FileAttachmentServiceBoot</mainClass>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerId>groovy-eclipse-compiler</compilerId>
-                </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-compiler-api</artifactId>
-                        <version>2.4</version>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>2.3.7-01</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
@@ -88,17 +73,31 @@
                         <version>2.9.1-01</version>
                     </dependency>
                     <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>2.3.7-01</version>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-compiler-api</artifactId>
+                        <version>2.4</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-eclipse-compiler</artifactId>
                 <version>2.9.1-01</version>
                 <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>zed.service.attachment.file.FileAttachmentServiceBoot</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

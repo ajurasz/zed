@@ -8,12 +8,49 @@
     <version>0.0.14-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <!-- Maven Central metadata -->
+
+    <name>${project.artifactId}</name>
+    <description>Backend as a Service (BaaS) platform</description>
+    <url>https://github.com/hekonsek/zed</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Henryk Konsek</name>
+            <email>hekonsek@gmail.com</email>
+            <organization>Red Hat</organization>
+            <organizationUrl>http://redhat.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
+        <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>git@github.com:hekonsek/zed</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <!-- Settings & dependencies -->
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
 
         <activemq.version>5.10.0</activemq.version>
         <awaitility.version>1.6.3</awaitility.version>
@@ -21,47 +58,35 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>3.3.2</commons.lang.version>
         <docker-java.version>0.10.4</docker-java.version>
+        <ekstazi.version>4.5.0</ekstazi.version>
         <embedmongo.version>1.46.4</embedmongo.version>
+        <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
-        <maven.version>3.0.5</maven.version>
-        <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
-        <zed.version>0.0.14-SNAPSHOT</zed.version>
 
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
-        <ekstazi.version>4.5.0</ekstazi.version>
-        <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
+        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.version>3.2</maven.compiler.version>
         <maven.javadoc.version>2.10.1</maven.javadoc.version>
-        <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+        <maven.version>3.0.5</maven.version>
         <plexus-compiler-api.version>2.4</plexus-compiler-api.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
+        <zed.version>0.0.14-SNAPSHOT</zed.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- BOMs -->
+
+            <!-- 3rd parties dependencies -->
 
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-parent</artifactId>
-                <version>${camel.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.activemq</groupId>
-                <artifactId>activemq-parent</artifactId>
-                <version>${activemq.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.github.docker-java</groupId>
+                <artifactId>docker-java</artifactId>
+                <version>${docker-java.version}</version>
             </dependency>
 
             <!-- Zed's dependencies -->
@@ -106,21 +131,13 @@
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-shell</artifactId>
-                <type>war</type>
                 <version>${zed.version}</version>
+                <type>war</type>
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-utils</artifactId>
                 <version>${zed.version}</version>
-            </dependency>
-
-            <!-- 3rd parties dependencies -->
-
-            <dependency>
-                <groupId>com.github.docker-java</groupId>
-                <artifactId>docker-java</artifactId>
-                <version>${docker-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -148,29 +165,46 @@
                 <version>${embedmongo.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-parent</artifactId>
+                <version>${activemq.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang.version}</version>
             </dependency>
+            <!-- BOMs -->
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>pahoRepository</id>
+            <url>https://repo.eclipse.org/content/repositories/paho-releases</url>
+        </repository>
+    </repositories>
 
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.servicemix.tooling</groupId>
-                    <artifactId>depends-maven-plugin</artifactId>
-                    <version>1.2</version>
-                    <executions>
-                        <execution>
-                            <id>generate-depends-file</id>
-                            <goals>
-                                <goal>generate-depends-file</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
                 <plugin>
                     <groupId>com.google.code.sortpom</groupId>
                     <artifactId>maven-sortpom-plugin</artifactId>
@@ -197,14 +231,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven.compiler.version}</version>
-                    <configuration>
-                        <compilerId>groovy-eclipse-compiler</compilerId>
-                    </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>org.codehaus.plexus</groupId>
-                            <artifactId>plexus-compiler-api</artifactId>
-                            <version>${plexus-compiler-api.version}</version>
+                            <groupId>org.codehaus.groovy</groupId>
+                            <artifactId>groovy-eclipse-batch</artifactId>
+                            <version>2.3.7-01</version>
                         </dependency>
                         <dependency>
                             <groupId>org.codehaus.groovy</groupId>
@@ -212,11 +243,14 @@
                             <version>${groovy-eclipse-compiler.version}</version>
                         </dependency>
                         <dependency>
-                            <groupId>org.codehaus.groovy</groupId>
-                            <artifactId>groovy-eclipse-batch</artifactId>
-                            <version>2.3.7-01</version>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-compiler-api</artifactId>
+                            <version>${plexus-compiler-api.version}</version>
                         </dependency>
                     </dependencies>
+                    <configuration>
+                        <compilerId>groovy-eclipse-compiler</compilerId>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -227,6 +261,34 @@
                             <id>attach-javadocs</id>
                             <goals>
                                 <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                        <attachClasses>true</attachClasses>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.servicemix.tooling</groupId>
+                    <artifactId>depends-maven-plugin</artifactId>
+                    <version>1.2</version>
+                    <executions>
+                        <execution>
+                            <id>generate-depends-file</id>
+                            <goals>
+                                <goal>generate-depends-file</goal>
                             </goals>
                         </execution>
                     </executions>
@@ -249,21 +311,6 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${maven-war-plugin.version}</version>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                        <attachClasses>true</attachClasses>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven-surefire-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.jolokia</groupId>
@@ -299,6 +346,20 @@
 
         <plugins>
             <plugin>
+                <groupId>com.google.code.sortpom</groupId>
+                <artifactId>maven-sortpom-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
@@ -320,16 +381,6 @@
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
@@ -358,52 +409,5 @@
             </build>
         </profile>
     </profiles>
-
-    <repositories>
-        <repository>
-            <id>pahoRepository</id>
-            <url>https://repo.eclipse.org/content/repositories/paho-releases</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
-    <!-- Maven Central metadata -->
-
-    <name>${project.artifactId}</name>
-    <description>Backend as a Service (BaaS) platform</description>
-    <url>https://github.com/hekonsek/zed</url>
-
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Henryk Konsek</name>
-            <email>hekonsek@gmail.com</email>
-            <organization>Red Hat</organization>
-            <organizationUrl>http://redhat.com</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
-        <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
-        <url>git@github.com:hekonsek/zed</url>
-        <tag>HEAD</tag>
-    </scm>
 
 </project>
