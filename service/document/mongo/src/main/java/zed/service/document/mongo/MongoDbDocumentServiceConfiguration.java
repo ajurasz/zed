@@ -8,16 +8,21 @@ import org.apache.camel.RoutesBuilder;
 import org.apache.camel.component.swagger.spring.SpringRestSwaggerApiDeclarationServlet;
 import org.apache.camel.spring.SpringCamelContext;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@SpringBootApplication
 public class MongoDbDocumentServiceConfiguration {
 
     // TODO Migrate to camel-spring-boot when Camel 2.15.0 is out -
@@ -60,6 +65,28 @@ public class MongoDbDocumentServiceConfiguration {
         swaggerServlet.setLoadOnStartup(2);
         swaggerServlet.addUrlMappings("/api/contract/*");
         return swaggerServlet;
+    }
+
+    @Bean
+    Filter corsFilter() {
+        return new Filter() {
+
+            public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+                HttpServletResponse response = (HttpServletResponse) res;
+                response.setHeader("Access-Control-Allow-Origin", "*");
+                response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+                response.setHeader("Access-Control-Max-Age", "3600");
+                response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+                chain.doFilter(req, res);
+            }
+
+            public void init(FilterConfig filterConfig) {
+            }
+
+            public void destroy() {
+            }
+
+        };
     }
 
 }
