@@ -3,7 +3,6 @@ package zed.service.document.mongo.routing;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,32 +14,44 @@ import static org.apache.camel.component.mongodb.MongoDbConstants.COLLECTION;
 import static org.apache.camel.component.mongodb.MongoDbConstants.LIMIT;
 import static org.apache.camel.component.mongodb.MongoDbConstants.NUM_TO_SKIP;
 import static org.apache.camel.component.mongodb.MongoDbConstants.SORT_BY;
+import static org.apache.camel.model.rest.RestBindingMode.auto;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapBsonToJson;
 import static zed.service.document.mongo.bson.BsonMapperProcessor.mapJsonToBson;
 import static zed.service.document.mongo.query.MongoDbSortConditionExpression.sortCondition;
 import static zed.service.document.mongo.query.MongoQueryBuilderProcessor.queryBuilder;
 
 @Component
-public class RestGatewayRoute extends RouteBuilder {
+public class DocumentServiceRestApiRoutes extends RouteBuilder {
+
+    // Configuration members
 
     private final String documentsDbName;
 
     private final int restPort;
 
+    private final boolean enableCors;
+
+    // Constructors
+
     @Autowired
-    public RestGatewayRoute(
+    public DocumentServiceRestApiRoutes(
             @Value("${zed.service.document.mongo.db:zed_service_document}") String documentsDbName,
-            @Value("${zed.service.api.port:15001}") int restPort) {
+            @Value("${zed.service.api.port:15001}") int restPort,
+            @Value("${zed.service.api.cors:true}") boolean enableCors) {
         this.documentsDbName = documentsDbName;
         this.restPort = restPort;
+        this.enableCors = enableCors;
     }
+
+    // Routes
 
     @Override
     public void configure() throws Exception {
 
         // REST API facade
 
-        restConfiguration().component("netty-http").host("0.0.0.0").port(restPort).bindingMode(RestBindingMode.auto);
+        restConfiguration().component("netty-http").
+                host("0.0.0.0").port(restPort).bindingMode(auto).enableCORS(enableCors);
 
         rest("/api/document").
                 post("/save/{collection}").type(Object.class).route().
@@ -129,6 +140,8 @@ public class RestGatewayRoute extends RouteBuilder {
                 process(mapBsonToJson());
 
     }
+
+    // Helpers
 
     private String baseMongoDbEndpoint() {
         // TODO:CAMEL Collection should not be required for dynamic endpoints
