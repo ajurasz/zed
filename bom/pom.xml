@@ -28,6 +28,7 @@
         <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
         <zed.version>0.0.14-SNAPSHOT</zed.version>
 
+        <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
         <ekstazi.version>4.5.0</ekstazi.version>
         <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
         <maven.compiler.version>3.2</maven.compiler.version>
@@ -157,6 +158,41 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.servicemix.tooling</groupId>
+                    <artifactId>depends-maven-plugin</artifactId>
+                    <version>1.2</version>
+                    <executions>
+                        <execution>
+                            <id>generate-depends-file</id>
+                            <goals>
+                                <goal>generate-depends-file</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.code.sortpom</groupId>
+                    <artifactId>maven-sortpom-plugin</artifactId>
+                    <version>${maven-sortpom-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sort</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <sortProperties>true</sortProperties>
+                        <nrOfIndentSpace>4</nrOfIndentSpace>
+                        <sortDependencies>groupId,artifactId</sortDependencies>
+                        <sortPlugins>groupId,artifactId</sortPlugins>
+                        <keepBlankLines>true</keepBlankLines>
+                        <expandEmptyElements>false</expandEmptyElements>
+                        <createBackupFile>false</createBackupFile>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
