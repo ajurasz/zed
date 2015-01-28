@@ -1,4 +1,4 @@
 language: java
-install: mvn install
+install: mvn install >> build.log 2>&1; cat build.log
 jdk:
   - oraclejdk8
