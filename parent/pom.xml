@@ -6,7 +6,7 @@
     <parent>
         <artifactId>zed-bom</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.16-SNAPSHOT</version>
+        <version>0.0.16</version>
         <relativePath>../bom</relativePath>
     </parent>
 
