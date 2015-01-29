@@ -5,13 +5,13 @@
     <parent>
         <artifactId>zed-parent</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.14</version>
+        <version>0.0.15-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
     <groupId>zed.panel</groupId>
     <artifactId>zedpanel</artifactId>
-    <version>0.0.14</version>
+    <version>0.0.15-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>zedpanel</name>
