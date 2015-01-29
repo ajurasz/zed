@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.zed-platform</groupId>
-    <version>0.0.15</version>
+    <version>0.0.16-SNAPSHOT</version>
     <artifactId>zed</artifactId>
     <packaging>pom</packaging>
 
@@ -54,7 +54,7 @@
         <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
         <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
         <url>git@github.com:hekonsek/zed</url>
-        <tag>zed-0.0.15</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>

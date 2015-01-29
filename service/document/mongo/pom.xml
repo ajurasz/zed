@@ -6,7 +6,7 @@
     <parent>
         <artifactId>zed-service-document</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.15</version>
+        <version>0.0.16-SNAPSHOT</version>
     </parent>
 
     <artifactId>zed-service-document-mongodb</artifactId>
