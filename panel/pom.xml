@@ -63,6 +63,17 @@
             <artifactId>jackson-datatype-json-org</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP-agent</artifactId>
+            <version>${HikariCP.version}</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-utils</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -131,17 +142,6 @@
                     <groupId>com.sun</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
