@@ -9,12 +9,8 @@
         <relativePath>../parent</relativePath>
     </parent>
 
-    <groupId>zed.panel</groupId>
     <artifactId>zedpanel</artifactId>
-    <version>0.0.16-SNAPSHOT</version>
     <packaging>war</packaging>
-
-    <name>zedpanel</name>
 
     <prerequisites>
         <maven>3.0.0</maven>
@@ -23,8 +19,6 @@
     <properties>
         <HikariCP.version>2.2.5</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version>
-        <commons-io.version>2.4</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
 
         <dropwizard-metrics.version>3.1.0</dropwizard-metrics.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
@@ -146,14 +140,8 @@
         </dependency>
         -->
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
