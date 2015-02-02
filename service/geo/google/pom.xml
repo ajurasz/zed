@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>zed-service-document</artifactId>
+        <artifactId>zed-service-geo</artifactId>
         <groupId>com.github.zed-platform</groupId>
         <version>0.0.17-SNAPSHOT</version>
     </parent>
 
-    <artifactId>zed-service-document-mongodb</artifactId>
+    <artifactId>zed-service-geo-google</artifactId>
     <packaging>war</packaging>
 
-    <name>${project.artifactId}</name>
-
     <dependencies>
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-camel</artifactId>
+            <version>0.0.17-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-service-geo-sdk</artifactId>
+            <version>0.0.17-SNAPSHOT</version>
+        </dependency>
+
         <!-- Utils -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-utils</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.1.4</version>
         </dependency>
 
         <!-- Service -->
@@ -32,7 +43,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-mongodb</artifactId>
+            <artifactId>camel-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -53,11 +64,6 @@
             <artifactId>jolokia-core</artifactId>
         </dependency>
 
-        <!-- SQL cross store -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
@@ -65,22 +71,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-        </dependency>
-
-        <!-- Testing -->
-        <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-document-sdk</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,6 +92,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>zed.service.geo.google.GoogleGeoServiceConfiguration</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>

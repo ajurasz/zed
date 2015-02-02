@@ -4,3 +4,5 @@
 15003   attachment service REST API
 15004   shell HTTP operation endpoints
 15005   shell SSH port
+15006   geo service HTTP operation endpoints
+15007   geo service REST API

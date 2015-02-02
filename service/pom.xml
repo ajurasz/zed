@@ -16,6 +16,7 @@
     <modules>
         <module>sdk-base</module>
         <module>document</module>
+        <module>geo</module>
         <module>attachment</module>
         <module>messagestore</module>
     </modules>

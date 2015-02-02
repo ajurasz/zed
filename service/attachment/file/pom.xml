@@ -14,13 +14,6 @@
 
     <dependencies>
 
-        <!-- Testing -->
-        <dependency>
-            <groupId>com.github.zed-platform</groupId>
-            <artifactId>zed-service-attachment-sdk</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <!-- Service -->
         <dependency>
             <groupId>com.github.zed-platform</groupId>
@@ -33,15 +26,22 @@
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-utils</artifactId>
         </dependency>
-        <dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>
         <!-- Language -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-service-attachment-sdk</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -127,6 +127,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.zed-platform</groupId>
+                <artifactId>zed-rest-client</artifactId>
+                <version>${zed.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.zed-platform</groupId>
                 <artifactId>zed-service-attachment-file</artifactId>
                 <version>${zed.version}</version>
                 <classifier>classes</classifier>
@@ -222,7 +227,7 @@
                     <configuration>
                         <sortProperties>true</sortProperties>
                         <nrOfIndentSpace>4</nrOfIndentSpace>
-                        <sortDependencies>groupId,artifactId</sortDependencies>
+                        <sortDependencies>scope,groupId,artifactId</sortDependencies>
                         <sortPlugins>groupId,artifactId</sortPlugins>
                         <keepBlankLines>true</keepBlankLines>
                         <expandEmptyElements>false</expandEmptyElements>
