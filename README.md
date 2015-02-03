@@ -1,7 +1,8 @@
 Zed - IoT Backend as a Service (BaaS) platform
 ===
 
-Zed is **Backend as a Service (BaaS)** platform providing **Internet Of Things (IoT)** application enablement.
+Zed is **Backend as a Service (BaaS)** platform providing instant **Internet Of Things (IoT)** applications development
+enablement.
 
 ### Zed architecture
 
@@ -13,7 +14,8 @@ applications. No enterprise system exists in the isolation, so Zed comes with th
 [Apache Camel](http://camel.apache.org/) based integration framework to provide smooth integration with the other
 enterprise systems.
 
-Your application deployed into the Zed platform can immediately communicate with the *Internet Of Things*.
+Armed with base backend services and with the powerful integration framework, your application deployed into the Zed
+platform can immediately communicate with the *Internet Of Things*.
 
 ### DevOps friendly
 
