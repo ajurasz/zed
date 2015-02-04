@@ -5,6 +5,8 @@ import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.DockerClientConfig.DockerClientConfigBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ import static com.google.common.collect.Sets.newConcurrentHashSet;
 import static java.lang.Runtime.getRuntime;
 
 public class DockerTester {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DockerTester.class);
 
     private final DockerClient docker;
 
@@ -63,11 +67,15 @@ public class DockerTester {
         }
     }
 
-    private void registerShutdown(String containerId) {
+    public void registerShutdown(String containerId) {
         getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                DockerTester.this.stop(containerId);
+                try {
+                    DockerTester.this.stop(containerId);
+                } catch (IllegalStateException e) {
+                    LOG.info("Container {} is not running: {}", containerId, e.getMessage());
+                }
             }
         });
     }

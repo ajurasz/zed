@@ -21,6 +21,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

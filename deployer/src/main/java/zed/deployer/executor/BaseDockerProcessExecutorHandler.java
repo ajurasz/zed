@@ -1,6 +1,10 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerCmd;
+import com.github.dockerjava.api.command.StartContainerCmd;
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.PortBinding;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 
@@ -22,17 +26,25 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
         return uri.startsWith(URI_PREFIX);
     }
 
-    protected String getImageName(DeploymentDescriptor descriptor) {
-        return descriptor.uri().substring(URI_PREFIX.length());
-    }
-
     @Override
     public String start(String deploymentId) {
         try {
             DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
 
-            String pid = docker.createContainerCmd(getImageName(descriptor)).exec().getId();
-            docker.startContainerCmd(pid).exec();
+            CreateContainerCmd createContainer = docker.createContainerCmd(getImageName(descriptor));
+            if (name(descriptor) != null) {
+                createContainer.withName(name(descriptor));
+            }
+            String pid = createContainer.exec().getId();
+
+            StartContainerCmd startContainer = docker.startContainerCmd(pid);
+            if (portToExpose(descriptor) != null) {
+                startContainer.withPortBindings(PortBinding.parse(portToExpose(descriptor) + ":" + portToExpose(descriptor)));
+            }
+            if (volume(descriptor) != null) {
+                startContainer.withBinds(Bind.parse(volume(descriptor)));
+            }
+            startContainer.exec();
 
             deployableManager.update(descriptor.pid(pid));
             return pid;
@@ -41,4 +53,21 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
 
         }
     }
+
+    protected String getImageName(DeploymentDescriptor descriptor) {
+        return descriptor.uri().substring(URI_PREFIX.length());
+    }
+
+    protected String name(DeploymentDescriptor deploymentDescriptor) {
+        return null;
+    }
+
+    protected Integer portToExpose(DeploymentDescriptor deploymentDescriptor) {
+        return null;
+    }
+
+    protected String volume(DeploymentDescriptor deploymentDescriptor) {
+        return null;
+    }
+
 }

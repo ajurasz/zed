@@ -1,5 +1,6 @@
 package zed.dockerunit;
 
+import com.github.dockerjava.api.DockerClient;
 import org.junit.AfterClass;
 import org.junit.Assert;
 
@@ -28,9 +29,13 @@ public abstract class BaseDockerTest extends Assert {
     }
 
     @AfterClass
-    public static void afterClass() throws IOException {
+    public static void afterBaseDockerTest() throws IOException {
         dockerTester.stopAll();
         dockerTester.docker().close();
+    }
+
+    protected DockerClient docker() {
+        return dockerTester.docker();
     }
 
 }

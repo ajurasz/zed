@@ -1,9 +1,8 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +17,23 @@ import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 import zed.deployer.manager.ZedHome;
+import zed.dockerunit.BaseDockerTest;
 
 import java.io.File;
 
 import static com.google.common.io.Files.createTempDir;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.junit.Assume.assumeTrue;
 import static org.springframework.boot.autoconfigure.spotifydocker.Dockers.isConnected;
+import static zed.dockerunit.VolumeDockerInspectMatcher.hasVolume;
+import static zed.dockerunit.VolumeDockerInspectMatcher.volumeBinds;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {SpotifyDockerAutoConfiguration.class, DefaultProcessExecutorTestConfiguration.class})
 @IntegrationTest
-public class DefaultProcessExecutorTest extends Assert {
+public class DefaultProcessExecutorTest extends BaseDockerTest {
 
     static String TEST_IMAGE = "ajurasz/busybox:latest";
-
-    @Autowired
-    DockerClient docker;
 
     @Autowired
     DeployablesManager deployableManager;
@@ -43,9 +43,14 @@ public class DefaultProcessExecutorTest extends Assert {
 
     String pid;
 
+    @BeforeClass
+    public static void beforeClass() {
+        initializeDocker();
+    }
+
     @Before
     public void before() {
-        assumeTrue(isConnected(docker));
+        assumeTrue(isConnected(dockerTester.docker()));
     }
 
     @Test
@@ -61,31 +66,31 @@ public class DefaultProcessExecutorTest extends Assert {
             assertNotNull(pid);
         } finally {
             if (pid != null) {
-                docker.stopContainerCmd(pid).exec();
-                docker.removeContainerCmd(pid).withForce().exec();
+                docker().stopContainerCmd(pid).exec();
+                docker().removeContainerCmd(pid).withForce().exec();
             }
         }
     }
 
     @Test
-    public void shouldSupportDockerMongo() {
+    public void shouldRunDefaultDockerizedMongo() {
         try {
             // Given
             DeploymentDescriptor descriptor = deployableManager.deploy("mongodb:docker");
 
             // When
             pid = defaultProcessExecutor.start(descriptor.id());
+            dockerTester.registerShutdown(pid);
 
             // Then
-            assertNotNull(pid);
-            if (StringUtils.isNotEmpty(pid)) {
-                assertTrue(docker.inspectContainerCmd(pid).exec().getState().isRunning());
-                assertTrue(docker.inspectContainerCmd(pid).exec().getConfig().getImage().contains("dockerfile/mongodb"));
-            }
+            assertTrue(isNotEmpty(pid));
+            assertTrue(docker().inspectContainerCmd(pid).exec().getState().isRunning());
+            assertTrue(docker().inspectContainerCmd(pid).exec().getConfig().getImage().contains("dockerfile/mongodb"));
+            assertThat(volumeBinds(docker(), pid), hasVolume("/data/db", "/var/zed/mongodb/default"));
         } finally {
             if (pid != null) {
-                docker.stopContainerCmd(pid).exec();
-                docker.removeContainerCmd(pid).withForce().exec();
+                docker().stopContainerCmd(pid).exec();
+                docker().removeContainerCmd(pid).withForce().exec();
             }
         }
     }
