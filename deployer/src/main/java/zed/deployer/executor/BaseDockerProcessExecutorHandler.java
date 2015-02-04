@@ -1,12 +1,17 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerCmd;
 import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.PortBinding;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.DeploymentDescriptor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler {
 
@@ -31,11 +36,18 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
         try {
             DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
 
-            CreateContainerCmd createContainer = docker.createContainerCmd(getImageName(descriptor));
+            String pid;
             if (name(descriptor) != null) {
-                createContainer.withName(name(descriptor));
+                List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
+                containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(descriptor))).collect(Collectors.toList());
+                if (containers.size() == 0) {
+                    pid = docker.createContainerCmd(getImageName(descriptor)).withName(name(descriptor)).exec().getId();
+                } else {
+                    pid = containers.get(0).getId();
+                }
+            } else {
+                pid = docker.createContainerCmd(getImageName(descriptor)).exec().getId();
             }
-            String pid = createContainer.exec().getId();
 
             StartContainerCmd startContainer = docker.startContainerCmd(pid);
             if (portToExpose(descriptor) != null) {
