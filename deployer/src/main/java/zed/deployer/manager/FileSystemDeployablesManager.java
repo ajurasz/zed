@@ -30,9 +30,9 @@ public class FileSystemDeployablesManager implements DeployablesManager {
     }
 
     @Override
-    public DeploymentDescriptor deploy(String uri) {
+    public DeployableDescriptor deploy(String uri) {
         String id = UUID.randomUUID().toString();
-        BasicDeploymentDescriptor deploymentDescriptor = new BasicDeploymentDescriptor(workspace.getName(), id, uri);
+        BasicDeployableDescriptor deploymentDescriptor = new BasicDeployableDescriptor(workspace.getName(), id, uri);
         for (DeployableHandler deployHandler : deployHandlers) {
             if (deployHandler.supports(uri)) {
                 deployHandler.deploy(deploymentDescriptor);
@@ -44,20 +44,20 @@ public class FileSystemDeployablesManager implements DeployablesManager {
     }
 
     @Override
-    public DeploymentDescriptor update(DeploymentDescriptor pid) {
-        BasicDeploymentDescriptor basicDescriptor = (BasicDeploymentDescriptor) pid;
-        basicDescriptor.save(new File(workspace, pid.id() + ".deploy"));
+    public DeployableDescriptor update(DeployableDescriptor descriptor) {
+        BasicDeployableDescriptor basicDescriptor = (BasicDeployableDescriptor) descriptor;
+        basicDescriptor.save(new File(workspace, descriptor.id() + ".deploy"));
         return basicDescriptor;
     }
 
     @Override
-    public DeploymentDescriptor deployment(String deploymentId) {
-        List<DeploymentDescriptor> deploymentDescriptors = list().parallelStream().filter(descriptor -> descriptor.id().equals(deploymentId)).collect(Collectors.toList());
-        return new BasicDeploymentDescriptor(workspace.getName(), deploymentId, deploymentDescriptors.get(0).uri(), deploymentDescriptors.get(0).pid());
+    public DeployableDescriptor deployment(String deployableId) {
+        List<DeployableDescriptor> deployableDescriptors = list().parallelStream().filter(descriptor -> descriptor.id().equals(deployableId)).collect(Collectors.toList());
+        return new BasicDeployableDescriptor(workspace.getName(), deployableId, deployableDescriptors.get(0).uri(), deployableDescriptors.get(0).pid());
     }
 
     @Override
-    public List<DeploymentDescriptor> list() {
+    public List<DeployableDescriptor> list() {
         return newArrayList(workspace.listFiles((dir, name) -> name.endsWith(".deploy"))).
                 parallelStream().map(file -> {
             try {
@@ -65,7 +65,7 @@ public class FileSystemDeployablesManager implements DeployablesManager {
                 props.load(new FileInputStream(file));
                 String pid = props.getProperty("pid");
                 String uri = props.getProperty("uri");
-                return new BasicDeploymentDescriptor(workspace.getName(), file.getName().replaceAll(".deploy", ""), uri, pid);
+                return new BasicDeployableDescriptor(workspace.getName(), file.getName().replaceAll(".deploy", ""), uri, pid);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

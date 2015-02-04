@@ -1,6 +1,6 @@
 package zed.deployer;
 
-import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.DeployableDescriptor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,8 +15,8 @@ public class ProcessUriStatusResolver implements UriStatusResolver {
     }
 
     @Override
-    public boolean status(DeploymentDescriptor deploymentDescriptor) {
-        String pid = deploymentDescriptor.pid();
+    public boolean status(DeployableDescriptor deployableDescriptor) {
+        String pid = deployableDescriptor.pid();
         if (pid == null) {
             return false;
         }

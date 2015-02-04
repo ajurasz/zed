@@ -2,7 +2,7 @@ package zed.deployer.handlers;
 
 import com.github.dockerjava.api.DockerClient;
 import org.apache.commons.io.IOUtils;
-import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.DeployableDescriptor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +27,10 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
     }
 
     @Override
-    public void deploy(DeploymentDescriptor deploymentDescriptor) {
-        String[] dockerUri = deploymentDescriptor.uri().split(":");
+    public void deploy(DeployableDescriptor deployableDescriptor) {
+        String[] dockerUri = deployableDescriptor.uri().split(":");
         if (dockerUri.length < 2) {
-            throw new IllegalArgumentException(deploymentDescriptor.uri() + " is not a valid docker deploy URI. Proper URI format is docker:imagerepoprefix/image[:tag] .");
+            throw new IllegalArgumentException(deployableDescriptor.uri() + " is not a valid docker deploy URI. Proper URI format is docker:imagerepoprefix/image[:tag] .");
         }
 
         InputStream inputStream = null;

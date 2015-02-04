@@ -1,7 +1,7 @@
 package zed.deployer.handlers;
 
 import com.github.dockerjava.api.DockerClient;
-import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.DeployableDescriptor;
 
 public class MongoDbDockerDeployableHandler extends BaseDockerDeployableHandler {
 
@@ -18,7 +18,7 @@ public class MongoDbDockerDeployableHandler extends BaseDockerDeployableHandler 
     }
 
     @Override
-    public void deploy(DeploymentDescriptor deploymentDescriptor) {
+    public void deploy(DeployableDescriptor deployableDescriptor) {
         asString(docker().pullImageCmd(MONGO_IMAGE).exec());
     }
 }

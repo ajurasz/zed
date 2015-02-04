@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class BasicDeploymentDescriptor implements DeploymentDescriptor {
+public class BasicDeployableDescriptor implements DeployableDescriptor {
 
     private final String workspace;
 
@@ -15,14 +15,14 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
 
     private final String pid;
 
-    public BasicDeploymentDescriptor(String workspace, String id, String uri, String pid) {
+    public BasicDeployableDescriptor(String workspace, String id, String uri, String pid) {
         this.workspace = workspace;
         this.id = id;
         this.uri = uri;
         this.pid = pid;
     }
 
-    public BasicDeploymentDescriptor(String workspace, String id, String uri) {
+    public BasicDeployableDescriptor(String workspace, String id, String uri) {
         this(workspace, id, uri, null);
     }
 
@@ -47,8 +47,8 @@ public class BasicDeploymentDescriptor implements DeploymentDescriptor {
     }
 
     @Override
-    public BasicDeploymentDescriptor pid(String pid) {
-        return new BasicDeploymentDescriptor(workspace, id, uri, pid);
+    public BasicDeployableDescriptor pid(String pid) {
+        return new BasicDeployableDescriptor(workspace, id, uri, pid);
     }
 
     @Override

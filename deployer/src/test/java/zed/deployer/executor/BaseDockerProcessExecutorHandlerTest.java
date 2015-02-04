@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.DefaultStatusResolver;
 import zed.deployer.StatusResolver;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 import zed.deployer.manager.ZedHome;
 
@@ -45,7 +45,7 @@ public class BaseDockerProcessExecutorHandlerTest extends Assert {
     @Autowired
     StatusResolver statusResolver;
 
-    DeploymentDescriptor descriptor;
+    DeployableDescriptor descriptor;
 
     @Before
     public void before() {

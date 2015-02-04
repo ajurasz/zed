@@ -1,7 +1,7 @@
 package zed.deployer.executor;
 
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.ZedHome;
 import zed.utils.Reflections;
 
@@ -26,14 +26,14 @@ public class FatJarLocalProcessExecutionHandler implements ProcessExecutorHandle
 
     @Override
     public String start(String deploymentId) {
-        DeploymentDescriptor deploymentDescriptor = deployablesManager.deployment(deploymentId);
+        DeployableDescriptor deployableDescriptor = deployablesManager.deployment(deploymentId);
 
-        String name = deploymentDescriptor.uri();
+        String name = deployableDescriptor.uri();
         name = name.substring(name.indexOf('/') + 1);
         name = name.replaceFirst("/", "-");
         name = name.replace('/', '.');
 
-        File toRun = new File(new File(zedHome.deployDirectory(), deploymentDescriptor.workspace()), name);
+        File toRun = new File(new File(zedHome.deployDirectory(), deployableDescriptor.workspace()), name);
         try {
             Process process = Runtime.getRuntime().exec(new String[]{"java", "-Dzed.deployable.id=" + deploymentId, "-jar", toRun.getAbsolutePath()});
             int pid = Reflections.readField(process, "pid", Integer.class);

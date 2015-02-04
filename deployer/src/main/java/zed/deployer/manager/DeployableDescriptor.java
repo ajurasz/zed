@@ -1,6 +1,6 @@
 package zed.deployer.manager;
 
-public interface DeploymentDescriptor {
+public interface DeployableDescriptor {
 
     String workspace();
 
@@ -10,6 +10,6 @@ public interface DeploymentDescriptor {
 
     String pid();
 
-    DeploymentDescriptor pid(String pid);
+    DeployableDescriptor pid(String pid);
 
 }

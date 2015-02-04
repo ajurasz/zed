@@ -13,8 +13,8 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 import zed.deployer.manager.ZedHome;
 import zed.utils.Mavens;
@@ -85,21 +85,21 @@ public class FileSystemDeployablesManagerTest extends Assert {
     @Test
     public void shouldWriteUriIntoFatJarMavenDescriptor() throws IOException {
         // When
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+        DeployableDescriptor deployableDescriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
-        assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+        assertEquals(deployableDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
     @Test
     public void shouldListDeploymentDescriptors() {
         // Given
-        DeploymentDescriptor descriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
+        DeployableDescriptor descriptor = deploymentManager.deploy("fatjar:mvn:com.google.guava/guava/18.0");
 
         // When
-        List<DeploymentDescriptor> descriptors = deploymentManager.list();
+        List<DeployableDescriptor> descriptors = deploymentManager.list();
 
         // Then
         assertEquals(1, descriptors.size());
@@ -111,12 +111,12 @@ public class FileSystemDeployablesManagerTest extends Assert {
     public void shouldWriteUriIntoDockerDescriptor() throws IOException {
         // When
         assumeTrue(isConnected(docker));
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
+        DeployableDescriptor deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
-        assertEquals(deploymentDescriptor.uri(), savedDescriptor.getProperty("uri"));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+        assertEquals(deployableDescriptor.uri(), savedDescriptor.getProperty("uri"));
     }
 
     @Test
@@ -125,12 +125,12 @@ public class FileSystemDeployablesManagerTest extends Assert {
         assumeTrue(isConnected(docker));
 
         // When
-        DeploymentDescriptor deploymentDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
+        DeployableDescriptor deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
         // Then
         Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deploymentDescriptor.id() + ".deploy")));
-        assertEquals(deploymentDescriptor.id(), savedDescriptor.getProperty("id"));
+        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+        assertEquals(deployableDescriptor.id(), savedDescriptor.getProperty("id"));
     }
 
 }

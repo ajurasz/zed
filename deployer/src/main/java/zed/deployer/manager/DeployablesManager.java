@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface DeployablesManager {
 
-    DeploymentDescriptor deploy(String uri);
+    DeployableDescriptor deploy(String uri);
 
-    DeploymentDescriptor update(DeploymentDescriptor pid);
+    DeployableDescriptor update(DeployableDescriptor descriptor);
 
-    DeploymentDescriptor deployment(String deploymentId);
+    DeployableDescriptor deployment(String deployableId);
 
-    List<DeploymentDescriptor> list();
+    List<DeployableDescriptor> list();
 
     void clear();
 

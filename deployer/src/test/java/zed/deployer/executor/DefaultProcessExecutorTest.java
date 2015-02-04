@@ -13,8 +13,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import zed.deployer.handlers.DeployableHandlers;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 import zed.deployer.manager.FileSystemDeployablesManager;
 import zed.deployer.manager.ZedHome;
 import zed.dockerunit.BaseDockerTest;
@@ -57,7 +57,7 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
     public void shouldSupportDocker() {
         try {
             // Given
-            DeploymentDescriptor descriptor = deployableManager.deploy("docker:" + TEST_IMAGE);
+            DeployableDescriptor descriptor = deployableManager.deploy("docker:" + TEST_IMAGE);
 
             // When
             pid = defaultProcessExecutor.start(descriptor.id());
@@ -76,7 +76,7 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
     public void shouldRunDefaultDockerizedMongo() {
         try {
             // Given
-            DeploymentDescriptor descriptor = deployableManager.deploy("mongodb:docker");
+            DeployableDescriptor descriptor = deployableManager.deploy("mongodb:docker");
 
             // When
             pid = defaultProcessExecutor.start(descriptor.id());

@@ -5,8 +5,8 @@ import com.github.dockerjava.api.command.StartContainerCmd;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.PortBinding;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
     @Override
     public String start(String deploymentId) {
         try {
-            DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
+            DeployableDescriptor descriptor = deployableManager.deployment(deploymentId);
 
             String pid;
             if (name(descriptor) != null) {
@@ -66,19 +66,19 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
         }
     }
 
-    protected String getImageName(DeploymentDescriptor descriptor) {
+    protected String getImageName(DeployableDescriptor descriptor) {
         return descriptor.uri().substring(URI_PREFIX.length());
     }
 
-    protected String name(DeploymentDescriptor deploymentDescriptor) {
+    protected String name(DeployableDescriptor deployableDescriptor) {
         return null;
     }
 
-    protected Integer portToExpose(DeploymentDescriptor deploymentDescriptor) {
+    protected Integer portToExpose(DeployableDescriptor deployableDescriptor) {
         return null;
     }
 
-    protected String volume(DeploymentDescriptor deploymentDescriptor) {
+    protected String volume(DeployableDescriptor deployableDescriptor) {
         return null;
     }
 

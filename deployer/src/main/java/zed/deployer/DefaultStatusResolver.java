@@ -1,8 +1,8 @@
 package zed.deployer;
 
 import com.github.dockerjava.api.DockerClient;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ public class DefaultStatusResolver implements StatusResolver {
 
     @Override
     public boolean status(String deploymentId) {
-        DeploymentDescriptor descriptor = deployableManager.deployment(deploymentId);
+        DeployableDescriptor descriptor = deployableManager.deployment(deploymentId);
         for (UriStatusResolver uriStatusResolver : statusResolvers) {
             if (uriStatusResolver.support(descriptor.uri())) {
                 return uriStatusResolver.status(descriptor);

@@ -1,8 +1,8 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
-import zed.deployer.manager.DeploymentDescriptor;
 
 public class MongoDockerProcessExecutorHandler extends BaseDockerProcessExecutorHandler {
 
@@ -22,22 +22,22 @@ public class MongoDockerProcessExecutorHandler extends BaseDockerProcessExecutor
     // Container configuration
 
     @Override
-    protected String getImageName(DeploymentDescriptor descriptor) {
+    protected String getImageName(DeployableDescriptor descriptor) {
         return MONGO_IMAGE;
     }
 
     @Override
-    protected String name(DeploymentDescriptor deploymentDescriptor) {
+    protected String name(DeployableDescriptor deployableDescriptor) {
         return "mongodb";
     }
 
     @Override
-    protected Integer portToExpose(DeploymentDescriptor deploymentDescriptor) {
+    protected Integer portToExpose(DeployableDescriptor deployableDescriptor) {
         return 28017;
     }
 
     @Override
-    protected String volume(DeploymentDescriptor deploymentDescriptor) {
+    protected String volume(DeployableDescriptor deployableDescriptor) {
         return "/var/zed/mongodb/default:/data/db";
     }
 

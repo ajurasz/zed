@@ -1,7 +1,7 @@
 package zed.deployer.handlers;
 
 import org.apache.commons.io.IOUtils;
-import zed.deployer.manager.DeploymentDescriptor;
+import zed.deployer.manager.DeployableDescriptor;
 import zed.mavenrepo.JcabiMavenArtifactResolver;
 import zed.mavenrepo.MavenArtifactResolver;
 
@@ -33,9 +33,9 @@ public class FatJarMavenDeployableHandler implements DeployableHandler {
     }
 
     @Override
-    public void deploy(DeploymentDescriptor deploymentDescriptor) {
+    public void deploy(DeployableDescriptor deployableDescriptor) {
         try {
-            String mavenCoordinatesUri = deploymentDescriptor.uri().substring(URI_PREFIX.length());
+            String mavenCoordinatesUri = deployableDescriptor.uri().substring(URI_PREFIX.length());
             String[] mavenCoordinates = mavenCoordinatesUri.split("/");
             if (mavenCoordinates.length < 3) {
                 throw new IllegalArgumentException(mavenCoordinatesUri + " is not a valid Maven artifact URI. Proper URI format is fatjar:mvn:groupId/artifactId/version/[type] .");
