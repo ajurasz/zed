@@ -39,7 +39,7 @@ The command above will download MongoDB Document Service fat WAR into the `defau
 You can also run MongoDB Document Service using Docker image available in the
 [Docker Hub](https://registry.hub.docker.com/u/hekonsek/zed-service-document-mongodb):
 
-    docker run -t hekonsek/zed-service-document-mongodb:0.0.16
+    docker run 15000:15000 -p 15001:15001 -it hekonsek/zed-service-document-mongodb:0.0.16
 
 The command above pulls service image from the Docker Hub and starts MongoDB Document Service REST API on default port
 15001 (and Jolokia API on default port 15000).
