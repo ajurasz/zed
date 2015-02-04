@@ -95,6 +95,28 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
         }
     }
 
+    @Test
+    public void shouldStartDeployableOnce() {
+        try {
+            // Given
+            DeployableDescriptor descriptor = deployableManager.deploy("docker:" + TEST_IMAGE);
+            pid = defaultProcessExecutor.start(descriptor.id());
+
+            // Then
+            String pid2 = defaultProcessExecutor.start(descriptor.id());
+
+            // Then
+            assertNotNull(pid);
+            assertEquals(pid, pid2);
+            assertEquals(deployableManager.list().size(), 1);
+        } finally {
+            if (pid != null) {
+                docker().stopContainerCmd(pid).exec();
+                docker().removeContainerCmd(pid).withForce().exec();
+            }
+        }
+    }
+
 }
 
 @SpringBootApplication
