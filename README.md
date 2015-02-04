@@ -31,7 +31,7 @@ need enterprise-level support those components used in Zed - you can buy it from
 
 ### Reference documentation
 
-Reference documentation of the project can be found [here](https://github.com/hekonsek/zed/blob/master/docs/reference.MD).
+Reference documentation of the project can be found [here](https://github.com/hekonsek/zed/blob/master/docs/reference.md).
 
 ### Build status
 
