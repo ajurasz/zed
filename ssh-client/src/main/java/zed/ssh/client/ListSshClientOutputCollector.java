@@ -1,4 +1,4 @@
-package zed.shell;
+package zed.ssh.client;
 
 import com.google.common.collect.ImmutableList;
 

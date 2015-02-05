@@ -1,4 +1,4 @@
-package zed.shell;
+package zed.ssh.client;
 
 public class StdoutSshClientOutputCollector implements SshClientOutputCollector {
 

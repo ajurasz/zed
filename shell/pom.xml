@@ -18,6 +18,13 @@
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-deployer</artifactId>
         </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>com.github.zed-platform</groupId>
+            <artifactId>zed-ssh-client</artifactId>
+            <version>0.0.17-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-settings</artifactId>
@@ -41,19 +48,16 @@
             <version>3.0.17</version>
         </dependency>
         <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-remote-shell</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- Testing -->
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -3,7 +3,7 @@ package zed.shell;
 import com.github.dockerjava.api.DockerClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.spotifydocker.SpotifyDockerAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -17,7 +17,7 @@ import java.io.File;
 
 import static zed.deployer.handlers.DeployableHandlers.allDeployableHandlers;
 
-@EnableAutoConfiguration
+@SpringBootApplication
 @Import(SpotifyDockerAutoConfiguration.class)
 public class ShellConfiguration {
 

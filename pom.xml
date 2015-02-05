@@ -14,6 +14,7 @@
         <module>camel</module>
         <module>utils</module>
         <module>dockerunit</module>
+        <module>ssh-client</module>
         <module>rest-client</module>
         <module>deployer</module>
         <module>shell</module>
