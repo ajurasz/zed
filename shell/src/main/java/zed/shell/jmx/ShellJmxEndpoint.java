@@ -1,6 +1,6 @@
 package zed.shell.jmx;
 
-public interface ShellJmxBean {
+public interface ShellJmxEndpoint {
 
     String[] invokeCommand(String command);
 

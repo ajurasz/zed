@@ -8,26 +8,17 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
 import zed.ssh.client.SshClient;
 
-@ManagedResource(
-        objectName = "zed:name=zedShell",
-        description = "My Managed Bean",
-        log = true,
-        logFile = "jmx.log",
-        currencyTimeLimit = 15,
-        persistPolicy = "OnUpdate",
-        persistPeriod = 200,
-        persistLocation = "foo",
-        persistName = "bar")
 @Component
-public class DefaultShellJmxBean implements ShellJmxBean {
+@ManagedResource(objectName = "zed:name=zedShell", description = "Shell JMX endpoint.")
+public class SshShellJmxEndpoint implements ShellJmxEndpoint {
 
     @Value("${shell.ssh.port}")
     int port;
 
     @Override
-    @ManagedOperation(description = "Add two numbers")
+    @ManagedOperation(description = "Invoke shell command.")
     @ManagedOperationParameters({
-            @ManagedOperationParameter(name = "x", description = "The first number")})
+            @ManagedOperationParameter(name = "command", description = "Command to execute.")})
     public String[] invokeCommand(String command) {
         return new SshClient("localhost", port).command(command).toArray(new String[0]);
     }
