@@ -14,12 +14,12 @@ class deploy_start {
     def main(InvocationContext context, @Required @Argument String deploymentId) {
         ProcessExecutor processExecutor = context.getAttributes().get('spring.beanfactory').getBean(ProcessExecutor.class)
         DeployablesManager deployer = context.getAttributes().get('spring.beanfactory').getBean(DeployablesManager.class)
-        StatusResolver statusResolver = context.getAttributes().get('spring.beanfactory').getBean(StatusResolver.class)
-        if (statusResolver.status(deploymentId)) {
+        def pid = processExecutor.start(deploymentId)
+        if (pid.isPresent()) {
+            return "Deployment ${deploymentId} has been started with PID ${pid.get()}."
+        } else {
             return "Deployment ${deploymentId} is already running on PID ${deployer?.deployment(deploymentId)?.pid()}."
         }
-        def pid = processExecutor.start(deploymentId)
-        return "Deployment ${deploymentId} has been started with PID ${pid}."
     }
 
 }

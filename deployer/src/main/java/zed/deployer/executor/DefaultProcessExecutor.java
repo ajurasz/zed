@@ -5,6 +5,7 @@ import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DefaultProcessExecutor implements ProcessExecutor {
 
@@ -22,16 +23,16 @@ public class DefaultProcessExecutor implements ProcessExecutor {
     }
 
     @Override
-    public String start(String deploymentId) {
+    public Optional<String> start(String deploymentId) {
         DeployableDescriptor descriptor = deployableManager.deployment(deploymentId);
         for (ProcessExecutorHandler handler : handlers) {
             if (handler.supports(descriptor.uri())) {
                 if (statusResolver.status(deploymentId)) {
-                    return descriptor.pid();
+                    return Optional.empty();
                 }
                 String pid = handler.start(deploymentId);
                 deployableManager.update(descriptor.pid(pid));
-                return pid;
+                return Optional.of(pid);
             }
         }
         throw new RuntimeException("No executor handler for URI: " + descriptor.uri());

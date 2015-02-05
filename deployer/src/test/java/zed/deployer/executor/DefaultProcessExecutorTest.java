@@ -1,6 +1,7 @@
 package zed.deployer.executor;
 
 import com.github.dockerjava.api.DockerClient;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import zed.deployer.manager.ZedHome;
 import zed.dockerunit.BaseDockerTest;
 
 import java.io.File;
+import java.util.Optional;
 
 import static com.google.common.io.Files.createTempDir;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -41,7 +43,7 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
     @Autowired
     ProcessExecutor defaultProcessExecutor;
 
-    String pid;
+    Optional<String> pid;
 
     @BeforeClass
     public static void beforeClass() {
@@ -63,11 +65,11 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
             pid = defaultProcessExecutor.start(descriptor.id());
 
             // Then
-            assertNotNull(pid);
+            assertNotNull(pid.get());
         } finally {
             if (pid != null) {
-                docker().stopContainerCmd(pid).exec();
-                docker().removeContainerCmd(pid).withForce().exec();
+                docker().stopContainerCmd(pid.get()).exec();
+                docker().removeContainerCmd(pid.get()).withForce().exec();
             }
         }
     }
@@ -80,17 +82,17 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
 
             // When
             pid = defaultProcessExecutor.start(descriptor.id());
-            dockerTester.registerShutdown(pid);
+            dockerTester.registerShutdown(pid.get());
 
             // Then
-            assertTrue(isNotEmpty(pid));
-            assertTrue(docker().inspectContainerCmd(pid).exec().getState().isRunning());
-            assertTrue(docker().inspectContainerCmd(pid).exec().getConfig().getImage().contains("dockerfile/mongodb"));
-            assertThat(volumeBinds(docker(), pid), hasVolume("/data/db", "/var/zed/mongodb/default"));
+            assertTrue(isNotEmpty(pid.get()));
+            assertTrue(docker().inspectContainerCmd(pid.get()).exec().getState().isRunning());
+            assertTrue(docker().inspectContainerCmd(pid.get()).exec().getConfig().getImage().contains("dockerfile/mongodb"));
+            assertThat(volumeBinds(docker(), pid.get()), hasVolume("/data/db", "/var/zed/mongodb/default"));
         } finally {
-            if (pid != null) {
-                docker().stopContainerCmd(pid).exec();
-                docker().removeContainerCmd(pid).withForce().exec();
+            if (pid.isPresent() && StringUtils.isNotEmpty(pid.get())) {
+                docker().stopContainerCmd(pid.get()).exec();
+                docker().removeContainerCmd(pid.get()).withForce().exec();
             }
         }
     }
@@ -103,16 +105,16 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
             pid = defaultProcessExecutor.start(descriptor.id());
 
             // Then
-            String pid2 = defaultProcessExecutor.start(descriptor.id());
+            Optional<String> pid2 = defaultProcessExecutor.start(descriptor.id());
 
             // Then
-            assertNotNull(pid);
-            assertEquals(pid, pid2);
+            assertNotNull(pid.get());
+            assertFalse(pid2.isPresent());
             assertEquals(deployableManager.list().size(), 1);
         } finally {
             if (pid != null) {
-                docker().stopContainerCmd(pid).exec();
-                docker().removeContainerCmd(pid).withForce().exec();
+                docker().stopContainerCmd(pid.get()).exec();
+                docker().removeContainerCmd(pid.get()).withForce().exec();
             }
         }
     }
