@@ -402,6 +402,9 @@
     <profiles>
         <profile>
             <id>release</id>
+            <properties>
+                <arguments>-DskipTests</arguments>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
