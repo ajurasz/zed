@@ -2,9 +2,6 @@
 management.security.enabled: true
 security.basic.enabled: false
 
-# Disable Jolokia - An http/json bridge for remote JMX access
-endpoints.jolokia.enabled: false
-
 # security configuration (this key should be unique for your application, and kept secret)
 jhipster.security.rememberme.key: zedpanel
 

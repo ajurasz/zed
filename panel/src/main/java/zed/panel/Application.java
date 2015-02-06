@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Arrays;
 
-@ComponentScan
+@ComponentScan(basePackages = {"zed.panel", "zed.shell"})
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 public class Application {
 
