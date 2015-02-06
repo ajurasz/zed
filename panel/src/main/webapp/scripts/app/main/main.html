@@ -1,4 +1,4 @@
-<div ng-cloak>
+<div ng-cloak xmlns="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col-md-4">
             <span class="hipster img-responsive img-rounded"></span>
@@ -12,11 +12,18 @@
 
             <div ng-show="deployablesCount == 0">
                 Initialize your ThingsCloud instance! Select services to create:
-                <ul>
+                <p>
                     <div data-ng-repeat="service in availableServices">
-                        <li>{{service}}</li>
+                        <label>
+                            <input type="checkbox"
+                                   ng-checked="selection.indexOf(service) > -1" ng-click="selectService(service[0])"/>
+                            {{service[1]}}
+                        </label>
                     </div>
-                </ul>
+                </p>
+                <p>
+                    <input type="button" value="Initialize" ng-click="initialize()"/>
+                </p>
             </div>
 
             <div ng-show="flash" class="alert alert-warning">
