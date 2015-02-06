@@ -5,7 +5,7 @@
 
     <groupId>com.github.zed-platform</groupId>
     <artifactId>zed-bom</artifactId>
-    <version>0.0.17</version>
+    <version>0.0.18-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <!-- Maven Central metadata -->
@@ -33,7 +33,7 @@
     <scm>
         <connection>scm:git:git@github.com:hekonsek/zed.git</connection>
         <developerConnection>scm:git:git@github.com:hekonsek/zed.git</developerConnection>
-        <tag>zed-0.0.17</tag>
+        <tag>HEAD</tag>
         <url>git@github.com:hekonsek/zed</url>
     </scm>
 
@@ -75,7 +75,7 @@
         <plexus-compiler-api.version>2.4</plexus-compiler-api.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>1.2.1.RELEASE</spring.boot.version>
-        <zed.version>0.0.17</zed.version>
+        <zed.version>0.0.18-SNAPSHOT</zed.version>
     </properties>
 
     <dependencyManagement>

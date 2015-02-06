@@ -6,7 +6,7 @@
     <parent>
         <artifactId>zed-service-geo</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.17</version>
+        <version>0.0.18-SNAPSHOT</version>
     </parent>
 
     <artifactId>zed-service-geo-google</artifactId>
@@ -16,12 +16,12 @@
         <dependency>
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-camel</artifactId>
-            <version>0.0.17</version>
+            <version>0.0.18-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-service-geo-sdk</artifactId>
-            <version>0.0.17</version>
+            <version>0.0.18-SNAPSHOT</version>
         </dependency>
 
         <!-- Utils -->

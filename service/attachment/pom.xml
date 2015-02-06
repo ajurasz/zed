@@ -6,7 +6,7 @@
     <parent>
         <artifactId>zed-service</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.17</version>
+        <version>0.0.18-SNAPSHOT</version>
     </parent>
 
     <artifactId>zed-service-attachment</artifactId>
