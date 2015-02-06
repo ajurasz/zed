@@ -6,7 +6,7 @@
     <parent>
         <artifactId>zed-parent</artifactId>
         <groupId>com.github.zed-platform</groupId>
-        <version>0.0.17-SNAPSHOT</version>
+        <version>0.0.17</version>
         <relativePath>../parent</relativePath>
     </parent>
 
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.zed-platform</groupId>
             <artifactId>zed-ssh-client</artifactId>
-            <version>0.0.17-SNAPSHOT</version>
+            <version>0.0.17</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
