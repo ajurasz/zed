@@ -59,7 +59,7 @@
         <commons.lang.version>3.3.2</commons.lang.version>
         <docker-java.version>0.10.5</docker-java.version>
         <ekstazi.version>4.5.0</ekstazi.version>
-        <embedmongo.version>1.46.5</embedmongo.version>
+        <embedmongo.version>1.46.4</embedmongo.version>
         <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
         <guava.version>18.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
