@@ -1,7 +1,9 @@
 package zed.deployer.executor;
 
+import java.util.Optional;
+
 public interface ProcessExecutor {
 
-    String start(String deploymentId);
+    Optional<String> start(String deploymentId);
 
 }
