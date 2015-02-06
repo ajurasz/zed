@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import zed.deployer.StatusResolver;
 import zed.deployer.executor.*;
 import zed.deployer.manager.DeployablesManager;
 import zed.deployer.manager.LocalFileSystemZedHome;
@@ -27,8 +28,9 @@ public class DeployerAutoConfiguration {
     // Process executor
 
     @Bean
-    ProcessExecutor defaultProcessExecutor(DeployablesManager deployablesManager, ProcessExecutorHandler[] handlers) {
-        return new DefaultProcessExecutor(deployablesManager, asList(handlers));
+    ProcessExecutor defaultProcessExecutor(DeployablesManager deployablesManager, ProcessExecutorHandler[] handlers,
+                                           StatusResolver statusResolver) {
+        return new DefaultProcessExecutor(deployablesManager, asList(handlers), statusResolver);
     }
 
     @Bean
