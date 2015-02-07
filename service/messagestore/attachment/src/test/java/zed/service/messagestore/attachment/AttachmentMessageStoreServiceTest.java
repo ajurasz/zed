@@ -19,6 +19,7 @@ import zed.service.document.sdk.DocumentService;
 import zed.service.document.sdk.RestDocumentService;
 
 import static com.jayway.awaitility.Awaitility.await;
+import static java.lang.Boolean.TRUE;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,7 +35,8 @@ public class AttachmentMessageStoreServiceTest extends Assert {
     public static void beforeClass() {
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.api.port", restApiPort + "");
-        System.setProperty("spring.data.mongodb.host", "localhost");
+
+        System.setProperty("zed.service.document.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 

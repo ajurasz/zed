@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static java.lang.Boolean.TRUE;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -59,7 +60,8 @@ public class FileAttachmentServiceTest extends Assert {
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.attachment.file.path", storage.getAbsolutePath());
-        System.setProperty("spring.data.mongodb.host", "localhost");
+
+        System.setProperty("zed.service.document.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 

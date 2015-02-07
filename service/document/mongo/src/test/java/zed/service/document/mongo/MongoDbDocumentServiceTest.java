@@ -25,6 +25,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 
+import static java.lang.Boolean.TRUE;
 import static org.joda.time.DateTime.now;
 import static org.springframework.util.SocketUtils.findAvailableTcpPort;
 import static zed.service.document.mongo.crossstore.sql.Pojos.pojoClassToCollection;
@@ -48,7 +49,8 @@ public class MongoDbDocumentServiceTest extends Assert {
     public static void beforeClass() {
         System.setProperty("server.port", findAvailableTcpPort() + "");
         System.setProperty("zed.service.api.port", findAvailableTcpPort() + "");
-        System.setProperty("spring.data.mongodb.host", "localhost");
+
+        System.setProperty("zed.service.document.mongodb.springbootconfig", TRUE.toString());
         System.setProperty("spring.data.mongodb.port", EmbedMongoConfiguration.port + "");
     }
 
