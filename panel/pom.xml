@@ -9,7 +9,7 @@
         <relativePath>../parent</relativePath>
     </parent>
 
-    <artifactId>zedpanel</artifactId>
+    <artifactId>zed-panel</artifactId>
     <packaging>war</packaging>
 
     <properties>
