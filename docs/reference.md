@@ -47,7 +47,7 @@ The command above pulls service image from the Docker Hub and starts MongoDB Doc
 ## Services dependencies
 
 Some of the services requires some non-service dependencies to run. For example
-[MongoDB Document Service](#MongoDB-Document-Service) requires MongoDB to connect to in order to work properly. This
+[MongoDB Document Service](#mongodb-document-service) requires MongoDB to connect to in order to work properly. This
 section describes some of the services dependencies that come with the Zed.
 
 ### MongoDB
