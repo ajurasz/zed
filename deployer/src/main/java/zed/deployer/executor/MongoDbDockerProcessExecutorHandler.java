@@ -4,13 +4,13 @@ import com.github.dockerjava.api.DockerClient;
 import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
 
-public class MongoDockerProcessExecutorHandler extends BaseDockerProcessExecutorHandler {
+public class MongoDbDockerProcessExecutorHandler extends BaseDockerProcessExecutorHandler {
 
     private static final String URI_PREFIX = "mongodb:docker";
 
     private static final String MONGO_IMAGE = "dockerfile/mongodb";
 
-    public MongoDockerProcessExecutorHandler(DeployablesManager deployableManager, DockerClient docker) {
+    public MongoDbDockerProcessExecutorHandler(DeployablesManager deployableManager, DockerClient docker) {
         super(deployableManager, docker);
     }
 

@@ -31,7 +31,7 @@ need enterprise-level support those components used in Zed - you can buy it from
 
 ### What's new in the latest Zed?
 
-Are you curious what's new in the latest release of Zed? Check out our [changelog](changelog.md).
+Are you curious what's new in the latest release of Zed? Check out our [changelog](https://github.com/hekonsek/zed/blob/master/docs/changelog.md).
 
 ### Reference documentation
 

@@ -43,3 +43,20 @@ You can also run MongoDB Document Service using Docker image available in the
 
 The command above pulls service image from the Docker Hub and starts MongoDB Document Service REST API on default port
 15001 (and Jolokia API on default port 15000).
+
+## Services dependencies
+
+Some of the services requires some non-service dependencies to run. For example
+[MongoDB Document Service](#MongoDB-Document-Service) requires MongoDB to connect to in order to work properly. This
+section describes some of the services dependencies that come with the Zed.
+
+### MongoDB
+
+We highly recommend running MongoDB as a dockerized container. In order to deploy new MongoDB instance use the following
+Zed shell command:
+
+    deploy mongodb:docker
+
+The above command will deploy dockerized MongoDB server. The name of the container is `mongodb` and it exposes port
+`28017` to the host machine. Data directory `/data/db` from the container is bound to the `var/zed/mongodb/default`
+directory on the host machine.
