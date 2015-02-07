@@ -29,6 +29,10 @@ The complexity of the IoT world cannot be handled without keeping the highest de
 Zed is based on the many of the upstream open-source projects supported by [Red Hat](http://www.redhat.com). If you
 need enterprise-level support those components used in Zed - you can buy it from Red Hat.
 
+### What's new in the latest Zed?
+
+Are you curious what's new in the latest release of Zed? Check out our [changelog](changelog.md).
+
 ### Reference documentation
 
 Reference documentation of the project can be found [here](https://github.com/hekonsek/zed/blob/master/docs/reference.md).
