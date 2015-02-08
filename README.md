@@ -29,6 +29,11 @@ The complexity of the IoT world cannot be handled without keeping the highest de
 Zed is based on the many of the upstream open-source projects supported by [Red Hat](http://www.redhat.com). If you
 need enterprise-level support those components used in Zed - you can buy it from Red Hat.
 
+### ThingsCloud
+
+ThingsCloud is the Zed distribution dedicated to be installed without additional custom development (i.e. in the pure
+cloud form). More details are available here - [here](https://github.com/hekonsek/zed/blob/master/docs/thingscloud.md).
+
 ### What's new in the latest Zed?
 
 Are you curious what's new in the latest release of Zed? Check out our [changelog](https://github.com/hekonsek/zed/blob/master/docs/changelog.md).
