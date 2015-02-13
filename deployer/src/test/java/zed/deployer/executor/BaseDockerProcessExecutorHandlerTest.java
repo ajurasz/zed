@@ -20,6 +20,7 @@ import zed.deployer.manager.FileSystemDeployablesManager;
 import zed.deployer.manager.ZedHome;
 
 import java.io.File;
+import java.util.Arrays;
 
 import static com.google.common.io.Files.createTempDir;
 import static org.junit.Assume.assumeTrue;
@@ -65,6 +66,30 @@ public class BaseDockerProcessExecutorHandlerTest extends Assert {
 
             // Then
             assertTrue(statusResolver.status(descriptor.id()));
+        } finally {
+            docker.stopContainerCmd(descriptor.pid()).exec();
+            docker.removeContainerCmd(descriptor.pid()).withForce().exec();
+            assertFalse(statusResolver.status(descriptor.id()));
+        }
+    }
+
+    @Test
+    public void shouldStartDockerProcessWithEnvironmentVariables() {
+        try {
+            // Given
+            deployableManager.clear();
+            descriptor = deployableManager.deploy("docker:" + TEST_IMAGE + "?e:foo=bar&e:baz=qux");
+
+            // When
+            String pid = baseDockerProcessExecutorHandler.start(descriptor.id());
+            descriptor = descriptor.pid(pid);
+
+            // Then
+           String envs[] = docker.inspectContainerCmd(pid).exec().getConfig().getEnv();
+
+            assertTrue(statusResolver.status(descriptor.id()));
+            assertTrue(Arrays.asList(envs).contains("foo=bar"));
+            assertTrue(Arrays.asList(envs).contains("baz=qux"));
         } finally {
             docker.stopContainerCmd(descriptor.pid()).exec();
             docker.removeContainerCmd(descriptor.pid()).withForce().exec();

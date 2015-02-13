@@ -110,7 +110,6 @@ public class DefaultProcessExecutorTest extends BaseDockerTest {
             // Then
             assertNotNull(pid.get());
             assertFalse(pid2.isPresent());
-            assertEquals(deployableManager.list().size(), 1);
         } finally {
             if (pid != null) {
                 docker().stopContainerCmd(pid.get()).exec();

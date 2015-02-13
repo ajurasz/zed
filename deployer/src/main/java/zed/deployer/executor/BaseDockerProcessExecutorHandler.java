@@ -7,6 +7,7 @@ import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.PortBinding;
 import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.manager.DeployablesManager;
+import zed.deployer.util.DockerUriUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,12 +42,12 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
                 List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
                 containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(descriptor))).collect(Collectors.toList());
                 if (containers.size() == 0) {
-                    pid = docker.createContainerCmd(getImageName(descriptor)).withName(name(descriptor)).exec().getId();
+                    pid = docker.createContainerCmd(getImageName(descriptor)).withName(name(descriptor)).withEnv(envVariables(descriptor)).exec().getId();
                 } else {
                     pid = containers.get(0).getId();
                 }
             } else {
-                pid = docker.createContainerCmd(getImageName(descriptor)).exec().getId();
+                pid = docker.createContainerCmd(getImageName(descriptor)).withEnv(envVariables(descriptor)).exec().getId();
             }
 
             StartContainerCmd startContainer = docker.startContainerCmd(pid);
@@ -67,7 +68,7 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
     }
 
     protected String getImageName(DeployableDescriptor descriptor) {
-        return descriptor.uri().substring(URI_PREFIX.length());
+        return DockerUriUtil.imageName(URI_PREFIX, descriptor.uri());
     }
 
     protected String name(DeployableDescriptor deployableDescriptor) {
@@ -80,6 +81,10 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
 
     protected String volume(DeployableDescriptor deployableDescriptor) {
         return null;
+    }
+
+    protected String[] envVariables(DeployableDescriptor deployableDescriptor) {
+        return DockerUriUtil.environmentVariables(deployableDescriptor.uri());
     }
 
 }
