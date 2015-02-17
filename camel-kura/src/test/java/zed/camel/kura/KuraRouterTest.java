@@ -49,7 +49,7 @@ public class KuraRouterTest extends Assert {
         mockEndpoint.expectedBodiesReceived(message);
 
         // When
-        router.camelContext.createProducerTemplate().sendBody("direct:start", message);
+        router.producerTemplate.sendBody("direct:start", message);
 
         // Then
         mockEndpoint.assertIsSatisfied();

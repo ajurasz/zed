@@ -1,6 +1,7 @@
 package zed.camel.kura;
 
 import org.apache.camel.CamelContext;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.core.osgi.OsgiDefaultCamelContext;
 import org.osgi.framework.BundleActivator;
@@ -10,28 +11,31 @@ import org.slf4j.LoggerFactory;
 
 public abstract class KuraRouter extends RouteBuilder implements BundleActivator {
 
-    protected final Logger LOG = LoggerFactory.getLogger(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected BundleContext bundleContext;
 
     protected CamelContext camelContext;
 
+    protected ProducerTemplate producerTemplate;
+
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
-        LOG.debug("Initializing bundle {}.", bundleContext.getBundle().getBundleId());
+        log.debug("Initializing bundle {}.", bundleContext.getBundle().getBundleId());
         camelContext = createCamelContext();
         camelContext.addRoutes(this);
         beforeStart(camelContext);
         camelContext.start();
-        LOG.debug("Bundle {} started.", bundleContext.getBundle().getBundleId());
+        producerTemplate = camelContext.createProducerTemplate();
+        log.debug("Bundle {} started.", bundleContext.getBundle().getBundleId());
     }
 
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
-        LOG.debug("Stopping bundle {}.", bundleContext.getBundle().getBundleId());
+        log.debug("Stopping bundle {}.", bundleContext.getBundle().getBundleId());
         camelContext.stop();
-        LOG.debug("Bundle {} stopped.", bundleContext.getBundle().getBundleId());
+        log.debug("Bundle {} stopped.", bundleContext.getBundle().getBundleId());
     }
 
     // Callbacks
@@ -41,7 +45,7 @@ public abstract class KuraRouter extends RouteBuilder implements BundleActivator
     }
 
     protected void beforeStart(CamelContext camelContext) {
-        LOG.debug("Empty KuraRouter CamelContext before start configuration - skipping.");
+        log.debug("Empty KuraRouter CamelContext before start configuration - skipping.");
     }
 
 }
