@@ -48,4 +48,10 @@ public abstract class KuraRouter extends RouteBuilder implements BundleActivator
         log.debug("Empty KuraRouter CamelContext before start configuration - skipping.");
     }
 
+    // API Helpers
+
+    <T> T service(Class<T> serviceType) {
+        return bundleContext.getService(bundleContext.getServiceReference(serviceType));
+    }
+
 }
