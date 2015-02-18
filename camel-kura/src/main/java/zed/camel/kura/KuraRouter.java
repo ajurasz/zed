@@ -50,7 +50,7 @@ public abstract class KuraRouter extends RouteBuilder implements BundleActivator
 
     // API Helpers
 
-    <T> T service(Class<T> serviceType) {
+    protected <T> T service(Class<T> serviceType) {
         return bundleContext.getService(bundleContext.getServiceReference(serviceType));
     }
 
