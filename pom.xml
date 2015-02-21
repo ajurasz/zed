@@ -12,6 +12,7 @@
         <module>bom</module>
         <module>parent</module>
         <module>camel</module>
+        <module>camel-rpi-benchmark</module>
         <module>utils</module>
         <module>dockerunit</module>
         <module>ssh-client</module>
