@@ -1,12 +1,17 @@
 package zed.deployer.handlers;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
 import org.apache.commons.io.IOUtils;
 import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.util.DockerUriUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 public class BaseDockerDeployableHandler implements DeployableHandler {
 
@@ -38,6 +43,21 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         }
 
         asString(inputStream);
+
+        String pid;
+        if (name(deployableDescriptor) != null) {
+            List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
+            containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(deployableDescriptor))).collect(Collectors.toList());
+            if (containers.size() == 0) {
+                pid = docker.createContainerCmd(getImageName(deployableDescriptor)).withName(name(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId();
+            } else {
+                pid = containers.get(0).getId();
+            }
+        } else {
+            pid = docker.createContainerCmd(getImageName(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId();
+        }
+
+        //deployableManager.update(deployableDescriptor.pid(pid));
     }
 
     protected String asString(InputStream inputStream) {
@@ -46,5 +66,17 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String getImageName(DeployableDescriptor descriptor) {
+        return DockerUriUtil.imageName(URI_PREFIX, descriptor.uri());
+    }
+
+    protected String name(DeployableDescriptor deployableDescriptor) {
+        return null;
+    }
+
+    protected String[] envVariables(DeployableDescriptor deployableDescriptor) {
+        return DockerUriUtil.environmentVariables(deployableDescriptor.uri());
     }
 }
