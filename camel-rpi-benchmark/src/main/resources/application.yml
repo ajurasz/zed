@@ -1,0 +1,4 @@
+spring:
+  activemq.broker-url=vm://localhost
+
+zed.service.api.port: 9900
