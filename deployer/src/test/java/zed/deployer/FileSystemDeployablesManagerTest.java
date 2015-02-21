@@ -111,9 +111,12 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
     @Test
     public void shouldWriteUriIntoDockerDescriptor() throws IOException {
+
+        // Given
+        assumeTrue(isConnected(docker));
+
         try {
             // When
-            assumeTrue(isConnected(docker));
             deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
             // Then
@@ -129,10 +132,11 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
     @Test
     public void shouldWriteIdIntoDockerDescriptor() throws IOException {
-        try {
-            // Given
-            assumeTrue(isConnected(docker));
 
+        // Given
+        assumeTrue(isConnected(docker));
+
+        try {
             // When
             deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
@@ -149,10 +153,11 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
     @Test
     public void shouldUpdateDockerPidDuringDeploy() throws IOException {
-        try {
-            // Given
-            assumeTrue(isConnected(docker));
 
+        // Given
+        assumeTrue(isConnected(docker));
+
+        try {
             // When
             deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
