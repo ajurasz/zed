@@ -8,8 +8,6 @@ public class MongoDbDockerProcessExecutorHandler extends BaseDockerProcessExecut
 
     private static final String URI_PREFIX = "mongodb:docker";
 
-    private static final String MONGO_IMAGE = "dockerfile/mongodb";
-
     public MongoDbDockerProcessExecutorHandler(DeployablesManager deployableManager, DockerClient docker) {
         super(deployableManager, docker);
     }
@@ -20,16 +18,6 @@ public class MongoDbDockerProcessExecutorHandler extends BaseDockerProcessExecut
     }
 
     // Container configuration
-
-    @Override
-    protected String getImageName(DeployableDescriptor descriptor) {
-        return MONGO_IMAGE;
-    }
-
-    @Override
-    protected String name(DeployableDescriptor deployableDescriptor) {
-        return "mongodb";
-    }
 
     @Override
     protected Integer portToExpose(DeployableDescriptor deployableDescriptor) {

@@ -44,6 +44,8 @@ public class FileSystemDeployablesManagerTest extends Assert {
     @Autowired
     FileSystemDeployablesManager deploymentManager;
 
+    DeployableDescriptor deployableDescriptor;
+
     @Before
     public void before() {
         deploymentManager.clear();
@@ -109,28 +111,61 @@ public class FileSystemDeployablesManagerTest extends Assert {
 
     @Test
     public void shouldWriteUriIntoDockerDescriptor() throws IOException {
-        // When
-        assumeTrue(isConnected(docker));
-        DeployableDescriptor deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
+        try {
+            // When
+            assumeTrue(isConnected(docker));
+            deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
-        // Then
-        Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
-        assertEquals(deployableDescriptor.uri(), savedDescriptor.getProperty("uri"));
+            // Then
+            Properties savedDescriptor = new Properties();
+            savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+            assertEquals(deployableDescriptor.uri(), savedDescriptor.getProperty("uri"));
+        } finally {
+            if (deployableDescriptor.pid() != null) {
+                docker.removeContainerCmd(deployableDescriptor.pid()).withForce().exec();
+            }
+        }
     }
 
     @Test
     public void shouldWriteIdIntoDockerDescriptor() throws IOException {
-        // Given
-        assumeTrue(isConnected(docker));
+        try {
+            // Given
+            assumeTrue(isConnected(docker));
 
-        // When
-        DeployableDescriptor deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
+            // When
+            deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
 
-        // Then
-        Properties savedDescriptor = new Properties();
-        savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
-        assertEquals(deployableDescriptor.id(), savedDescriptor.getProperty("id"));
+            // Then
+            Properties savedDescriptor = new Properties();
+            savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+            assertEquals(deployableDescriptor.id(), savedDescriptor.getProperty("id"));
+        } finally {
+            if (deployableDescriptor.pid() != null) {
+                docker.removeContainerCmd(deployableDescriptor.pid()).withForce().exec();
+            }
+        }
+    }
+
+    @Test
+    public void shouldUpdateDockerPidDuringDeploy() throws IOException {
+        try {
+            // Given
+            assumeTrue(isConnected(docker));
+
+            // When
+            deployableDescriptor = deploymentManager.deploy("docker:" + TEST_IMAGE);
+
+            // Then
+            Properties savedDescriptor = new Properties();
+            savedDescriptor.load(new FileInputStream(new File(deploymentManager.workspace(), deployableDescriptor.id() + ".deploy")));
+            assertEquals(deployableDescriptor.id(), savedDescriptor.getProperty("id"));
+            assertNotNull(deployableDescriptor.pid());
+        } finally {
+            if (deployableDescriptor.pid() != null) {
+                docker.removeContainerCmd(deployableDescriptor.pid()).withForce().exec();
+            }
+        }
     }
 
 }

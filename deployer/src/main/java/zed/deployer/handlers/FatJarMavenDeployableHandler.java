@@ -33,7 +33,7 @@ public class FatJarMavenDeployableHandler implements DeployableHandler {
     }
 
     @Override
-    public void deploy(DeployableDescriptor deployableDescriptor) {
+    public DeployableDescriptor deploy(DeployableDescriptor deployableDescriptor) {
         try {
             String mavenCoordinatesUri = deployableDescriptor.uri().substring(URI_PREFIX.length());
             String[] mavenCoordinates = mavenCoordinatesUri.split("/");
@@ -44,6 +44,7 @@ public class FatJarMavenDeployableHandler implements DeployableHandler {
             InputStream artifactData = mavenArtifactResolver.artifactStream(mavenCoordinates[0].replaceAll("\\.", "/"), mavenCoordinates[1].replaceAll("\\.", "/"), mavenCoordinates[2], artifactType);
             File deployDirectory = new File(workspace, mavenCoordinates[1] + "-" + mavenCoordinates[2] + "." + artifactType);
             IOUtils.copy(artifactData, new FileOutputStream(deployDirectory));
+            return deployableDescriptor;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

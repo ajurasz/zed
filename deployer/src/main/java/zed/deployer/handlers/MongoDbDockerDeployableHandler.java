@@ -18,7 +18,17 @@ public class MongoDbDockerDeployableHandler extends BaseDockerDeployableHandler 
     }
 
     @Override
-    public void deploy(DeployableDescriptor deployableDescriptor) {
+    protected void pullDockerImage(DeployableDescriptor deployableDescriptor) {
         asString(docker().pullImageCmd(MONGO_IMAGE).exec());
+    }
+
+    @Override
+    protected String getImageName(DeployableDescriptor descriptor) {
+        return MONGO_IMAGE;
+    }
+
+    @Override
+    protected String name(DeployableDescriptor deployableDescriptor) {
+        return "mongodb";
     }
 }

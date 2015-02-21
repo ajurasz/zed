@@ -33,7 +33,24 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
     }
 
     @Override
-    public void deploy(DeployableDescriptor deployableDescriptor) {
+    public DeployableDescriptor deploy(DeployableDescriptor deployableDescriptor) {
+
+        pullDockerImage(deployableDescriptor);
+
+        if (name(deployableDescriptor) != null) {
+            List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
+            containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(deployableDescriptor))).collect(Collectors.toList());
+            if (containers.size() == 0) {
+                return deployableDescriptor.pid(docker.createContainerCmd(getImageName(deployableDescriptor)).withName(name(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId());
+            } else {
+                return deployableDescriptor.pid(containers.get(0).getId());
+            }
+        } else {
+            return deployableDescriptor.pid(docker.createContainerCmd(getImageName(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId());
+        }
+    }
+
+    protected void pullDockerImage(DeployableDescriptor deployableDescriptor) {
         String[] dockerUri = DockerUriUtil.imageName(URI_PREFIX, deployableDescriptor.uri()).split(":");
         InputStream inputStream = null;
         if (dockerUri.length == 2) {
@@ -41,23 +58,7 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         } else {
             inputStream = docker.pullImageCmd(dockerUri[0]).exec();
         }
-
         asString(inputStream);
-
-        String pid;
-        if (name(deployableDescriptor) != null) {
-            List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
-            containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(deployableDescriptor))).collect(Collectors.toList());
-            if (containers.size() == 0) {
-                pid = docker.createContainerCmd(getImageName(deployableDescriptor)).withName(name(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId();
-            } else {
-                pid = containers.get(0).getId();
-            }
-        } else {
-            pid = docker.createContainerCmd(getImageName(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId();
-        }
-
-        //deployableManager.update(deployableDescriptor.pid(pid));
     }
 
     protected String asString(InputStream inputStream) {
