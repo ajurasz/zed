@@ -6,6 +6,3 @@
 15005   shell SSH port
 15006   geo service HTTP operation endpoints
 15007   geo service REST API
-
-
-9900    Rpi benchmark REST API

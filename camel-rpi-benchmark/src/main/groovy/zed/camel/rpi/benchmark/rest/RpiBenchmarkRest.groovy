@@ -10,7 +10,7 @@ import static org.apache.camel.model.rest.RestBindingMode.json
 @Component
 class RpiBenchmarkRest extends RouteBuilder {
 
-    @Value('${zed.service.api.port:9900}')
+    @Value('${statistics.api.port:9900}')
     private int restPort;
 
     @Override

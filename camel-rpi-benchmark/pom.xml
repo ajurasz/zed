@@ -7,16 +7,11 @@
         <artifactId>zed-parent</artifactId>
         <groupId>com.github.zed-platform</groupId>
         <version>0.0.18-SNAPSHOT</version>
+        <relativePath>../parent</relativePath>
     </parent>
 
     <artifactId>zed-camel-rpi-benchmark</artifactId>
     <packaging>jar</packaging>
-
-    <properties>
-
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-    </properties>
 
     <dependencies>
 

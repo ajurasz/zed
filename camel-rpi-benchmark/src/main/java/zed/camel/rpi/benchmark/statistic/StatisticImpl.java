@@ -2,26 +2,26 @@ package zed.camel.rpi.benchmark.statistic;
 
 import org.apache.camel.util.StopWatch;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class StatisticImpl implements Statistic {
 
-    private StopWatch stopWatch;
-    private Long counter = 0L;
+    private final StopWatch stopWatch = new StopWatch();
+    private AtomicLong counter = new AtomicLong(0L);
 
     @Override
-    public void call() {
-        if (stopWatch == null) {
-            stopWatch = new StopWatch();
-        }
-        counter++;
+    public void update() {
+        counter.incrementAndGet();
     }
 
     @Override
     public Details details() {
         long sec = (stopWatch.taken() / 1000);
+        long currentCount = counter.get();
         return new Details(
-                counter,
+                currentCount,
                 sec,                    // in seconds
-                counter / sec           // messages / seconds
+                currentCount / sec      // messages / seconds
         );
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class RpiBenchmarkRouting extends RouteBuilder {
 
-    @Value('${zed.service.timer.period:200}')
+    @Value('${sensors.mock.period:200}')
     private int period;
 
     @Override
@@ -16,6 +16,6 @@ class RpiBenchmarkRouting extends RouteBuilder {
             .setBody().simple(UUID.randomUUID().toString())
             .to("jms://queue:RPi")
 
-        from("jms://queue:RPi").to("bean:statistic?method=call")
+        from("jms://queue:RPi").to("bean:statistic?method=update")
     }
 }
