@@ -1,12 +1,17 @@
 package zed.deployer.handlers;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
 import org.apache.commons.io.IOUtils;
 import zed.deployer.manager.DeployableDescriptor;
 import zed.deployer.util.DockerUriUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 public class BaseDockerDeployableHandler implements DeployableHandler {
 
@@ -28,7 +33,24 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
     }
 
     @Override
-    public void deploy(DeployableDescriptor deployableDescriptor) {
+    public DeployableDescriptor deploy(DeployableDescriptor deployableDescriptor) {
+
+        pullDockerImage(deployableDescriptor);
+
+        if (name(deployableDescriptor) != null) {
+            List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
+            containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(deployableDescriptor))).collect(Collectors.toList());
+            if (containers.size() == 0) {
+                return deployableDescriptor.pid(docker.createContainerCmd(getImageName(deployableDescriptor)).withName(name(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId());
+            } else {
+                return deployableDescriptor.pid(containers.get(0).getId());
+            }
+        } else {
+            return deployableDescriptor.pid(docker.createContainerCmd(getImageName(deployableDescriptor)).withEnv(envVariables(deployableDescriptor)).exec().getId());
+        }
+    }
+
+    protected void pullDockerImage(DeployableDescriptor deployableDescriptor) {
         String[] dockerUri = DockerUriUtil.imageName(URI_PREFIX, deployableDescriptor.uri()).split(":");
         InputStream inputStream = null;
         if (dockerUri.length == 2) {
@@ -36,7 +58,6 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         } else {
             inputStream = docker.pullImageCmd(dockerUri[0]).exec();
         }
-
         asString(inputStream);
     }
 
@@ -46,5 +67,17 @@ public class BaseDockerDeployableHandler implements DeployableHandler {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String getImageName(DeployableDescriptor descriptor) {
+        return DockerUriUtil.imageName(URI_PREFIX, descriptor.uri());
+    }
+
+    protected String name(DeployableDescriptor deployableDescriptor) {
+        return null;
+    }
+
+    protected String[] envVariables(DeployableDescriptor deployableDescriptor) {
+        return DockerUriUtil.environmentVariables(deployableDescriptor.uri());
     }
 }

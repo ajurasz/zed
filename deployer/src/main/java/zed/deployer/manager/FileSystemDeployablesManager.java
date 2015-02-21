@@ -35,9 +35,10 @@ public class FileSystemDeployablesManager implements DeployablesManager {
         BasicDeployableDescriptor deploymentDescriptor = new BasicDeployableDescriptor(workspace.getName(), id, uri);
         for (DeployableHandler deployHandler : deployHandlers) {
             if (deployHandler.supports(uri)) {
-                deployHandler.deploy(deploymentDescriptor);
-                deploymentDescriptor.save(new File(workspace, deploymentDescriptor.id() + ".deploy"));
-                return deploymentDescriptor;
+                DeployableDescriptor deployableDescriptor = deployHandler.deploy(deploymentDescriptor);
+                deploymentDescriptor.save(new File(workspace, deployableDescriptor.id() + ".deploy"));
+                this.update(deployableDescriptor);
+                return deployableDescriptor;
             }
         }
         throw new RuntimeException("No handler for deployable with URI: " + uri);

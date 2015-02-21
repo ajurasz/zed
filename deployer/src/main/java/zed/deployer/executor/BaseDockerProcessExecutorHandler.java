@@ -37,20 +37,7 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
         try {
             DeployableDescriptor descriptor = deployableManager.deployment(deploymentId);
 
-            String pid;
-            if (name(descriptor) != null) {
-                List<Container> containers = docker.listContainersCmd().withShowAll(true).exec();
-                containers = containers.parallelStream().filter(c -> asList(c.getNames()).contains("/" + name(descriptor))).collect(Collectors.toList());
-                if (containers.size() == 0) {
-                    pid = docker.createContainerCmd(getImageName(descriptor)).withName(name(descriptor)).withEnv(envVariables(descriptor)).exec().getId();
-                } else {
-                    pid = containers.get(0).getId();
-                }
-            } else {
-                pid = docker.createContainerCmd(getImageName(descriptor)).withEnv(envVariables(descriptor)).exec().getId();
-            }
-
-            StartContainerCmd startContainer = docker.startContainerCmd(pid);
+            StartContainerCmd startContainer = docker.startContainerCmd(descriptor.pid());
             if (portToExpose(descriptor) != null) {
                 startContainer.withPortBindings(PortBinding.parse(portToExpose(descriptor) + ":" + portToExpose(descriptor)));
             }
@@ -59,20 +46,11 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
             }
             startContainer.exec();
 
-            deployableManager.update(descriptor.pid(pid));
-            return pid;
+            return descriptor.pid();
         } catch (Exception e) {
             throw new RuntimeException(e);
 
         }
-    }
-
-    protected String getImageName(DeployableDescriptor descriptor) {
-        return DockerUriUtil.imageName(URI_PREFIX, descriptor.uri());
-    }
-
-    protected String name(DeployableDescriptor deployableDescriptor) {
-        return null;
     }
 
     protected Integer portToExpose(DeployableDescriptor deployableDescriptor) {
@@ -81,10 +59,6 @@ public class BaseDockerProcessExecutorHandler implements ProcessExecutorHandler 
 
     protected String volume(DeployableDescriptor deployableDescriptor) {
         return null;
-    }
-
-    protected String[] envVariables(DeployableDescriptor deployableDescriptor) {
-        return DockerUriUtil.environmentVariables(deployableDescriptor.uri());
     }
 
 }
