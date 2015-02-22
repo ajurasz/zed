@@ -10,17 +10,18 @@ class RpiBenchmarkRouting extends RouteBuilder {
     @Value('${sensors.mock.period:1}')
     private int period;
 
-    @Value('${broker.consumers:5}')
+    @Value('${broker.consumers:20}')
     private int consumers;
 
     @Override
     void configure() {
         from("timer://myTimer?period=${period}")
+        .threads(consumers)
             .process{
                 it.getIn().setBody(UUID.randomUUID().toString())
             }
         .multicast()
-                .to("jms://queue:RPi?concurrentConsumers=${consumers}", "bean:statistic?method=updateCreated")
+                .to("bean:statistic?method=updateCreated", "jms://queue:RPi?concurrentConsumers=${consumers}")
 
         from("jms://queue:RPi")
         .to("bean:statistic?method=updateConsumed")
