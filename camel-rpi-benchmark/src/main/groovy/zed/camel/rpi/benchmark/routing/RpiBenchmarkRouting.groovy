@@ -7,15 +7,19 @@ import org.springframework.stereotype.Component
 @Component
 class RpiBenchmarkRouting extends RouteBuilder {
 
-    @Value('${sensors.mock.period:200}')
+    @Value('${sensors.mock.period:1}')
     private int period;
 
     @Override
     void configure() {
         from("timer://myTimer?period=${period}")
-            .setBody().simple(UUID.randomUUID().toString())
-            .to("jms://queue:RPi")
+            .process{
+                it.getIn().setBody(UUID.randomUUID().toString())
+            }
+        .multicast()
+            .to("jms://queue:RPi", "bean:statistic?method=updateCreated")
 
-        from("jms://queue:RPi").to("bean:statistic?method=update")
+        from("jms://queue:RPi")
+        .to("bean:statistic?method=updateConsumed")
     }
 }

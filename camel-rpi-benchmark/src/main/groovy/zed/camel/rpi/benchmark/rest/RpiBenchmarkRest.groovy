@@ -21,9 +21,6 @@ class RpiBenchmarkRest extends RouteBuilder {
         rest("/statistic")
                 .consumes("application/json").produces("application/json")
 
-                .get("/counter").outType(Long.class)
-                    .to("bean:statistic?method=counter")
-
                 .get("/details").outType(Details.class)
                     .to("bean:statistic?method=details")
     }

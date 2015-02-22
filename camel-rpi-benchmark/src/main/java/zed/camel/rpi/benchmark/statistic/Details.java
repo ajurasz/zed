@@ -1,25 +1,37 @@
 package zed.camel.rpi.benchmark.statistic;
 
 public class Details {
-    private Long counter;
+    private Long created;
+    private Long consumed;
     private Long duration;
-    private Long performance;
+    private Long creationPerformance;
+    private Long consumptionPerformance;
 
-    public Details(Long counter, Long duration, Long performance) {
-        this.counter = counter;
+    public Details(Long created, Long consumed, Long duration, Long creationPerformance, Long consumptionPerformance) {
+        this.created = created;
+        this.consumed = consumed;
         this.duration = duration;
-        this.performance = performance;
+        this.creationPerformance = creationPerformance;
+        this.consumptionPerformance = consumptionPerformance;
     }
 
-    public Long getCounter() {
-        return counter;
+    public Long getCreated() {
+        return created;
+    }
+
+    public Long getConsumed() {
+        return consumed;
     }
 
     public Long getDuration() {
         return duration;
     }
 
-    public Long getPerformance() {
-        return performance;
+    public Long getCreationPerformance() {
+        return creationPerformance;
+    }
+
+    public Long getConsumptionPerformance() {
+        return consumptionPerformance;
     }
 }

@@ -7,21 +7,30 @@ import java.util.concurrent.atomic.AtomicLong;
 public class StatisticImpl implements Statistic {
 
     private final StopWatch stopWatch = new StopWatch();
-    private AtomicLong counter = new AtomicLong(0L);
+    private AtomicLong counterCreated = new AtomicLong(0L);
+    private AtomicLong counterConsumed = new AtomicLong(0L);
 
     @Override
-    public void update() {
-        counter.incrementAndGet();
+    public void updateCreated() {
+        counterCreated.incrementAndGet();
+    }
+
+    @Override
+    public void updateConsumed() {
+        counterConsumed.incrementAndGet();
     }
 
     @Override
     public Details details() {
         long sec = (stopWatch.taken() / 1000);
-        long currentCount = counter.get();
+        long createdCount = counterCreated.get();
+        long consumedCount = counterConsumed.get();
         return new Details(
-                currentCount,
+                createdCount,
+                consumedCount,
                 sec,                    // in seconds
-                currentCount / sec      // messages / seconds
+                createdCount / sec,     // in messages / seconds
+                consumedCount / sec     // out messages / seconds
         );
     }
 }
