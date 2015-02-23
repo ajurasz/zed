@@ -23,5 +23,8 @@ class RpiBenchmarkRest extends RouteBuilder {
 
                 .get("/details").outType(Details.class)
                     .to("bean:statistic?method=details")
+
+                .get("/list").outType(List.class)
+                    .to("bean:statistic?method=list")
     }
 }
