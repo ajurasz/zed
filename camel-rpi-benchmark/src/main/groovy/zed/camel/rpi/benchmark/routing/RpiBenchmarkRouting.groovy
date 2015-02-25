@@ -16,14 +16,14 @@ class RpiBenchmarkRouting extends RouteBuilder {
     @Override
     void configure() {
         from("timer://myTimer?period=${period}")
-        .threads(consumers)
-            .process{
-                it.getIn().setBody(UUID.randomUUID().toString())
-            }
+                .threads(1, 100)
+                .process {
+            it.getIn().setBody(UUID.randomUUID().toString())
+        }
         .multicast()
-                .to("bean:statistic?method=updateCreated", "jms://queue:RPi?concurrentConsumers=${consumers}")
+                .to("bean:statistic?method=updateCreated", "jms://queue:RPi")
 
-        from("jms://queue:RPi")
-        .to("bean:statistic?method=updateConsumed")
+        from("jms://queue:RPi?concurrentConsumers=${consumers}")
+                .to("bean:statistic?method=updateConsumed")
     }
 }
