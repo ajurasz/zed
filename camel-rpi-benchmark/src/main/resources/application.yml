@@ -1,4 +1,4 @@
 spring:
-  activemq.broker-url=vm://localhost?broker.persistent=false
+  activemq.broker-url: vm://localhostx?broker.persistent=false
 
 statistics.api.port: 9900
