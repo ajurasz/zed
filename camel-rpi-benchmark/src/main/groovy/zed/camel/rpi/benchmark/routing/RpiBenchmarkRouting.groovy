@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class RpiBenchmarkRouting extends RouteBuilder {
 
-    @Value('${sensors.mock.period:200}')
+    @Value('${sensors.mock.period:1}')
     private int period;
 
     @Value('${broker.consumers:5}')
