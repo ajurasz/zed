@@ -15,6 +15,9 @@ class RpiBenchmarkRouting extends RouteBuilder {
 
     @Override
     void configure() {
+        errorHandler(deadLetterChannel("seda:DLQ"))
+        context.getShutdownStrategy().setTimeout(5)
+
         from("timer://myTimer?period=${period}")
                 .threads(1, 100)
                 .process {
