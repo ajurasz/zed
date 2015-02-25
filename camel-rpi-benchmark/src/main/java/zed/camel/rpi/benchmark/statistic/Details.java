@@ -1,13 +1,14 @@
 package zed.camel.rpi.benchmark.statistic;
 
 public class Details {
-    private Long created;
+
+    private long created;
     private Long consumed;
     private Long duration;
     private Long creationPerformance;
     private Long consumptionPerformance;
 
-    public Details(Long created, Long consumed, Long duration, Long creationPerformance, Long consumptionPerformance) {
+    public Details(long created, Long consumed, Long duration, Long creationPerformance, Long consumptionPerformance) {
         this.created = created;
         this.consumed = consumed;
         this.duration = duration;
@@ -15,12 +16,16 @@ public class Details {
         this.consumptionPerformance = consumptionPerformance;
     }
 
-    public Long getCreated() {
+    public long getCreated() {
         return created;
     }
 
     public Long getConsumed() {
         return consumed;
+    }
+
+    public long getCurrentQueueSize() {
+        return created - consumed;
     }
 
     public Long getDuration() {
