@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component
 @Component
 class RpiBenchmarkRouting extends RouteBuilder {
 
+    @Value('${sensors.number:3}')
+    private int sensorsNumber;
+
     @Value('${sensors.mock.period:1}')
     private int period;
 
@@ -21,14 +24,16 @@ class RpiBenchmarkRouting extends RouteBuilder {
         errorHandler(deadLetterChannel("seda:DLQ"))
         context.getShutdownStrategy().setTimeout(5)
 
-        from("timer://myTimer?period=${period}")
-                .threads(1, 100)
-                .process {
-            it.getIn().setBody(UUID.randomUUID().toString())
+        for (int i = 0; i < sensorsNumber; i++) {
+            from("timer://myTimer?period=${period}")
+                    .threads(1, 100)
+                    .process {
+                it.getIn().setBody(UUID.randomUUID().toString())
+            }
+            .multicast()
+                    .to("bean:statistic?method=updateCreated", "jms://queue:RPi")
         }
-        .multicast()
-                .to("bean:statistic?method=updateCreated", "${queueType}://queue:RPi")
-
+            
         from("${queueType}://queue:RPi?concurrentConsumers=${consumers}")
                 .to("bean:statistic?method=updateConsumed")
     }
