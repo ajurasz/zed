@@ -31,7 +31,7 @@ class RpiBenchmarkRouting extends RouteBuilder {
                 it.getIn().setBody(UUID.randomUUID().toString())
             }
             .multicast()
-                    .to("bean:statistic?method=updateCreated", "jms://queue:RPi")
+                    .to("bean:statistic?method=updateCreated", "${queueType}://queue:RPi")
         }
             
         from("${queueType}://queue:RPi?concurrentConsumers=${consumers}")
