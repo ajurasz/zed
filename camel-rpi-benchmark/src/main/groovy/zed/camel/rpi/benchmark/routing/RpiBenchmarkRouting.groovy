@@ -13,6 +13,9 @@ class RpiBenchmarkRouting extends RouteBuilder {
     @Value('${broker.consumers:5}')
     private int consumers;
 
+    @Value('${queue.type:jms}')
+    private String queueType;
+
     @Override
     void configure() {
         errorHandler(deadLetterChannel("seda:DLQ"))
@@ -24,9 +27,9 @@ class RpiBenchmarkRouting extends RouteBuilder {
             it.getIn().setBody(UUID.randomUUID().toString())
         }
         .multicast()
-                .to("bean:statistic?method=updateCreated", "jms://queue:RPi")
+                .to("bean:statistic?method=updateCreated", "${queueType}://queue:RPi")
 
-        from("jms://queue:RPi?concurrentConsumers=${consumers}")
+        from("${queueType}://queue:RPi?concurrentConsumers=${consumers}")
                 .to("bean:statistic?method=updateConsumed")
     }
 }
